@@ -1,3 +1,4 @@
+import footer from './components/footer/footer';
 import Router from './router/Router';
 
 class App {
@@ -5,6 +6,9 @@ class App {
 
     public init(): void {
         this.router.init();
+
+        // панель навигации
+        document.body.insertAdjacentHTML('beforeend', footer);
     }
 }
 
