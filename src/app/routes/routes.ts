@@ -1,11 +1,13 @@
 import Home from '../../page/Home/Home';
-import Registration from '../../page/Registration/Registration';
+import Message from '../../page/Message/Message';
+import Profile from '../../page/Profile/Profile';
 import Base from '../base/Base';
 import PATHS from '../common/path';
 
 const routes = [
-    { path: PATHS.main, component: new Home() },
-    { path: PATHS.registration, component: new Registration() },
+    { path: PATHS.home, component: new Home() },
+    { path: PATHS.message, component: new Message() },
+    { path: PATHS.profile, component: new Profile() },
 ];
 
 function findRoutes(path: string): Base | null {
