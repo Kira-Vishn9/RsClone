@@ -1,0 +1,21 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.container {
+    max-width: 1440px;
+    padding: 0 15px;
+}
