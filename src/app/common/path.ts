@@ -1,6 +1,7 @@
 const PATHS = {
-    main: 'main',
-    registration: 'registration',
+    home: 'home',
+    message: 'message',
+    profile: 'profile',
 };
 
 export default PATHS;
