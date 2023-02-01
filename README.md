@@ -5,3 +5,4 @@
 #Nikolay's worker branch - dev_nikolay
 #Branch for pre-merge code develop
 #Deployment branch
+[доска Trello]https://trello.com/b/E8dJtafu/rs-clone
