@@ -2,6 +2,11 @@ import './style/footer.scss';
 
 const footer = `
   <footer class="footer">
+    <div class="years__footer">
+      <h3>2023</h3>
+      <span></span>
+    </div>
+
     <div class="authors__footer">
       <h3>AUTHORS:</h3>
       <ul class="list__footer">
