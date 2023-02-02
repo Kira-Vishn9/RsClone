@@ -1,3 +1,4 @@
+import Account from '../../page/Account/Account';
 import Home from '../../page/Home/Home';
 import Message from '../../page/Message/Message';
 import Profile from '../../page/Profile/Profile';
@@ -5,6 +6,7 @@ import Base from '../base/Base';
 import PATHS from '../common/path';
 
 const routes = [
+    { path: PATHS.account, component: new Account() },
     { path: PATHS.home, component: new Home() },
     { path: PATHS.message, component: new Message() },
     { path: PATHS.profile, component: new Profile() },
