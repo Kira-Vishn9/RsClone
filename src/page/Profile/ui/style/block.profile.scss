@@ -1,0 +1,21 @@
+.block__profile {
+    * {
+        margin-right: 20px;
+    }
+
+    *:last-child {
+        margin-right: 0;
+    }
+    
+    span {
+        font-size: 30px;
+        color: white;
+    }
+
+    > button {
+        padding: 5px 10px;
+        font-size: 18px;
+        color: black;
+        border-radius: 10px;
+    }
+}
