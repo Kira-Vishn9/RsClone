@@ -1,5 +1,4 @@
 .main {
-    width: 80%;
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -14,6 +13,7 @@
     position: relative;
 
     &__wrapper {
+        width: 570px;
         height: 84px;
         padding: 1px 0px 1px 1px;
         display: flex;
@@ -27,7 +27,7 @@
         height: 28px;
         right: 35px;
         top: calc(50% - 20px);
-        background: url('../../shared/Assets/icon/arrow-btn.svg');
+        background: url('../../../shared/Assets/icon/arrow-btn.svg');
         cursor: pointer;
     }
 }
@@ -117,17 +117,17 @@
     }
 
     &__like {
-        background: url('../../shared/Assets/icon/like.svg');
+        background: url('../../../shared/Assets/icon/like.svg');
         @include icon-style;
     }
 
     &__comment {
-        background: url('../../shared/Assets/icon/comment.svg');
+        background: url('../../../shared/Assets/icon/comment.svg');
         @include icon-style;
     }
 
     &__save {
-        background: url('../../shared/Assets/icon/save.svg');
+        background: url('../../../shared/Assets/icon/save.svg');
         @include icon-style;
         margin-left: auto;
     }

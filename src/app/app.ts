@@ -1,3 +1,4 @@
+import aside from '../page/aside/aside';
 import footer from '../shared/components/footer/footer';
 import Router from './router/Router';
 
@@ -10,9 +11,7 @@ class App {
         // панель навигации
         const app = document.querySelector('#app');
         if (app) {
-            /* app.insertAdjacentHTML('afterbegin', aside);
-            /* app.insertAdjacentHTML('beforeend', main); 
-            app.insertAdjacentHTML('beforeend', messagePage); */
+            app.insertAdjacentHTML('afterbegin', aside);
         }
         const container = document.querySelector('.container');
         if (container) {

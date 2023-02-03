@@ -2,6 +2,7 @@
   width: 935px;
   height: 671px;
   display: flex;
+  margin: 0 auto;
   padding-top: 30px;
 
   &__left {
@@ -28,7 +29,7 @@
   .message-btn {
     width: 24px;
     height: 24px;
-    background: url('../../shared/Assets/icon/new-mes.svg');
+    background: url('../../../shared/Assets/icon/new-mes.svg');
     cursor: pointer;
   }
 
@@ -72,12 +73,23 @@
     align-items: center;
     width: 583px;
 
+    &-header {
+
+    }
+
+    &-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
     &-img {
       width: 96px;
       height: 96px;
       border-radius: 50%;
       border: 3px solid #000000;
-      background: url('../../shared/Assets/icon/share-post.svg');
+      background: url('../../../shared/Assets/icon/share-post.svg');
       background-repeat: no-repeat;
       background-position: center;
     }
