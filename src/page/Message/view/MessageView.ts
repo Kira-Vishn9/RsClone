@@ -19,14 +19,17 @@ class MessageView {
               <div class="message-btn"></div>
             </div>
             <div class="message-block__left-main">
-              ${messageUser('Loreejrhdhf')}
-              ${messageUser('Loreejrhdhf')}
-              ${messageUser('Loreejrhdhf')}
+              ${messageUser('Tomas', 'hello')}
+              ${messageUser('Tomas', 'hello')}
+              ${messageUser('Tomas', 'hello')}
             </div>
           </div>
           <div class="message-block__right">
-            <div class="message-block__right-header">
-
+            <div class="message-block__right-header hidden">
+              <a class="user-message" href="#">
+                <img class="user-avatar" src="https://amiel.club/uploads/posts/2022-03/1647762844_3-amiel-club-p-kartinki-litsa-cheloveka-3.png" alt="avatar">
+                <span class="user-name">Tomas</span>
+              </a>
             </div>
             <div class="message-block__right-main">
               <div class="message-block__right-img"></div>
