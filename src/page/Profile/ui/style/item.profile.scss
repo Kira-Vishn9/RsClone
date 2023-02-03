@@ -10,6 +10,7 @@
     img {
         width: inherit;
         height: inherit;
+        object-fit: cover;
     }
 
     &:hover > .like-message__item {
