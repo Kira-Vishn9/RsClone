@@ -1,54 +1,37 @@
 .footer {
+  flex: 0 0 auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 40px;
-  background-color: #adc9d7;
-}
-
-.years__footer {
-  display: flex;
-  > h3 {
-    font-size: 20px;
-    margin-right: 20px;
-  }
-
-  > span {
-    display: inline-block;
-    width: 150px;
-    background-image: url('../../../../shared/Assets/svg/rs_school_js.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
+  font-size: 16px;
 }
 
 .authors__footer {
   display: flex;
   align-items: center;
-  
-  h3 {
+
+  h5 {
     margin-right: 10px;
   }
 }
 
-.list__footer {
-  display: flex;
-
-  :last-child {
-    margin-right: 0;
-  }
-}
-
 .item__footer {
-  margin-right: 5px;
   list-style: none;
+  width: 150px;
 }
 
 .link__footer {
   display: flex;
   align-items: center;
-  color: #101aa2;
   text-decoration: none;
+  color: #262626;
+  font-size: 14px;
+
+  &:hover {
+    font-weight: 600;
+  }
 
   span {
     width: 20px;
@@ -57,5 +40,14 @@
     background-repeat: no-repeat;
     background-size: contain;
     filter: invert(1);
+    margin-left: 10px;
   }
+}
+
+.school-logo {
+  width: 130px;
+  height: 40px;
+  background: url('../../../../shared/Assets/icon/rsschool.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
