@@ -17,11 +17,11 @@ class ProfileView {
             <section class="profile">
 
                 <div class="data__profile">
-                    <img src="https://zagony.ru/admin_new/foto/2018-1-29/1517180859/devushki_iz_socialnykh_setejj_39_foto_1.jpg">
+                    <img src="https://kipmu.ru/wp-content/uploads/jptr-1.jpg">
                     <div>
-                        ${dataProfileTop('TanyaT34')}
+                        ${dataProfileTop('Jupiter')}
                         ${dataProfile(154, 147, 577)}
-                        <span>Tanya Sprogiba</span>
+                        <span>Jupiter Sprogiba</span>
                     </div>
                 </div>
 
