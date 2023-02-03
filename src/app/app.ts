@@ -1,4 +1,4 @@
-import footer from './components/footer/footer';
+import footer from '../shared/components/footer/footer';
 import Router from './router/Router';
 
 class App {

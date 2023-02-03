@@ -1,16 +1,16 @@
 import Base from '../../app/base/Base';
-import ProfileView from './view/ProfileView';
+import AccountView from './view/AccountView';
 
-class Profile extends Base {
-    private view: ProfileView = new ProfileView();
+class Account extends Base {
+    private view: AccountView = new AccountView();
 
     public mount(): void {
-        console.log('Profile: MOUNT');
+        console.log('ACCOUNT: MOUNT');
         this.view.init();
     }
 
     public unmount(): void {
-        console.log('Profile: UNMOUNT');
+        console.log('ACCOUNT: UNMOUNT');
         this.view.unmount();
     }
 
@@ -19,4 +19,4 @@ class Profile extends Base {
     }
 }
 
-export default Profile;
+export default Account;

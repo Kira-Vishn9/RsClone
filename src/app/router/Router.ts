@@ -3,10 +3,12 @@ import findRoutes from '../routes/routes';
 
 class Router {
     private app: HTMLElement | null = null;
+    private container: HTMLElement | null = null;
 
     public init(): void {
         this.app = document.querySelector('#app');
-
+        if (this.app == null) return;
+        this.container = this.app.querySelector('.app-container');
         window.addEventListener('hashchange', this.onHascChange);
         this.onHascChange();
     }
@@ -20,7 +22,7 @@ class Router {
     private tempRoute: Base | null = null;
 
     private onHascChange = () => {
-        if (this.app === null) return;
+        if (this.container === null) return;
         if (this.tempRoute !== null && this.tempRoute.unmount) this.tempRoute.unmount();
         const route = this.getRoute(window.location.hash);
         this.tempRoute = route;
@@ -28,8 +30,8 @@ class Router {
         if (route === null) {
             console.log('NOT FOUND PAGE');
         } else {
-            this.app.innerHTML = '';
-            this.app.insertAdjacentHTML('afterbegin', route.render());
+            this.container.innerHTML = '';
+            this.container.insertAdjacentHTML('afterbegin', route.render());
             route.mount();
         }
     };
