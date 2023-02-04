@@ -2,8 +2,14 @@ import messageUser from '../ui/messageUser';
 import './messagePage.scss';
 
 class MessageView {
+    private root: HTMLElement | null = null;
     public init(): void {
-        //
+        this.root = document.querySelector('.message-block__left-main');
+        if (this.root) {
+            this.root.addEventListener('click', this.showMessage);
+        } else {
+            return;
+        }
     }
 
     public unmount(): void {
@@ -40,6 +46,15 @@ class MessageView {
           </div>
         </div>
       `.trim();
+    }
+
+    private showMessage(): void {
+        const messageInfo = document.querySelector('.message-block__right-header');
+        const messageBlock = document.querySelector('.message-block__right-main');
+        if (messageInfo && messageBlock) {
+            messageInfo.classList.remove('hidden');
+            messageBlock.innerHTML = '';
+        }
     }
 }
 
