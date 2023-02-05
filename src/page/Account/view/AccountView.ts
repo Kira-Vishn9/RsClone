@@ -1,3 +1,4 @@
+import Auth from '../../../firebase/auth/Auth';
 import '../style/account.scss';
 const logo = '../../../shared/Assets/svg/instagram-logo.svg';
 enum StateBlockChangeAccount {
