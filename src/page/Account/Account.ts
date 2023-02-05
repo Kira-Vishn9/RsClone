@@ -1,15 +1,16 @@
 import Base from '../../app/base/Base';
-import MessageView from './view/MessageView';
-class Message extends Base {
-    private view: MessageView = new MessageView();
+import AccountView from './view/AccountView';
+
+class Account extends Base {
+    private view: AccountView = new AccountView();
 
     public mount(): void {
-        console.log('MESSAGE: MOUNT');
+        console.log('ACCOUNT: MOUNT');
         this.view.init();
     }
 
     public unmount(): void {
-        console.log('MESSAGE: UNMOUNT');
+        console.log('ACCOUNT: UNMOUNT');
         this.view.unmount();
     }
 
@@ -18,4 +19,4 @@ class Message extends Base {
     }
 }
 
-export default Message;
+export default Account;

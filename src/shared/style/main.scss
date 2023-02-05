@@ -11,11 +11,40 @@ html {
 }
 
 body {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    scroll-behavior: smooth;
+}
+
+body.covert {
+    overflow: hidden;
 }
 
 .container {
     max-width: 1440px;
     padding: 0 15px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+ol, ul, li {
+	list-style: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#app {
+    display: flex;
+    flex: 1 0 auto;
+}
+
+.app-container {
+    width: 80%;
 }
