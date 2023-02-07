@@ -1,5 +1,5 @@
 import './popapUpload.scss';
-import { pushkin } from '../../shared/push/pushkin';
+import { pushkin } from '../../firebase/pull-push-img/push/pushkin';
 
 function createPopap() {
     const popap = `
