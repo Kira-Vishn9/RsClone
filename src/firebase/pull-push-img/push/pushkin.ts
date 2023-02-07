@@ -1,20 +1,9 @@
-import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAbrSlPJqm6a0sdSm-f4Ds7MWrIpoyIF-s",
-    authDomain: "clone-instagram-7c300.firebaseapp.com",
-    projectId: "clone-instagram-7c300",
-    storageBucket: "clone-instagram-7c300.appspot.com",
-    messagingSenderId: "572673925162",
-    appId: "1:572673925162:web:423fb6786549b83fe9a353",
-  };
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+import app from "../../config/config";
 
 const storage = getStorage(app);
 
-const newPost = (src: string) =>(
+const newPost = (src: string) => (
   `
     <div class="upload-content__header">Create a post</div>
     <div class="upload-content__main">
@@ -47,8 +36,6 @@ export  function pushkin(selector: string, options = {}) {
         input.click()}
     })
     
-    // const changeHandler = ;
-
       if(input instanceof HTMLInputElement)
       input.addEventListener('input', ({ target }) => {
         let arrayFiles: File[] = [];
@@ -62,13 +49,11 @@ export  function pushkin(selector: string, options = {}) {
           if (!file.type.match('image')) {
             return
           }
-    
           const reader = new FileReader()
-    
           reader.onload = ({ target }) => {
             const bthSubmit: HTMLButtonElement | null = document.querySelector('.submit');
             const src = target?.result;
-
+            console.log(target?.result)
             if (typeof src === 'string' ) {
               if(uploadContent)
             uploadContent.innerHTML = '';
@@ -90,7 +75,7 @@ export  function pushkin(selector: string, options = {}) {
 
 // // // // Initialize Cloud Storage and get a reference to the service
 // // //  const storage = getStorage(app);
-// // //  const starsRef = ref(storage, '/avatars/avatarka.png')
+// // //  const starsRef = ref(storage, 'Путь на сервер к фотграфии для выгрузки')
 // // //  export default function asda () {
 // // //  getDownloadURL(starsRef)
 // // //   .then((url) => {
