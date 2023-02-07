@@ -3,7 +3,6 @@ import { DocumentData } from 'firebase/firestore/lite';
 interface IUser {
     email: string;
     name: string;
-    surname: string;
     nikName: string;
     password: string;
     followers?: DocumentData;

@@ -1,7 +1,16 @@
 import { getFirestore, collection, getDocs, doc, getDoc, setDoc, DocumentData } from 'firebase/firestore/lite';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    AuthErrorCodes,
+    onAuthStateChanged,
+} from 'firebase/auth';
 import app from '../config/config';
 import IUser from '../model/IUser';
+import { FirebaseError } from 'firebase/app';
+import userState from '../../state/user.state';
 
 class Auth {
     public static instance = new Auth();
@@ -70,33 +79,64 @@ class Auth {
         //
     }
 
-    public async signupUser(user: IUser): Promise<boolean | IUser> {
+    public async signupUser(user: IUser): Promise<string | undefined> {
         const email = user.email;
         const pass = user.password;
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
-            const authUser = create.user;
             this.setUser(user);
-            console.log(authUser);
-            return user;
-        } catch (error: unknown) {
-            console.log(error);
-            return false;
+            // const authUser = create.user;
+            // console.log(authUser);
+            // return user;
+            return '';
+        } catch (error) {
+            if (error instanceof FirebaseError) {
+                return error.code;
+            }
         }
     }
 
-    public async signinUser(user: IUser): Promise<boolean | IUser> {
-        const email = user.email;
-        const pass = user.password;
+    // public async signinUser(user: IUser): Promise<boolean | IUser> {
+    //     const email = user.email;
+    //     const pass = user.password;
+    //     try {
+    //         const create = await signInWithEmailAndPassword(this.auth, email, pass);
+    //         const authUser = create.user;
+    //         console.log(authUser);
+    //         return user;
+    //     } catch (error: unknown) {
+    //         console.log(error);
+    //         return false;
+    //     }
+    // }
+
+    public async signinUser(email: string, password: string) {
         try {
-            const create = await signInWithEmailAndPassword(this.auth, email, pass);
-            const authUser = create.user;
-            console.log(authUser);
-            return user;
-        } catch (error: unknown) {
-            console.log(error);
+            const userAuth = await signInWithEmailAndPassword(this.auth, email, password);
+            console.log(userAuth.user);
             return false;
+        } catch (error) {
+            if (error instanceof FirebaseError) {
+                console.log(error.code);
+                if (error.code === AuthErrorCodes.INVALID_EMAIL) {
+                    return 'Wrong email. Try again.';
+                } else if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
+                    return 'Wrong password. Try again.';
+                } else {
+                    return 'User not found';
+                }
+            }
         }
+    }
+
+    public async monitorAuthState() {
+        onAuthStateChanged(this.auth, (user) => {
+            if (user) {
+                userState.id = user.uid;
+                userState.email = user.email || '';
+                console.log(userState);
+            }
+        });
     }
 }
 export default Auth;
