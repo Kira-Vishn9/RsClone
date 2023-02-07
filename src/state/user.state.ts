@@ -1,4 +1,5 @@
-const user = {
-    id: 'adad',
-    name: 'asdasd',
+const userState = {
+    id: '',
+    email: '',
 };
+export default userState;
