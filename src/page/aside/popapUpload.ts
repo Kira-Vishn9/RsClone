@@ -1,6 +1,5 @@
 import './popapUpload.scss';
 import { pushkin } from '../../shared/push/pushkin';
-// import { pushts } from '../../shared/push/pushkin';
 
 function createPopap() {
     const popap = `
@@ -26,11 +25,6 @@ function createPopap() {
         multi: true,
         accept: ['.png', '.jpg', '.jpeg', '.gif']})
     } )
-    // document.querySelector('.upload-content__main-btn')?.addEventListener('click',()=>{
-    //   pushkin('#file', {
-    //     multi: true,
-    //     accept: ['.png', '.jpg', '.jpeg', '.gif']})
-    // } )
     document.body.classList.add('covert');
 
     const popapUpload = document.querySelector('#popap-upload') as HTMLElement;
