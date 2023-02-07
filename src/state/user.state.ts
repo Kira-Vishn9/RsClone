@@ -1,6 +1,5 @@
 const userState = {
-    id: 'adad',
-    name: 'asdasd',
+    id: '',
+    email: '',
 };
-
 export default userState;
