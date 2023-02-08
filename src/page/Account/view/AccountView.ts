@@ -78,102 +78,104 @@ class AccountView {
     }
 
     private userLogin() {
-        const loginBtn = document.querySelector('#btn__login');
-        const divErr: HTMLFormElement | null = document.querySelector('#divLoginError');
-        const email: HTMLInputElement | null = document.querySelector('.user-input__account');
-        const password: HTMLInputElement | null = document.querySelector('.password-input__account');
-        loginBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (divErr) {
-                if (email && password) {
-                    if (email.value && password.value) {
-                        const logInfo = async (email: string, password: string) => {
-                            const userInfo = await Auth.instance.signinUser(email, password);
-                            if (userInfo) {
-                                divErr.innerHTML = userInfo;
-                            } else {
-                                // запись и переход в профиль
-                                location.hash = '#/home';
-                            }
-                        };
-                        logInfo(email.value, password.value);
-                        const writeState = async () => {
-                            await Auth.instance.monitorAuthState();
-                        };
-                        writeState();
-                        console.log(userState);
-                    } else if (!email.value) {
-                        divErr.innerHTML = 'Wrong email. Try again.';
-                    } else if (!password.value) {
-                        divErr.innerHTML = 'Wrong password. Try again.';
-                    }
-
-                    email.onfocus = function () {
-                        divErr.innerHTML = '';
-                    };
-                    password.onfocus = function () {
-                        divErr.innerHTML = '';
-                    };
-                }
-            }
-        });
+        if (this.root === null) return;
+        const loginBtn = this.root.querySelector('#btn__login');
+        loginBtn?.addEventListener('click', this.logHandler);
     }
 
-    private async userRegistration() {
-        const regBtn = document.querySelector('#btn__registr');
-        const divRegErr: HTMLElement | null = document.querySelector('#divRegistrError');
-        const email: HTMLInputElement | null = document.querySelector('.email-input__account');
-        const name: HTMLInputElement | null = document.querySelector('.name-surname-input__account');
-        const nikName: HTMLInputElement | null = document.querySelector('.name-input__account');
-        const password: HTMLInputElement | null = document.querySelector('.password-input__account');
-        regBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (email && name && nikName && password && divRegErr) {
-                if (email.value && name.value && nikName.value && password.value) {
-                    const user = {
-                        email: email.value,
-                        name: name.value,
-                        nikName: nikName.value,
-                        password: password.value,
-                    };
-                    const authInfo = async (user: IUser) => {
-                        let errCode = await Auth.instance.signupUser(user);
-                        console.log(errCode);
-                        if (errCode) {
-                            if (errCode.includes('invalid-email')) {
-                                divRegErr.innerHTML = 'Wrong email. Try again.';
-                                errCode = '';
-                            } else if (errCode.includes('email-already-in-use')) {
-                                divRegErr.innerHTML = 'Email already in use. Try again.';
-                                errCode = '';
-                            } else if (errCode.includes('password')) {
-                                divRegErr.innerHTML = 'Wrong password. Try again.';
-                                errCode = '';
-                            }
+    private logHandler = (e: Event) => {
+        e.preventDefault();
+        if (this.root === null) return;
+        const loginBtn = this.root.querySelector('#btn__login');
+        const divErr: HTMLFormElement | null = this.root.querySelector('#divLoginError');
+        const email: HTMLInputElement | null = this.root.querySelector('.user-input__account');
+        const password: HTMLInputElement | null = this.root.querySelector('.password-input__account');
+        if (divErr) {
+            if (email && password) {
+                if (email.value && password.value) {
+                    const logInfo = async (email: string, password: string) => {
+                        const userInfo = await Auth.instance.signinUser(email, password);
+                        if (userInfo) {
+                            divErr.innerHTML = userInfo;
                         } else {
-                            // переход  в профиль
+                            // переход в профиль
                             location.hash = '#/home';
+                            loginBtn?.removeEventListener('click', this.logHandler);
                         }
                     };
-
-                    authInfo(user);
-                } else {
-                    divRegErr.innerHTML = 'Fill all fields.';
+                    logInfo(email.value, password.value);
+                } else if (!email.value) {
+                    divErr.innerHTML = 'Wrong email. Try again.';
+                } else if (!password.value) {
+                    divErr.innerHTML = 'Wrong password. Try again.';
                 }
-                email.onfocus = function () {
-                    divRegErr.innerHTML = '';
-                };
-                name.onfocus = function () {
-                    divRegErr.innerHTML = '';
-                };
-                nikName.onfocus = function () {
-                    divRegErr.innerHTML = '';
-                };
-                password.onfocus = function () {
-                    divRegErr.innerHTML = '';
-                };
+
+                this.deFocus(email, divErr);
+                this.deFocus(password, divErr);
             }
-        });
+        }
+    };
+
+    private async userRegistration() {
+        if (this.root === null) return;
+        const regBtn = this.root.querySelector('#btn__registr');
+
+        regBtn?.addEventListener('click', this.regHandler);
+    }
+
+    private regHandler = (e: Event) => {
+        if (this.root === null) return;
+        const regBtn = this.root.querySelector('#btn__registr');
+        const divRegErr: HTMLElement | null = this.root.querySelector('#divRegistrError');
+        const email: HTMLInputElement | null = this.root.querySelector('.email-input__account');
+        const name: HTMLInputElement | null = this.root.querySelector('.name-surname-input__account');
+        const nikName: HTMLInputElement | null = this.root.querySelector('.name-input__account');
+        const password: HTMLInputElement | null = this.root.querySelector('.password-input__account');
+        e.preventDefault();
+        if (email && name && nikName && password && divRegErr) {
+            if (email.value && name.value && nikName.value && password.value) {
+                const user = {
+                    email: email.value,
+                    name: name.value,
+                    nikName: nikName.value,
+                    password: password.value,
+                };
+                const authInfo = async (user: IUser) => {
+                    let errCode = await Auth.instance.signupUser(user);
+                    console.log(errCode);
+                    if (errCode) {
+                        if (errCode.includes('invalid-email')) {
+                            divRegErr.innerHTML = 'Wrong email. Try again.';
+                            errCode = '';
+                        } else if (errCode.includes('email-already-in-use')) {
+                            divRegErr.innerHTML = 'Email already in use. Try again.';
+                            errCode = '';
+                        } else if (errCode.includes('password')) {
+                            divRegErr.innerHTML = 'Wrong password. Try again.';
+                            errCode = '';
+                        }
+                    } else {
+                        // переход  в профиль
+                        location.hash = '#/home';
+                        regBtn?.removeEventListener('click', this.regHandler);
+                    }
+                };
+
+                authInfo(user);
+            } else {
+                divRegErr.innerHTML = 'Fill all fields.';
+            }
+            this.deFocus(email, divRegErr);
+            this.deFocus(name, divRegErr);
+            this.deFocus(nikName, divRegErr);
+            this.deFocus(password, divRegErr);
+        }
+    };
+
+    private deFocus(elem: HTMLElement, div: HTMLElement) {
+        elem.onfocus = function () {
+            div.innerHTML = '';
+        };
     }
 
     private onLink = () => {

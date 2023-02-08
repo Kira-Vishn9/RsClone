@@ -85,6 +85,7 @@ class Auth {
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
             this.setUser(user);
+            await this.monitorAuthState();
             // const authUser = create.user;
             // console.log(authUser);
             // return user;
@@ -114,6 +115,7 @@ class Auth {
         try {
             const userAuth = await signInWithEmailAndPassword(this.auth, email, password);
             console.log(userAuth.user);
+            await this.monitorAuthState();
             return false;
         } catch (error) {
             if (error instanceof FirebaseError) {
@@ -129,7 +131,7 @@ class Auth {
         }
     }
 
-    public async monitorAuthState() {
+    private async monitorAuthState() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
                 userState.id = user.uid;
