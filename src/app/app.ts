@@ -7,7 +7,7 @@ import Router from './router/Router';
 class App {
     private router: Router = new Router();
 
-    public init(): void {
+    public async init() {
         this.router.init();
 
         // панель навигации

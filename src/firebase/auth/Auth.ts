@@ -10,7 +10,7 @@ import {
 import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
-import userState from '../../state/user.state';
+import { LocalStorage } from '../../localStorage/localStorage';
 
 class Auth {
     public static instance = new Auth();
@@ -32,28 +32,32 @@ class Auth {
     }
 
     // Вернуть юзера или null
-    private async getUser(email: string, password: string): Promise<IUser> {
+    public async getUser(id: string) {
         // const datasSet = collection(this.db, 'DatasSet');
         // const dataSnapshot = await getDocs(datasSet);
         // const dataSnapshot = await getDoc(datasSet.path);
         // const dataList = dataSnapshot.docs.map((doc) => doc.data());
         // console.log(dataList);
         // console.log(dataSnapshot)
-        // const docRef = doc(this.data, 'xPEZiSFKJZpeMVHddnQS');
-        // const docSnap = await getDoc(docRef);
+        const docRef = doc(this.db, 'Users', id);
+        const docSnap = await getDoc(docRef);
         // docSnap.
         // const bb = docSnap.data();
         // const tt = await getDoc(bb);
         // console.log(docSnap.ref);
-        const collections = await getDocs(this.data);
+        // const collections = await getDocs(this.data);
 
-        const docData = collections.docs.map((doc) => doc.data());
-        const getDoc1 = docData.filter((doc) => doc.email === email);
-        const user = getDoc1[0] as IUser;
+        // const docData = collections.docs.map((doc) => doc.data());
+        console.log(docSnap.data());
+        // const getDoc1 = docData.filter((doc) => doc.email === email);
+        // const user = getDoc1[0] as IUser;
+
         // const user = getDoc1[0];
         // const posts = user.posts as DocumentData;
         // console.log(posts.id);
-        return user;
+
+        // return user;
+
         // const bebe = getDoc.map((doc) => doc.data())
         // console.log(getDoc.map((doc) => console.log(doc)));
         // const docRef = doc(this.data, 'Tod');
@@ -69,9 +73,14 @@ class Auth {
     }
 
     // записать юзера
-    private async setUser(user: IUser): Promise<void> {
-        const test = doc(this.data);
-        await setDoc(test, user);
+    private async setUser(user: IUser, id: string): Promise<void> {
+        const data = collection(this.db, 'Users');
+        const docRef = doc(data, id);
+        console.log('setUserID: ' + docRef.id);
+        const userStore = LocalStorage.instance.getUser();
+        userStore.id = docRef.id;
+        // userState.id = docRef.id;
+        await setDoc(docRef, user);
     }
 
     // Обновить данные юзера
@@ -84,7 +93,8 @@ class Auth {
         const pass = user.password;
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
-            this.setUser(user);
+            this.setUser(user, create.user.uid);
+            await this.monitorAuthState();
             // const authUser = create.user;
             // console.log(authUser);
             // return user;
@@ -114,6 +124,7 @@ class Auth {
         try {
             const userAuth = await signInWithEmailAndPassword(this.auth, email, password);
             console.log(userAuth.user);
+            await this.monitorAuthState();
             return false;
         } catch (error) {
             if (error instanceof FirebaseError) {
@@ -129,12 +140,14 @@ class Auth {
         }
     }
 
-    public async monitorAuthState() {
+    private async monitorAuthState() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
-                userState.id = user.uid;
-                userState.email = user.email || '';
-                console.log(userState);
+                const userStore = LocalStorage.instance.getUser();
+                userStore.id = user.uid;
+                userStore.email = user.email || '';
+                LocalStorage.instance.putUser(userStore.id, userStore.email);
+                console.log(userStore);
             }
         });
     }
