@@ -37,7 +37,7 @@ class PopUpUploadComponent {
             <div class="upload-content__header">Create a post</div>
             <div class="upload-content__main">
             <span class="upload-content__main-img"></span>
-            <input type="file" class="upload-content__main-btn">Select on computer</input>
+            <input type="file" class="upload-content__main-btn" style="display: block">Select on computer
             </div>
             </div>
             </div>
