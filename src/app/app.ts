@@ -5,7 +5,6 @@ import PopUpUploadComponent from '../page/aside/PopUpUploadView';
 import footer from '../shared/components/footer/footer';
 import Router from './router/Router';
 
-
 class App {
     private router: Router = new Router();
 
@@ -20,8 +19,8 @@ class App {
             app.insertAdjacentHTML('afterbegin', aside.render());
             aside.mount();
         }
-        const upload = document.querySelector('.upload-btn') as HTMLElement;
-        upload.addEventListener('click', createPopap);
+        // const upload = document.querySelector('.upload-btn') as HTMLElement;
+        // upload.addEventListener('click', createPopap);
 
         const container = document.querySelector('.container');
         if (container) {
