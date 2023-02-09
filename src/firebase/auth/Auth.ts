@@ -10,9 +10,8 @@ import {
 import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
+import { LocalStorage } from '../../localStorage/localStorage';
 import userState from '../../state/user.state';
-import UserService from '../service/UserSevice';
-import UserState from '../../state/UserState';
 
 class Auth {
     public static instance = new Auth();
@@ -41,31 +40,31 @@ class Auth {
     }
 
     // Вернуть юзера или null
-    // private async getUser(email: string, password: string): Promise<IUser> {
-    //     // const datasSet = collection(this.db, 'DatasSet');
-    //     // const dataSnapshot = await getDocs(datasSet);
-    //     // const dataSnapshot = await getDoc(datasSet.path);
-    //     // const dataList = dataSnapshot.docs.map((doc) => doc.data());
-    //     // console.log(dataList);
-    //     // console.log(dataSnapshot)
-    //     // const docRef = doc(this.data, 'xPEZiSFKJZpeMVHddnQS');
-    //     // const docSnap = await getDoc(docRef);
-    //     // docSnap.
-    //     // const bb = docSnap.data();
-    //     // const tt = await getDoc(bb);
-    //     // console.log(docSnap.ref);
-    //     const collections = await getDocs(this.data);
+    private async getUser(email: string, password: string): Promise<IUser> {
+        // const datasSet = collection(this.db, 'DatasSet');
+        // const dataSnapshot = await getDocs(datasSet);
+        // const dataSnapshot = await getDoc(datasSet.path);
+        // const dataList = dataSnapshot.docs.map((doc) => doc.data());
+        // console.log(dataList);
+        // console.log(dataSnapshot)
+        // const docRef = doc(this.data, 'xPEZiSFKJZpeMVHddnQS');
+        // const docSnap = await getDoc(docRef);
+        // docSnap.
+        // const bb = docSnap.data();
+        // const tt = await getDoc(bb);
+        // console.log(docSnap.ref);
+        const collections = await getDocs(this.data);
 
-    //     const docData = collections.docs.map((doc) => doc.data());
-    //     const getDoc1 = docData.filter((doc) => doc.email === email);
-    //     const user = getDoc1[0] as IUser;
-    //     // const user = getDoc1[0];
-    //     // const posts = user.posts as DocumentData;
-    //     // console.log(posts.id);
-    //     return user;
-    //     // const bebe = getDoc.map((doc) => doc.data())
-    //     // console.log(getDoc.map((doc) => console.log(doc)));
-    //     // const docRef = doc(this.data, 'Tod');
+        const docData = collections.docs.map((doc) => doc.data());
+        const getDoc1 = docData.filter((doc) => doc.email === email);
+        const user = getDoc1[0] as IUser;
+        // const user = getDoc1[0];
+        // const posts = user.posts as DocumentData;
+        // console.log(posts.id);
+        return user;
+        // const bebe = getDoc.map((doc) => doc.data())
+        // console.log(getDoc.map((doc) => console.log(doc)));
+        // const docRef = doc(this.data, 'Tod');
 
     //     // const docRef = doc(this.data, 'xPEZiSFKJZpeMVHddnQS');
     //     // const col = collection(this.db, 'Posts');
@@ -78,16 +77,14 @@ class Auth {
     // }
 
     // записать юзера
-    private async setUser(user: IUser, id: string): Promise<void> {
-        try {
-            const data = collection(this.db, 'Users');
-            const docRef = doc(data, id);
-            console.log('setUserID: ' + docRef.id);
-            userState.id = docRef.id;
-            await setDoc(docRef, user);
-        } catch (error) {
-            console.log(error);
-        }
+    private async setUser(user: IUser): Promise<void> {
+        const data = collection(this.db, 'Users');
+        const docRef = doc(data, id);
+        console.log('setUserID: ' + docRef.id);
+        const userStore = LocalStorage.instance.getUser();
+        userStore.id = docRef.id;
+        // userState.id = docRef.id;
+        await setDoc(docRef, user);
     }
 
     // Обновить данные юзера
@@ -100,8 +97,7 @@ class Auth {
         const pass = user.password;
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
-            await UserService.instance.setUser(create.user.uid, user);
-            // this.setUser(user);
+            this.setUser(user);
             // const authUser = create.user;
             // console.log(authUser);
             // return user;
@@ -132,6 +128,7 @@ class Auth {
         try {
             const userAuth = await signInWithEmailAndPassword(this.auth, email, password);
             console.log(userAuth.user);
+            await this.monitorAuthState();
             return false;
         } catch (error) {
             if (error instanceof FirebaseError) {
@@ -147,13 +144,14 @@ class Auth {
         }
     }
 
-    public async monitorAuthState() {
+    private async monitorAuthState() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
-                userState.id = user.uid;
-                userState.email = user.email || '';
-                console.log(userState);
-                UserState.instance.setUserID(user.uid);
+                const userStore = LocalStorage.instance.getUser();
+                userStore.id = user.uid;
+                userStore.email = user.email || '';
+                LocalStorage.instance.putUser(userStore.id, userStore.email);
+                console.log(userStore);
             }
         });
     }
