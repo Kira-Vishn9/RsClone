@@ -1,4 +1,5 @@
 import './popapUpload.scss';
+import { pushkin } from '../../firebase/pull-push-img/push/pushkin';
 
 function createPopap() {
     const popap = `
@@ -9,7 +10,8 @@ function createPopap() {
             <div class="upload-content__header">Create a post</div>
             <div class="upload-content__main">
               <span class="upload-content__main-img"></span>
-              <button class="upload-content__main-btn">Select on computer</button>
+              <input type='file' id='file'>
+              <button class="submit upload-content__main-btn">Select on computer</button>
             </div>
           </div>
         </div>
@@ -18,6 +20,11 @@ function createPopap() {
   `;
 
     document.body.insertAdjacentHTML('beforeend', popap);
+    document.querySelector('.upload-content__main-btn')?.addEventListener('click',()=>{
+      pushkin('#file', {
+        multi: true,
+        accept: ['.png', '.jpg', '.jpeg', '.gif']})
+    } )
     document.body.classList.add('covert');
 
     const popapUpload = document.querySelector('#popap-upload') as HTMLElement;

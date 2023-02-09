@@ -15,7 +15,9 @@
   &-window {
     display: flex;
   }
-
+  input[type=file]{
+    display: none;
+  }
   .upload-content {
     width: 457px;
     height: 500px;
