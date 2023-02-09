@@ -1,7 +1,4 @@
-import aside from '../page/aside/aside';
 import AsideView from '../page/aside/AsideView';
-import createPopap from '../page/aside/popapUpload';
-import PopUpUploadComponent from '../page/aside/PopUpUploadView';
 import footer from '../shared/components/footer/footer';
 import Router from './router/Router';
 
