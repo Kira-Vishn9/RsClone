@@ -1,11 +1,13 @@
 type Sub = {
     eventType: string;
-    func: <T>(...args: T[]) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    func: (args: any) => void;
 };
 
 class Observer {
     private subscribers: Sub[] = [];
-    public subscribe<T>(eventType: string, fun: <T>(...args: T[]) => void): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public subscribe<T>(eventType: string, fun: (args: any) => void): void {
         const subject: Sub = {
             eventType: eventType,
             func: fun,
@@ -14,7 +16,8 @@ class Observer {
         this.subscribers.push(subject);
     }
 
-    public unsubscribe(eventType: string, fun: <T>(...args: T[]) => void): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public unsubscribe<T>(eventType: string, fun: (args: any) => void): void {
         for (let i = 0; i < this.subscribers.length; i += 1) {
             const subscribe = this.subscribers[i];
             if (subscribe.eventType === eventType) {
@@ -26,10 +29,12 @@ class Observer {
         }
     }
 
-    public emit<T>(eventType: string, ...args: T[]): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public emit<T>(eventType: string, args: any): void {
         for (let i = 0; i < this.subscribers.length; i += 1) {
             const subscribe = this.subscribers[i];
             if (subscribe.eventType === eventType) {
+                // const result: T = Object.assign([...args]);
                 subscribe.func(args);
             }
         }
