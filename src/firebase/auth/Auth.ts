@@ -11,6 +11,8 @@ import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
 import userState from '../../state/user.state';
+import UserService from '../service/UserSevice';
+import UserState from '../../state/UserState';
 
 class Auth {
     public static instance = new Auth();
@@ -76,12 +78,13 @@ class Auth {
     // }
 
     // записать юзера
-    private async setUser(user: IUser): Promise<void> {
+    private async setUser(user: IUser, id: string): Promise<void> {
         try {
-            const test = doc(this.data);
-            console.log('setUserID: ' + test.id);
-            userState.id = test.id;
-            await setDoc(test, user);
+            const data = collection(this.db, 'Users');
+            const docRef = doc(data, id);
+            console.log('setUserID: ' + docRef.id);
+            userState.id = docRef.id;
+            await setDoc(docRef, user);
         } catch (error) {
             console.log(error);
         }
@@ -97,7 +100,8 @@ class Auth {
         const pass = user.password;
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
-            this.setUser(user);
+            await UserService.instance.setUser(create.user.uid, user);
+            // this.setUser(user);
             // const authUser = create.user;
             // console.log(authUser);
             // return user;
@@ -123,6 +127,7 @@ class Auth {
     //     }
     // }
 
+    public test: IUser | null = null;
     public async signinUser(email: string, password: string) {
         try {
             const userAuth = await signInWithEmailAndPassword(this.auth, email, password);
@@ -148,6 +153,7 @@ class Auth {
                 userState.id = user.uid;
                 userState.email = user.email || '';
                 console.log(userState);
+                UserState.instance.setUserID(user.uid);
             }
         });
     }
