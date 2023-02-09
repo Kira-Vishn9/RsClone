@@ -1,19 +1,20 @@
 import './style/item.profile.scss';
+function makePost(imgUrl: string, amountLike: number = 0, amountMessage: number = 0): string {
+    return `
+    <div class="item__profile">
+        <img src="${imgUrl}">
+        <div class="like-message__item">
+            <div class="like__item">
+                    <span></span>
+                    <span>${amountLike}</span>
+            </div>
 
-const itemProfile = `
-<div class="item__profile">
-    <img src="https://kipmu.ru/wp-content/uploads/jptr-1.jpg">
-    <div class="like-message__item">
-        <div class="like__item">
-                <span></span>
-                <span>10</span>
-        </div>
-
-        <div class="message__item">
-                <span></span>
-                <span>4</span>
+            <div class="message__item">
+                    <span></span>
+                    <span>${amountMessage}</span>
+            </div>
         </div>
     </div>
-</div>
-`;
-export default itemProfile;
+    `;
+}
+export default makePost;
