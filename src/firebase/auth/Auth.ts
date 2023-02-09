@@ -147,7 +147,6 @@ class Auth {
                 userStore.id = user.uid;
                 userStore.email = user.email || '';
                 LocalStorage.instance.putUser(userStore.id, userStore.email);
-                console.log(userStore);
             }
         });
     }
