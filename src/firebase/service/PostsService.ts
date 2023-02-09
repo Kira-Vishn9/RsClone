@@ -2,6 +2,8 @@ import { getFirestore, collection, getDocs, doc, getDoc, setDoc, DocumentData } 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import app from '../config/config';
 import IPosts from '../model/IPosts';
+import userState from '../../state/user.state';
+import UserState from '../../state/UserState';
 
 class PostsService {
     public static instance: PostsService = new PostsService();
@@ -39,8 +41,11 @@ class PostsService {
 
     public async setPosts(post: IPosts): Promise<void> {
         try {
+            // post.userID = userState.id;
+            post.userID = UserState.instance.UserID as string;
             const test = doc(this.data);
             await setDoc(test, post);
+            UserState.instance.addPostID(test.id);
         } catch (error) {
             console.log(error);
         }
