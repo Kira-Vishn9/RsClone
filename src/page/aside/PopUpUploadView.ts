@@ -49,7 +49,6 @@ class PopUpUploadComponent {
     }
 
     private makeNewPost(src: string): string {
-          console.log('sdf')
         return `
         <div class = 'popap-dark'>
         <div class = 'wrapper'>
@@ -87,7 +86,7 @@ class PopUpUploadComponent {
         const fileReader = new FileReader();
         fileReader.onload = () => {
             console.log('sdas')
-            if (this.root === null) return;
+            if (this.root === null) return
             const result = fileReader.result as string;
             this.root.innerHTML = '';
             this.root.insertAdjacentHTML('afterbegin', this.makeNewPost(result));
