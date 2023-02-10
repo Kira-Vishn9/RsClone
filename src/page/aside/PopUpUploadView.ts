@@ -32,15 +32,17 @@ class PopUpUploadComponent {
         return `
         <div class="popap" id="popap-upload">
             <div class="popap-dark">
-            <div class="popap-window">
-            <div class="upload-content">
-            <div class="upload-content__header">Create a post</div>
-            <div class="upload-content__main">
-            <span class="upload-content__main-img"></span>
-            <input type="file" class="upload-content__main-btn" style="display: block">Select on computer
-            </div>
-            </div>
-            </div>
+                <div class="popap-window">
+                    <div class="upload-content">
+                        <div class="upload-content__header">Create a post</div>
+                        <div class="upload-content__main">
+                            <span class="upload-content__main-img"></span>
+                            <button class="upload-content__main-btn">
+                            <span class = 'less'>Submit </span>
+                            <input type="file"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         `;
@@ -48,24 +50,15 @@ class PopUpUploadComponent {
 
     private makeNewPost(src: string): string {
         return `
+        <div class = 'popap-dark'>
+        <div class = 'wrapper'>
           <div class="upload-content__header">Create a post</div>
           <div class="upload-content__main">
-            <img class = 'img-post' src="${src}" 
-            style="
-              margin-bottom: 20px;
-              width: 90%;
-          alt="">
-            <input class="input-text" type='text' style="
-            height: 200px;
-            background: black;
-            width: 90%;
-            color: #fff;
-            border: 0px solid black;
-            border-radius: 10px;
-            "
-            >
+            <img class = 'img-post' src="${src}" alt="">
+            <textarea class="input-text" type='text'></textarea>
             <input type="file" id="file">
             <button class="submit upload-content__main-btn">Submit</button>
+          </div>
           </div>
         `;
     }
@@ -117,6 +110,7 @@ class PopUpUploadComponent {
                     if (typeof urlImg === 'string') {
                         post.fileURL = urlImg;
                         PostsService.instance.setPosts(post); // Запись Поста в Базу
+                        document.querySelector('.popap-dark')?.remove();
                     }
 
                     console.log(`KEK: ${urlImg}`);
