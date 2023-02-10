@@ -16,26 +16,25 @@ class PostModel {
         this.observer = observer;
     }
 
-    public init(): void {
+    public execute(): void {
         this.getPost();
     }
 
     private async getPost(): Promise<void> {
         const userID = UserState.instance.UserID as string;
-        console.log('USERID: ' + userID);
         const postID = UserState.instance.PostsID[0];
-        console.log('POST: ' + postID);
+        // const post: IPosts | boolean = await PostsService.instance.getPost(postID);
+        // if (typeof post === 'boolean') return;
+        const posts: IPosts[] | boolean = await PostsService.instance.getAllPosts();
+        if (typeof posts === 'boolean') return;
+        for (let i = 0; i < posts.length; i++) {
+            const post = posts[i];
+            if (post.userID === userID) {
+                this.observer.emit('eventPost', post);
+            }
+        }
 
-        // const user: IUser | null = await UserService.instance.getUser(userID);
-        const post: IPosts | boolean = await PostsService.instance.getPost(postID);
-        console.log('POSTMODEL');
-        console.log(post);
-        if (typeof post === 'boolean') return;
-
-        // const img = await PullPushImg.instance.getFile(post.fileName);
-        console.log(typeof post);
-        debugger;
-        this.observer.emit('eventPost', post);
+        // window.location.href = '#/profile';
     }
 }
 
