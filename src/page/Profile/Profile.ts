@@ -11,7 +11,7 @@ class Profile extends Base {
     public mount(): void {
         console.log('Profile: MOUNT');
         this.view.init();
-        this.postModel.init();
+        this.postModel.execute();
     }
 
     public unmount(): void {
