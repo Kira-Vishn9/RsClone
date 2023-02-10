@@ -1,12 +1,12 @@
 .message-block {
-    width: 935px;
+    width: 880px;
     height: 671px;
     display: flex;
     margin: 0 auto;
     padding-top: 30px;
 
     &__left {
-        width: 349px;
+        width: 300px;
         border: 1px solid #dbdbdb;
 
         &-header {
@@ -65,7 +65,7 @@
 
     &__right {
         border: 1px solid #dbdbdb;
-        width: 583px;
+        width: 580px;
 
         &-header {
             height: 60px;

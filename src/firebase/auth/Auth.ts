@@ -11,7 +11,6 @@ import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
 import { LocalStorage } from '../../localStorage/localStorage';
-import userState from '../../state/user.state';
 import UserService from '../service/UserSevice';
 
 class Auth {
@@ -27,6 +26,7 @@ class Auth {
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
             UserService.instance.setUser(create.user.uid, user);
+            await this.monitorAuthState();
             return '';
         } catch (error) {
             if (error instanceof FirebaseError) {

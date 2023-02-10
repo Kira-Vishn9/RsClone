@@ -3,6 +3,7 @@ const PATHS = {
     message: 'message',
     profile: 'profile',
     account: 'account',
+    search: 'search',
 };
 
 export default PATHS;
