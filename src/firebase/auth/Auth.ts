@@ -27,6 +27,7 @@ class Auth {
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
             UserService.instance.setUser(create.user.uid, user);
+            await this.monitorAuthState();
             return '';
         } catch (error) {
             if (error instanceof FirebaseError) {
