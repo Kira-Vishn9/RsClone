@@ -25472,9 +25472,9 @@ class PopUpUploadComponent {
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 var _a;
-                console.log('sdas');
-                if (this.root === null)
+                if (this.root === null) {
                     return;
+                }
                 const result = fileReader.result;
                 this.root.innerHTML = '';
                 this.root.insertAdjacentHTML('afterbegin', this.makeNewPost(result));
@@ -25541,7 +25541,6 @@ class PopUpUploadComponent {
         `;
     }
     makeNewPost(src) {
-        console.log('sdf');
         return `
         <div class = 'popap-dark'>
         <div class = 'wrapper'>
