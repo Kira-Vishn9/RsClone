@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -23,32 +22,20 @@ module.exports = {
 		filename: '[name].js',
 		publicPath: "/",
 		path: path.resolve(__dirname, 'dist'),
-        assetModuleFilename: 'assets/[hash][ext][query]', // output dir for assets
 	},
     resolve: {
         extensions: ['.ts', '.js'],
     },
 	plugins: [
-        new CleanWebpackPlugin(),
+		new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
         }),
-        new CopyWebpackPlugin({
-            patterns: [
-              {
-                from: paths.public,
-                to: 'assets',
-                globOptions: {
-                  ignore: ['*.DS_Store'],
-                },
-              },
-            ],
-          }),
 		new MiniCssExtractPlugin({
 			filename: 'main.css',
 		}),
-        new EslingPlugin({ extensions: 'ts' }), 
+        new EslingPlugin({ extensions: 'ts' }),
 	],
 	module: {
 		rules: [
