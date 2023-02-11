@@ -36,10 +36,15 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-              { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/fav/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/fav/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/fav/' },
-            ]}),
+              {
+                from: paths.public,
+                to: 'assets',
+                globOptions: {
+                  ignore: ['*.DS_Store'],
+                },
+              },
+            ],
+          }),
 		new MiniCssExtractPlugin({
 			filename: 'main.css',
 		}),
@@ -58,7 +63,7 @@ module.exports = {
 			},
 			{
 				test: /\.(png|svg|jpg|jpeg|gif)$/i,
-				type: 'asset/fav/resource',
+				type: 'asset/resource',
 			},
 			{
 				test: /\.s[ac]ss$/i,
