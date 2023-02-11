@@ -23,7 +23,7 @@ module.exports = {
 		filename: '[name].js',
 		publicPath: "/",
 		path: path.resolve(__dirname, 'dist'),
-        assetModuleFilename: 'assets/[hash][ext][query]', // output dir for assets
+        assetModuleFilename: 'assets/fav/[hash][ext][query]', // output dir for assets
 	},
     resolve: {
         extensions: ['.ts', '.js'],
@@ -36,9 +36,9 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-              { from: path.resolve(__dirname, './src/shared/Assets/icon/'), to: './assets/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/image/'), to: './assets/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/svg/'), to: './assets/' },
+              { from: path.resolve(__dirname, './shared/Assets/icon/'), to: './assets/fav/' },
+              { from: path.resolve(__dirname, './shared/Assets/image/'), to: './assets/fav/' },
+              { from: path.resolve(__dirname, './shared/Assets/svg/'), to: './assets/fav/' },
             ]}),
 		new MiniCssExtractPlugin({
 			filename: 'main.css',
