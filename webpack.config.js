@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -36,6 +37,12 @@ module.exports = {
 			filename: 'main.css',
 		}),
         new EslingPlugin({ extensions: 'ts' }),
+		new CopyWebpackPlugin({
+			patterns: [
+			  { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },
+			  { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/image/' },
+			  { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/svg/' },
+			]}),
 	],
 	module: {
 		rules: [

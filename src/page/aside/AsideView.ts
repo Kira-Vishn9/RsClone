@@ -15,7 +15,7 @@ class AsideView {
     public render(): string {
         return `
         <aside class="aside">
-        <img src="../../../../shared/Assets/image/logo.png" alt="instagram" class="logo">
+        <img src="./assets/image/logo.png" alt="instagram" class="logo">
         <ul class="aside__list">
           <li class="aside__list-item aside__list-active"><a href="#/home"><span class="home-ico"></span>Home</a></li>
           <li class="aside__list-item"><a href="#/message"><span class="messenger-ico"></span>Messages</a></li>
