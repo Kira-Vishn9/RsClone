@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
@@ -28,20 +29,21 @@ module.exports = {
         extensions: ['.ts', '.js'],
     },
 	plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
         }),
         new CopyWebpackPlugin({
             patterns: [
-              { from: path.resolve(__dirname, './src/shared/Assets/icon/'), to: './assets/favicon/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/image/'), to: './assets/favicon/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/svg/'), to: './assets/favicon/' },
+              { from: path.resolve(__dirname, './src/shared/Assets/icon/'), to: './assets/' },
+              { from: path.resolve(__dirname, './src/shared/Assets/image/'), to: './assets/' },
+              { from: path.resolve(__dirname, './src/shared/Assets/svg/'), to: './assets/' },
             ]}),
 		new MiniCssExtractPlugin({
 			filename: 'main.css',
 		}),
-        new EslingPlugin({ extensions: 'ts' }),
+        new EslingPlugin({ extensions: 'ts' }), 
 	],
 	module: {
 		rules: [
