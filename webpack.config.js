@@ -33,9 +33,9 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
-              { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/favicon/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/favicon/' },
-              { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/favicon/' },
+              { from: path.resolve(__dirname, './src/shared/Assets/icon/'), to: './assets/favicon/' },
+              { from: path.resolve(__dirname, './src/shared/Assets/image/'), to: './assets/favicon/' },
+              { from: path.resolve(__dirname, './src/shared/Assets/svg/'), to: './assets/favicon/' },
             ]}),
 		new MiniCssExtractPlugin({
 			filename: 'main.css',
