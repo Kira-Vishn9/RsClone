@@ -25959,7 +25959,7 @@ function __classPrivateFieldIn(state, receiver) {
   \**********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "f6c06e2418a2c702884c.svg";
+module.exports = __webpack_require__.p + "assets/favicon/f6c06e2418a2c702884c.svg";
 
 /***/ }),
 
@@ -25969,7 +25969,7 @@ module.exports = __webpack_require__.p + "f6c06e2418a2c702884c.svg";
   \********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "4ea9c62f641a7ac67bc0.svg";
+module.exports = __webpack_require__.p + "assets/favicon/4ea9c62f641a7ac67bc0.svg";
 
 /***/ }),
 
@@ -25979,7 +25979,7 @@ module.exports = __webpack_require__.p + "4ea9c62f641a7ac67bc0.svg";
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "7c850d4741e4b0953648.svg";
+module.exports = __webpack_require__.p + "assets/favicon/7c850d4741e4b0953648.svg";
 
 /***/ }),
 
@@ -25989,7 +25989,7 @@ module.exports = __webpack_require__.p + "7c850d4741e4b0953648.svg";
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "cb21e27d7151efc12b12.svg";
+module.exports = __webpack_require__.p + "assets/favicon/cb21e27d7151efc12b12.svg";
 
 /***/ }),
 
@@ -25999,7 +25999,7 @@ module.exports = __webpack_require__.p + "cb21e27d7151efc12b12.svg";
   \**********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "698517d7cea77f621398.svg";
+module.exports = __webpack_require__.p + "assets/favicon/698517d7cea77f621398.svg";
 
 /***/ }),
 
@@ -26009,7 +26009,7 @@ module.exports = __webpack_require__.p + "698517d7cea77f621398.svg";
   \********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "530d3efd75a6a90cd0dc.svg";
+module.exports = __webpack_require__.p + "assets/favicon/530d3efd75a6a90cd0dc.svg";
 
 /***/ }),
 
@@ -26019,7 +26019,7 @@ module.exports = __webpack_require__.p + "530d3efd75a6a90cd0dc.svg";
   \**********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "6c3a29ac0417be78a59d.svg";
+module.exports = __webpack_require__.p + "assets/favicon/6c3a29ac0417be78a59d.svg";
 
 /***/ }),
 
@@ -26029,7 +26029,7 @@ module.exports = __webpack_require__.p + "6c3a29ac0417be78a59d.svg";
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "759dd4fdb6400d9a05f5.png";
+module.exports = __webpack_require__.p + "assets/favicon/759dd4fdb6400d9a05f5.png";
 
 /***/ }),
 
@@ -26039,7 +26039,7 @@ module.exports = __webpack_require__.p + "759dd4fdb6400d9a05f5.png";
   \*********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "ad178c0df28bc133be34.svg";
+module.exports = __webpack_require__.p + "assets/favicon/ad178c0df28bc133be34.svg";
 
 /***/ }),
 
@@ -26049,7 +26049,7 @@ module.exports = __webpack_require__.p + "ad178c0df28bc133be34.svg";
   \*****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "786b740351659a253175.svg";
+module.exports = __webpack_require__.p + "assets/favicon/786b740351659a253175.svg";
 
 /***/ }),
 
@@ -26059,7 +26059,7 @@ module.exports = __webpack_require__.p + "786b740351659a253175.svg";
   \***********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "8c2d4d902321820398f2.svg";
+module.exports = __webpack_require__.p + "assets/favicon/8c2d4d902321820398f2.svg";
 
 /***/ }),
 
@@ -26069,7 +26069,7 @@ module.exports = __webpack_require__.p + "8c2d4d902321820398f2.svg";
   \*******************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "925aa8e685ab0217bb34.png";
+module.exports = __webpack_require__.p + "assets/favicon/925aa8e685ab0217bb34.png";
 
 /***/ }),
 
@@ -26079,7 +26079,7 @@ module.exports = __webpack_require__.p + "925aa8e685ab0217bb34.png";
   \*********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "21bce46c7b0f8b8af95f.svg";
+module.exports = __webpack_require__.p + "assets/favicon/21bce46c7b0f8b8af95f.svg";
 
 /***/ }),
 
@@ -26089,7 +26089,7 @@ module.exports = __webpack_require__.p + "21bce46c7b0f8b8af95f.svg";
   \************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "ecab632926e79f3d2065.svg";
+module.exports = __webpack_require__.p + "assets/favicon/ecab632926e79f3d2065.svg";
 
 /***/ }),
 
