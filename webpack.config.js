@@ -22,6 +22,7 @@ module.exports = {
 		filename: '[name].js',
 		publicPath: "/",
 		path: path.resolve(__dirname, 'dist'),
+        assetModuleFilename: 'assets/favicon/[hash][ext][query]', // output dir for assets
 	},
     resolve: {
         extensions: ['.ts', '.js'],
