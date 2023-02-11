@@ -23,7 +23,7 @@ module.exports = {
 		filename: '[name].js',
 		publicPath: "/",
 		path: path.resolve(__dirname, 'dist'),
-        assetModuleFilename: 'assets/fav/[hash][ext][query]', // output dir for assets
+        assetModuleFilename: 'assets/[hash][ext][query]', // output dir for assets
 	},
     resolve: {
         extensions: ['.ts', '.js'],
