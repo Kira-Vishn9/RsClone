@@ -14,14 +14,14 @@ class UserService {
     }
 
     // Вернуть массив юзеров
-    private async getAllUser(): Promise<IUser[] | boolean> {
+    public async getAllUser(): Promise<IUser[] | null> {
         try {
             const collections = await getDocs(this.data);
             const data: IUser[] = collections.docs.map((doc) => doc.data()) as IUser[];
             return data;
         } catch (error: unknown) {
             console.error(error);
-            return false;
+            return null;
         }
     }
     // Вернуть юзера или null

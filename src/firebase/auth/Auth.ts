@@ -11,7 +11,6 @@ import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
 import { LocalStorage } from '../../localStorage/localStorage';
-import userState from '../../state/user.state';
 import UserService from '../service/UserSevice';
 
 class Auth {
@@ -64,7 +63,6 @@ class Auth {
                 userStore.id = user.uid;
                 userStore.email = user.email || '';
                 LocalStorage.instance.putUser(userStore.id, userStore.email);
-                console.log(userStore);
             }
         });
     }

@@ -1,7 +1,8 @@
 .aside {
-  width: 20%;
+  width: 12%;
   padding: 30px;
   font-size: 18px;
+  position: fixed;
 
   &__list {
     margin-top: 30px;
@@ -33,14 +34,16 @@
 .aside__list-item:hover .home-ico,
 .aside__list-item:hover .messenger-ico,
 .aside__list-item:hover .new-posts-ico,
-.aside__list-item:hover .profile-ico  {
+.aside__list-item:hover .profile-ico,
+.aside__list-item:hover .search-ico  {
   transform: scale(1.2);
 }
 
 .home-ico,
 .messenger-ico,
 .new-posts-ico,
-.profile-ico {
+.profile-ico,
+.search-ico {
   display: block;
   width: 22px;
   height: 22px;
@@ -68,4 +71,8 @@
   border: 1px solid #000;
   border-radius: 50%;
   background-color: #fff;
+}
+
+.search-ico {
+  background: url('../../shared/Assets/icon/search.png');
 }

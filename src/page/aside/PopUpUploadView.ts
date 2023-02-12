@@ -86,7 +86,9 @@ class PopUpUploadComponent {
 
         const fileReader = new FileReader();
         fileReader.onload = () => {
-            if (this.root === null) return;
+            if (this.root === null) {
+                return;
+            }
             const result = fileReader.result as string;
             this.root.innerHTML = '';
             this.root.insertAdjacentHTML('afterbegin', this.makeNewPost(result));
