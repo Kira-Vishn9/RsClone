@@ -1,3 +1,4 @@
+import { DocumentReference } from 'firebase/firestore/lite';
 import IPosts from '../../firebase/model/IPosts';
 import PullPushImg from '../../firebase/pull-push-img/PullPushImg';
 import PostsService from '../../firebase/service/PostsService';
@@ -99,18 +100,23 @@ class PopUpUploadComponent {
                     // Гдето должен формировать в другом месте, в каком хз!!
                     // Формирования запроса
                     const userID = UserState.instance.UserID as string;
+                    const author = UserState.instance.Author;
                     const post: IPosts = {
                         userID: userID, // Формирования запроса
                         fileName: `${userID}.${file[0].name}`, // Формирования запроса
                         fileURL: '',
                         text: text === undefined ? '' : text, // Формирования запроса
+                        likesCount: 0,
+                        commentsCount: 0,
+                        author: author,
                     }; // Формирования запроса
                     console.log(post);
                     const urlImg = await PullPushImg.instance.upload(file[0], post.fileName); // Запись Картинки
                     if (typeof urlImg === 'string') {
                         post.fileURL = urlImg;
                         PostsService.instance.setPosts(post); // Запись Поста в Базу
-                        document.querySelector('.popap-dark')?.remove();
+                        // document.querySelector('.popap-dark')?.remove();
+                        this.root?.remove();
                     }
 
                     console.log(`KEK: ${urlImg}`);
