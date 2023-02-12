@@ -1,4 +1,4 @@
-import { DocumentData, DocumentReference } from 'firebase/firestore/lite';
+import { DocumentData, DocumentReference, DocumentSnapshot } from 'firebase/firestore/lite';
 
 interface IPosts {
     userID: string;
@@ -9,12 +9,13 @@ interface IPosts {
     nickName?: string;
 
     likes?: DocumentReference;
-    likesCount?: number;
+    likesCount: number;
 
     comments?: DocumentReference;
-    commentsCount?: number;
+    commentsCount: number;
 
     createdAt?: Date;
+    author: { fullname: string; nickName: string };
 }
 
 export default IPosts;

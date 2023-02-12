@@ -2,8 +2,9 @@ const PATHS = {
     home: 'home',
     message: 'message',
     profile: 'profile',
-    account: 'account',
     search: 'search',
+    account: 'account',
+    settings: 'settings',
 };
 
 export default PATHS;

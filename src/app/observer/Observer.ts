@@ -1,7 +1,8 @@
 type Sub = {
     eventType: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    func: (args: any) => void;
+    func: (args: any, cb?: (args: any) => void) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 };
 
 class Observer {
@@ -30,12 +31,16 @@ class Observer {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public emit<T>(eventType: string, args: any): void {
+    public emit<T>(eventType: string, args: any, callback?: (args: any) => void): void | string {
         for (let i = 0; i < this.subscribers.length; i += 1) {
             const subscribe = this.subscribers[i];
             if (subscribe.eventType === eventType) {
                 // const result: T = Object.assign([...args]);
-                subscribe.func(args);
+                if (callback !== undefined) {
+                    subscribe.func(args, callback);
+                } else {
+                    subscribe.func(args);
+                }
             }
         }
     }

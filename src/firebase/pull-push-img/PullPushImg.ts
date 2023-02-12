@@ -2,6 +2,7 @@ import app from '../config/config';
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { FirebaseError, getApp } from 'firebase/app';
 import userState from '../../state/user.state';
+import UserService from '../service/UserSevice';
 
 class PullPushImg {
     public static instance: PullPushImg = new PullPushImg();
@@ -21,6 +22,19 @@ class PullPushImg {
         } catch (error) {
             // console.log(error);
             console.log('Загрузка Файла Faild!!!');
+        }
+    }
+
+    public async uploadAvatar(file: File): Promise<void | string> {
+        try {
+            const pathCreate = `avatars/${file.name}`;
+            const refImg = ref(this.storage, pathCreate);
+            const upload = await uploadBytes(refImg, await file.arrayBuffer());
+            const result = await getDownloadURL(refImg);
+            await UserService.instance.updateUserAvatar(result);
+            return result;
+        } catch (error) {
+            console.log(error);
         }
     }
 
