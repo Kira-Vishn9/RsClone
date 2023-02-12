@@ -1,12 +1,12 @@
 import Base from '../../app/base/Base';
 import Observer from '../../app/observer/Observer';
-import PostModel from './model/PostModel';
+import ProfileModel from './model/ProfileModel';
 import ProfileView from './view/ProfileView';
 
 class Profile extends Base {
     private observer: Observer = new Observer();
     private view: ProfileView = new ProfileView(this.observer);
-    private postModel: PostModel = new PostModel(this.observer);
+    private postModel: ProfileModel = new ProfileModel(this.observer);
 
     public mount(): void {
         console.log('Profile: MOUNT');
