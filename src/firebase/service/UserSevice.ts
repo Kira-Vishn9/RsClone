@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
+import { collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
 import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
 import app from '../config/config';
@@ -30,6 +30,11 @@ class UserService {
             const docRef = doc(this.data, id);
             const docSnaphot = await getDoc(docRef);
             const result = docSnaphot.data() as IUser;
+            const u = {
+                fullname: result.name,
+                nickName: result.nikName,
+            };
+            UserState.instance.Author = u;
             return result;
         } catch (error) {
             console.log(error);
@@ -46,6 +51,11 @@ class UserService {
             console.log('setUserID: ' + docRef.id);
             userState.id = docRef.id;
             UserState.instance.setUserID(docRef.id);
+            const u = {
+                fullname: user.name,
+                nickName: user.nikName,
+            };
+            UserState.instance.Author = u;
             await setDoc(docRef, user);
         } catch (error) {
             console.log(error);
@@ -53,8 +63,15 @@ class UserService {
     }
 
     // Обновить данные юзера
-    private async updateUser(): Promise<void> {
-        //
+    public async updateUserAvatar(urlImg: string): Promise<void> {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        // const user = await this.getUser(userID);
+        const docRef = doc(this.data, userID);
+
+        await updateDoc(docRef, {
+            avatar: urlImg,
+        });
     }
 }
 
