@@ -1,0 +1,59 @@
+.search {
+    width: 400px;
+    height: 95%;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    margin: 0 auto;
+    margin-top: 30px;
+
+    &__header {
+        padding: 10px;
+        height: 60px;
+        border-bottom: 1px solid #dbdbdb;
+
+        &-input {
+            font-size: 18px;
+            height: 100%;
+            outline: none;
+            border: none;
+            padding: 3px 16px;
+            width: 100%;
+        }
+    }
+
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &-user {
+        height: 72px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    &-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        margin-right: 12px;
+    }
+
+    &-content {
+        font-size: 16px;
+        line-height: 16px;
+        width: 100%;
+    }
+
+    &-title {
+        margin-bottom: 8px;
+        color: #262626;
+    }
+
+    &-subtitle {
+        color: #8e8e8e;
+    }
+}
