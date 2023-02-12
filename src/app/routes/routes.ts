@@ -2,6 +2,7 @@ import Account from '../../page/Account/Account';
 import Home from '../../page/Home/Home';
 import Message from '../../page/Message/Message';
 import Profile from '../../page/Profile/Profile';
+import ProfileSettings from '../../page/ProfileSettings/ProfileSettings';
 import Base from '../base/Base';
 import PATHS from '../common/path';
 
@@ -10,6 +11,7 @@ const routes = [
     { path: PATHS.home, component: new Home() },
     { path: PATHS.message, component: new Message() },
     { path: PATHS.profile, component: new Profile() },
+    { path: PATHS.settings, component: new ProfileSettings() },
 ];
 
 function findRoutes(path: string): Base | null {
