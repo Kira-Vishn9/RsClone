@@ -7,7 +7,7 @@
     "lint": "eslint . --ext .ts",
     "start": "set NODE_ENV=development&&webpack serve",
     "build:dev": "set NODE_ENV=development&&webpack",
-    "build:prod": "set NODE_ENV=production&&webpack",
+    "build": "webpack --mode production",
     "clean": "rd /s /q dist",
     "test": "jest"
   },
@@ -28,6 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.46.0",
     "babel-jest": "^29.3.1",
+    "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^5.2.7",
     "eslint": "^7.32.0",
@@ -57,6 +58,7 @@
     "webpack-dev-server": "^3.11.3"
   },
   "dependencies": {
+    "build": "^0.1.4",
     "firebase": "^9.17.1",
     "firebaseui": "^6.0.2"
   }
