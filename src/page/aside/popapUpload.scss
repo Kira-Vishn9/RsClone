@@ -10,44 +10,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-y: scroll;
   }
   &-window {
     display: flex;
   }
-  input[type=file]{
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    z-index: 100;
-    position: relative;
-  }
-  .less{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-  }
+
   .wrapper{
     background-color: white;
     border-radius: 10px;
     border: 0;
     display: flex;
     flex-direction: column;
-    max-width: 550px;
-    max-height: 700px;
+    width: 457px;
+    height: 500px;
+    overflow: hidden;
   }
-  .input-text{
-    padding: 10px;
-    height: 200px;
-    background: black;
-    width: 90%;
-    color: #fff;
-    border: 0px solid black;
-    border-radius: 10px;
-  }
-  .img-post{
-    margin-bottom: 20px;
-    width: 90%;
-  }
+
   .upload-content {
     width: 457px;
     height: 500px;
@@ -64,7 +43,6 @@
     }
 
     &__main {
-      overflow: hidden;
       height: 90%;
       display: flex;
       flex-direction: column;
@@ -89,15 +67,47 @@
           font-size: 14px;
           line-height: 18px;
           color: #ffffff;
-          cursor: pointer;
           outline: none;
           border: none;
           transition: 0.5s;
 
           &:hover {
             background: #1877f2;
+            cursor: pointer;
           }
       }
     }
+  }
+
+  input[type=file]{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 100;
+    position: relative;
+    cursor: pointer;
+  }
+  .less{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding-top: 8px;
+    cursor: pointer;
+  }
+
+  .input-text{
+    padding: 10px;
+    height: 50px;
+    resize: none;
+    background: black;
+    width: 90%;
+    color: #fff;
+    border: 0px solid black;
+    border-radius: 10px;
+  }
+  .img-post{
+    margin-bottom: 20px;
+    width: auto;
+    height: 250px;
   }
 }

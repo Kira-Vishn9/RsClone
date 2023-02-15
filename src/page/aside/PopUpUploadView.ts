@@ -2,6 +2,7 @@ import { DocumentReference } from 'firebase/firestore/lite';
 import IPosts from '../../firebase/model/IPosts';
 import PullPushImg from '../../firebase/pull-push-img/PullPushImg';
 import PostsService from '../../firebase/service/PostsService';
+import { LocalStorage } from '../../localStorage/localStorage';
 import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
 import './popapUpload.scss';
@@ -57,7 +58,6 @@ class PopUpUploadComponent {
           <div class="upload-content__main">
             <img class = 'img-post' src="${src}" alt="">
             <textarea class="input-text" type='text'></textarea>
-            <input type="file" id="file">
             <button class="submit upload-content__main-btn">Submit</button>
           </div>
           </div>
@@ -102,17 +102,21 @@ class PopUpUploadComponent {
                     // Гдето должен формировать в другом месте, в каком хз!!
                     // Формирования запроса
                     const userID = UserState.instance.UserID as string;
-                    const author = UserState.instance.Author;
+
+                    // const author = UserState.instance.Author;
+                    const author = LocalStorage.instance.getAuthor();
                     const post: IPosts = {
                         userID: userID, // Формирования запроса
                         fileName: `${userID}.${file[0].name}`, // Формирования запроса
                         fileURL: '',
                         text: text === undefined ? '' : text, // Формирования запроса
                         likesCount: 0,
+                        likesUsers: [],
                         commentsCount: 0,
                         author: author,
+                        time: Date.now(),
+                        postID: '',
                     }; // Формирования запроса
-                    console.log(post);
                     const urlImg = await PullPushImg.instance.upload(file[0], post.fileName); // Запись Картинки
                     if (typeof urlImg === 'string') {
                         post.fileURL = urlImg;
@@ -120,7 +124,7 @@ class PopUpUploadComponent {
                         // document.querySelector('.popap-dark')?.remove();
                         this.root?.remove();
                     }
-
+                    document.body.classList.remove('covert');
                     console.log(`KEK: ${urlImg}`);
                 });
         };

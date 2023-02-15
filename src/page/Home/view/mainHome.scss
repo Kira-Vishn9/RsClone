@@ -131,6 +131,10 @@
         @include icon-style;
         margin-left: auto;
     }
+
+    &__like-black {
+        background: url('../../../shared/Assets/icon/like-black.svg');
+    }
 }
 
 .count {
@@ -146,6 +150,7 @@
     justify-content: center;
     font-size: 14px;
     line-height: 18px;
+    position: relative;
 
     &__nickname {
         font-weight: 900;
@@ -153,7 +158,7 @@
     }
 
     &__text {
-        height: 34px;
+        height: 37px;
         overflow: hidden;
     }
 
@@ -204,4 +209,21 @@
             color: #00416b;
         }
     }
+}
+
+.more-text {
+    visibility: hidden;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    width: 70px;
+    background-color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    top: 53px;
+    cursor: pointer;
+}
+
+.visible-text {
+    visibility: visible;
 }
