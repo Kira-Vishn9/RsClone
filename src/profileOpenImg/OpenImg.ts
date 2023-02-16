@@ -1,7 +1,7 @@
 import './OpenImg.scss';
 
 class OpenImg {
-    private itemTarget = document.querySelector('.items-grid__profile');
+    // private itemTarget = document.querySelector('.items-grid__profile');
 
     public constructor() {
         //
@@ -120,3 +120,15 @@ class OpenImg {
 }
 
 export default OpenImg;
+
+const tt = `
+<li class = 'new-comment'>
+      <div style="display: flex; align-items: center;">
+            <img src="../shared/Assets/image/post-1.jpg" class = 'user-comentator-photo' alt='photoUser'>
+           <span class= "name-comentator-photo">Regina</span>
+      </div>
+                
+      <p class="text-comentator-photo">
+      Блин, сердце кровью обливается, вот всё у вас хорошо, посетителей нехватает чувствуется. От души советую vika_kaxova Виктория молодая опытная специалистка. с посещаемостью поможет- пишите в директ ей, ток скажите что вы от меня.
+      </p>
+</li>`;
