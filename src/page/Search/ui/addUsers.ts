@@ -6,7 +6,7 @@ async function addUsersInBlock() {
     let searchHtml = '';
     if (allUsers !== null) {
         allUsers.forEach((item) => {
-            searchHtml += searchUser(item.nikName, 'img', item.name);
+            searchHtml += searchUser(item.nickName, 'img', item.name);
         });
     }
     return searchHtml;
