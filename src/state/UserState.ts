@@ -1,3 +1,4 @@
+import { User } from 'firebase/auth';
 import { DocumentReference, DocumentSnapshot } from 'firebase/firestore/lite';
 import { LocalStorage } from '../localStorage/localStorage';
 type obj = {
@@ -7,6 +8,7 @@ type obj = {
 
 class UserState {
     public static instance = new UserState();
+    public User: User | null = null;
     private userID: string | null = null;
     private postsID: string[] = [];
     private author: obj = {
@@ -20,6 +22,15 @@ class UserState {
 
     public set Author(author: obj) {
         this.author = author;
+    }
+
+    private anotherUserID: string | null = null;
+    public get AnotherUserID() {
+        return this.anotherUserID;
+    }
+
+    public set AnotherUserID(id: string | null) {
+        this.anotherUserID = id;
     }
 
     private constructor() {
