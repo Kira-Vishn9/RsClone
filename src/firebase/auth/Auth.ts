@@ -6,12 +6,19 @@ import {
     signOut,
     AuthErrorCodes,
     onAuthStateChanged,
+    updateCurrentUser,
+    User,
+    updateProfile,
+    updateEmail,
+    Unsubscribe,
+    NextOrObserver,
 } from 'firebase/auth';
 import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
 import { LocalStorage } from '../../localStorage/localStorage';
 import UserService from '../service/UserSevice';
+import UserState from '../../state/UserState';
 
 class Auth {
     public static instance = new Auth();
@@ -19,6 +26,18 @@ class Auth {
     private db = getFirestore(app);
     private data = collection(this.db, 'Users');
     private auth = getAuth();
+
+    public get Auth() {
+        return this.auth;
+    }
+
+    public get CurrentUser() {
+        return this.auth.currentUser;
+    }
+
+    private constructor() {
+        //
+    }
 
     public async signupUser(user: IUser): Promise<string | undefined> {
         const email = user.email;
@@ -56,15 +75,25 @@ class Auth {
         }
     }
 
-    private async monitorAuthState() {
+    public async monitorAuthState() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
                 const userStore = LocalStorage.instance.getUser();
                 userStore.id = user.uid;
                 userStore.email = user.email || '';
                 LocalStorage.instance.putUser(userStore.id, userStore.email);
+                UserState.instance.User = user;
+                console.log('LOGIN_IN');
+            } else {
+                UserState.instance.User = null;
+                console.log('NOT_LOGIN');
             }
         });
+    }
+
+    public async updateAuth(email: string, password: string): Promise<void> {
+        if (this.auth.currentUser === null) return;
+        await updateEmail(this.auth.currentUser, email);
     }
 }
 
