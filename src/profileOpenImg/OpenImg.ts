@@ -24,7 +24,7 @@ class OpenImg {
               </div>
               <ul class="plase-commets">
                 <li class = 'new-comment'>
-                  <div 
+                  <div
                   style="
                   display: flex;
                   align-items: center;
@@ -37,7 +37,7 @@ class OpenImg {
                   </p>
                 </li>
                 <li class = 'new-comment'>
-                <div 
+                <div
                 style="
                 display: flex;
                 align-items: center;
@@ -50,7 +50,7 @@ class OpenImg {
                 </p>
               </li>
               <li class = 'new-comment'>
-              <div 
+              <div
               style="
               display: flex;
               align-items: center;
@@ -63,7 +63,7 @@ class OpenImg {
               </p>
             </li>
             <li class = 'new-comment'>
-            <div 
+            <div
             style="
             display: flex;
             align-items: center;
@@ -76,7 +76,7 @@ class OpenImg {
             </p>
           </li>
           <li class = 'new-comment'>
-          <div 
+          <div
           style="
           display: flex;
           align-items: center;

@@ -1,5 +1,7 @@
 import Auth from '../../../firebase/auth/Auth';
 import IUser from '../../../firebase/model/IUser';
+import UserService from '../../../firebase/service/UserSevice';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import userState from '../../../state/user.state';
 import Home from '../../Home/Home';
 import '../style/account.scss';
@@ -101,6 +103,8 @@ class AccountView {
                             // переход в профиль
                             location.hash = '#/home';
                             loginBtn?.removeEventListener('click', this.logHandler);
+                            const id = LocalStorage.instance.getUser().id;
+                            this.infoAuthor(id);
                         }
                     };
                     logInfo(email.value, password.value);
@@ -115,6 +119,13 @@ class AccountView {
             }
         }
     };
+
+    private async infoAuthor(id: string) {
+        const data = await UserService.instance.getUser(id);
+        if (data) {
+            LocalStorage.instance.putAuthor(data.name, data.nikName);
+        }
+    }
 
     private async userRegistration() {
         if (this.root === null) return;
@@ -140,6 +151,7 @@ class AccountView {
                     nickName: nickName.value,
                     password: password.value,
                 };
+                LocalStorage.instance.putAuthor(name.value, nikName.value);
                 const authInfo = async (user: IUser) => {
                     let errCode = await Auth.instance.signupUser(user);
                     console.log(errCode);

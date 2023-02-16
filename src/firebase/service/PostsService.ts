@@ -1,4 +1,13 @@
-import { getFirestore, collection, getDocs, doc, getDoc, setDoc, DocumentData } from 'firebase/firestore/lite';
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    updateDoc,
+    doc,
+    getDoc,
+    setDoc,
+    DocumentData,
+} from 'firebase/firestore/lite';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import app from '../config/config';
 import IPosts from '../model/IPosts';
@@ -27,7 +36,8 @@ class PostsService {
         }
     }
 
-    public async getPost(id: string): Promise<IPosts | boolean> {
+    // public async getPost(id: string): Promise<IPosts | boolean> {
+    public async getPost(id: string): Promise<IPosts | undefined> {
         try {
             const data = doc(this.data, id);
             const dataSnap = await getDoc(data);
@@ -35,7 +45,7 @@ class PostsService {
             return result;
         } catch (error) {
             console.log(error);
-            return false;
+            // return false;
         }
     }
 
@@ -45,7 +55,18 @@ class PostsService {
             post.userID = UserState.instance.UserID as string;
             const test = doc(this.data);
             await setDoc(test, post);
+            await updateDoc(doc(this.db, 'Posts', test.id), {
+                postID: test.id,
+            });
             UserState.instance.addPostID(test.id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    public async updatePosts(id: string, obj: {}) {
+        try {
+            await updateDoc(doc(this.db, 'Posts', id), obj);
         } catch (error) {
             console.log(error);
         }
