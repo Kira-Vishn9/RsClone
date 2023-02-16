@@ -1,4 +1,5 @@
 import Base from '../../app/base/Base';
+
 import HomeView from './view/HomeView';
 
 class Home extends Base {
