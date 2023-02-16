@@ -6,8 +6,6 @@ interface IPosts {
     fileName: string;
     fileURL: string;
 
-    nickName?: string;
-
     likes?: DocumentReference;
     likesCount: number;
 
