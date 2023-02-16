@@ -6,6 +6,10 @@ class AsideView {
     private upload: HTMLElement | null = null;
     private search: HTMLElement | null = null;
 
+    public get Root() {
+        return this.root;
+    }
+
     public mount(): void {
         this.root = document.querySelector('.aside');
         if (this.root === null) return;
@@ -13,6 +17,10 @@ class AsideView {
         this.upload?.addEventListener('click', this.onUpload);
         // this.search = this.root.querySelector('.search-btn');
         // this.search?.addEventListener('click', this.searchQuery);
+    }
+
+    public unmount(): void {
+        this.upload?.removeEventListener('click', this.onUpload);
     }
 
     public render(): string {
