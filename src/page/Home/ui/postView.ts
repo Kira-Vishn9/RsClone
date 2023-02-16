@@ -1,11 +1,20 @@
 import '../view/mainHome.scss';
 
-function postView(nikName: string, img: string): string {
+function postView(
+    nickName: string,
+    img: string,
+    text: string,
+    likes: number,
+    time: string,
+    postID: string,
+    likeBlack: string,
+    numberComment: number
+): string {
     return `
-      <div class="newsline">
+      <div class="newsline" id="${postID}">
         <div class="newsline__header">
           <div class="user__avatar small-avatar"></div>
-          <div class="user__name">${nikName}</div>
+          <div class="user__name">${nickName}</div>
         </div>
         <div class="newsline__main">
           <img class="newsline__main-img" src="${img}" alt="image">
@@ -13,17 +22,19 @@ function postView(nikName: string, img: string): string {
         <div class="newsline__footer">
           <div class="icons">
             <div class="icons-block">
-                <span class="icons__like"></span>
+                <span class="icons__like ${likeBlack}"></span>
                 <span class="icons__comment"></span>
                 <span class="icons__save"></span>
             </div>
-            <p class="count"><span class="count-likes">100</span> likes</p>
+            <p class="count"><span class="count-likes">${likes}</span> likes</p>
           </div>
           <div class="post">
-            <p class="post__text"><span class="post__nickname">${nikName}</span>lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem </p>
-            <a class="post__comment" href="#">View all comments (<span class="count-comment">10</span>)</a>
-            <p class="post__time"><span class="time-ago">5 minute</span> AGO</p>
+            <p class="post__text"><span class="post__nickname">${nickName}</span>${text}</p>
+            <div class="more-text">... more</div>
+            <p class="post__time">Published: <span class="time-ago">${time}</span></p>
+            <a class="post__comment">View all comments (<span class="count-comment">${numberComment}</span>)</a>
           </div>
+          <div class="comments-all"></div>
           <div class="comment">
             <textarea class="comment__input" placeholder="Add a comment..."></textarea>
             <button class="comment__btn">Post</button>

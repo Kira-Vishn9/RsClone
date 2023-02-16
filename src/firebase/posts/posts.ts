@@ -1,6 +1,15 @@
-import { getFirestore, collection, getDocs, doc, getDoc, setDoc, DocumentData } from 'firebase/firestore/lite';
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    DocumentData,
+    updateDoc,
+} from 'firebase/firestore/lite';
 import app from '../config/config';
-import IPost from './model/IPost';
+import IPosts from '../model/IPosts';
 
 class Posts {
     public static init = new Posts();
@@ -8,9 +17,9 @@ class Posts {
     private db = getFirestore(app);
     private data = collection(this.db, 'Posts');
 
-    public async getAllPosts(): Promise<IPost[]> {
+    public async getAllPosts(): Promise<IPosts[]> {
         const collections = await getDocs(this.data);
-        const data: IPost[] = collections.docs.map((doc) => doc.data()) as IPost[];
+        const data = collections.docs.map((doc) => doc.data()) as IPosts[];
         return data;
     }
 }
