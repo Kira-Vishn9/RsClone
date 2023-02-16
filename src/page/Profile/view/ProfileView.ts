@@ -1,8 +1,11 @@
 import Observer from '../../../app/observer/Observer';
 import IPosts from '../../../firebase/model/IPosts';
+import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
 import ProfileHeadComponent from '../components/ProfileHeadComponent';
+import SubFollModal from '../modals/SubFollModal';
 import '../style/profile.scss';
+import EventType from '../types/EventType';
 import makePost from '../ui/item-profile';
 
 class ProfileView {
@@ -29,13 +32,22 @@ class ProfileView {
 
         this.$observer.subscribe('eventUser', this.onGetUser);
         this.$observer.subscribe('eventPost', this.onGetPost);
+        this.$observer.subscribe(EventType.INIT_SUBSCRIPTIONS, this.onGetSubscriptions);
+        this.$observer.subscribe(EventType.INIT_FOLLOWERS, this.onGetFollowers);
         this.profileHead.InputAvatar?.addEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.addEventListener('click', this.onSettings);
+        this.profileHead.BtnSubscriptions?.addEventListener('click', this.onBtnSub);
     }
 
     public unmount(): void {
         this.$observer.unsubscribe('eventUser', this.onGetUser);
         this.$observer.unsubscribe('eventPost', this.onGetPost);
+        this.$observer.unsubscribe(EventType.INIT_SUBSCRIPTIONS, this.onGetSubscriptions);
+        this.$observer.unsubscribe(EventType.INIT_FOLLOWERS, this.onGetFollowers);
+
+        this.profileHead.InputAvatar?.removeEventListener('change', this.onChangeAvatar);
+        this.profileHead.BtnSettings?.removeEventListener('click', this.onSettings);
+        this.profileHead.BtnSubscriptions?.removeEventListener('click', this.onBtnSub);
     }
 
     public make(): string {
@@ -53,7 +65,8 @@ class ProfileView {
 
     private onGetUser = (event: IUser) => {
         const fullname = event.name;
-        const nickName = event.nikName;
+        const nickName = event.nickName;
+        console.log('NICK:' + event.nickName);
         this.profileHead.changeFullName(fullname);
         console.log('FULLNAME: ' + fullname);
         this.profileHead.changeNickName(nickName);
@@ -61,14 +74,27 @@ class ProfileView {
         if (event.avatar !== undefined) this.profileHead.changeAvatar(event.avatar);
     };
 
-    private onGetPost = (event: IPosts) => {
+    private onGetPost = (event: IPosts[]) => {
         console.log('ProfileView');
         console.log(event);
 
-        const createPost = makePost(event.fileURL);
+        event.forEach((post: IPosts) => {
+            const createPost = makePost(post.fileURL);
+            this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
+        });
+
+        this.profileHead.changeAmountPublications(event.length);
+
         // this.profileHead?.changeName(event.author.nickName);
         // this.profileHead.changeFullName(event.author.fullname);
-        this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
+    };
+
+    private onGetSubscriptions = (data: ISubscription[]) => {
+        this.profileHead.changeAmountSubscriptions(data.length);
+    };
+
+    private onGetFollowers = (data: ISubscription[]) => {
+        this.profileHead.changeAmountFollowers(data.length);
     };
 
     private onChangeAvatar = (event: Event) => {
@@ -82,6 +108,19 @@ class ProfileView {
 
     private onSettings = () => {
         window.location.href = '#/settings';
+    };
+
+    // modal
+    private onBtnSub = () => {
+        this.$observer.emit(EventType.SUBSCRIPTIONS, {}, (data: ISubscription[]) => {
+            const modal = new SubFollModal(this.$observer);
+            this.root?.insertAdjacentHTML('afterend', modal.render());
+            modal.init();
+
+            data.forEach((sub: ISubscription) => {
+                modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id);
+            });
+        });
     };
 }
 
