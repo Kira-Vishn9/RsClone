@@ -7,7 +7,8 @@ function postView(
     likes: number,
     time: string,
     postID: string,
-    likeBlack: string
+    likeBlack: string,
+    numberComment: number
 ): string {
     return `
       <div class="newsline" id="${postID}">
@@ -30,9 +31,10 @@ function postView(
           <div class="post">
             <p class="post__text"><span class="post__nickname">${nickName}</span>${text}</p>
             <div class="more-text">... more</div>
-            <a class="post__comment" href="#">View all comments (<span class="count-comment">10</span>)</a>
             <p class="post__time">Published: <span class="time-ago">${time}</span></p>
+            <a class="post__comment">View all comments (<span class="count-comment">${numberComment}</span>)</a>
           </div>
+          <div class="comments-all"></div>
           <div class="comment">
             <textarea class="comment__input" placeholder="Add a comment..."></textarea>
             <button class="comment__btn">Post</button>

@@ -227,3 +227,18 @@
 .visible-text {
     visibility: visible;
 }
+
+.comments-all {
+    display:  flex;
+    flex-direction: column;
+    font-size: 14px;
+
+    .comments-item {
+        display: flex;
+
+        & span {
+            font-weight: 600;
+            margin-right: 10px;
+        }
+    }
+}

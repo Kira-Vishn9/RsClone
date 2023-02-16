@@ -12,6 +12,12 @@ async function getAllPosts() {
         const timePost = datePost.toString().slice(3, 24);
 
         const likeBlack = addLikesInPost(item);
+        let numberComment = 0;
+
+        const commentsArr = item.comments;
+        if (!commentsArr) return;
+        numberComment = commentsArr.length;
+        commentsArr.sort((a, b) => a.time - b.time);
 
         postsHtml += postView(
             item.author.nickName,
@@ -20,7 +26,8 @@ async function getAllPosts() {
             item.likesCount,
             timePost,
             item.postID,
-            likeBlack
+            likeBlack,
+            numberComment
         );
     });
     return postsHtml;

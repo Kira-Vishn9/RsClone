@@ -1,6 +1,7 @@
 import Base from '../../app/base/Base';
 import PostsService from '../../firebase/service/PostsService';
 import { LocalStorage } from '../../localStorage/localStorage';
+import OpenImg from '../../profileOpenImg/OpenImg';
 import HomeView from './view/HomeView';
 
 class Home extends Base {
@@ -11,6 +12,53 @@ class Home extends Base {
         this.view.init();
         const postList = document.querySelector('.posts-list');
         postList?.addEventListener('click', this.addLike);
+        postList?.addEventListener('click', this.openPost);
+        postList?.addEventListener('click', this.addComment);
+    }
+
+    private async addComment(e: Event) {
+        if (!e.target) return;
+        if (e.target instanceof HTMLElement) {
+            const nickName: string = LocalStorage.instance.getAuthor().nickName;
+            const postBlock = e.target.closest('.newsline') as HTMLElement;
+            const idPost = postBlock.id;
+            const commentDiv = postBlock.querySelector('.comments-all') as HTMLDivElement;
+            const post = await PostsService.instance.getPost(idPost);
+            const postComment = post?.comments;
+            if (e.target.classList.contains('comment__btn')) {
+                const commentBlock = e.target.previousElementSibling as HTMLTextAreaElement;
+                let comment = commentBlock.value;
+
+                if (comment) {
+                    const commentObj = {
+                        nickName: nickName,
+                        text: comment,
+                        time: Date.now(),
+                    };
+                    postComment?.push(commentObj);
+                    await PostsService.instance.updatePosts(idPost, { comments: postComment });
+                    commentBlock.value = '';
+
+                    const html = `
+                        <div class="comments-item">
+                            <span>${nickName}</span>
+                            <p>${comment}</p>
+                        </div>
+                    `;
+
+                    commentDiv.insertAdjacentHTML('beforeend', html);
+                }
+            }
+        }
+    }
+
+    private openPost(e: Event) {
+        if (!e.target) return;
+        if (e.target instanceof HTMLElement) {
+            if (e.target.classList.contains('icons__comment') || e.target.classList.contains('post__comment')) {
+                console.log('open popup post');
+            }
+        }
     }
 
     private async addLike(e: Event) {

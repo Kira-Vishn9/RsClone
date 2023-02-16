@@ -1,12 +1,12 @@
 import { DocumentData, DocumentReference } from 'firebase/firestore/lite';
 
 interface IComment {
-    userID: DocumentReference;
+    nickName: string;
 
-    post: DocumentReference;
+    // post: DocumentReference;
     text: string;
 
-    createAt: Date;
+    time: number;
 }
 
 export default IComment;

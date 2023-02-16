@@ -1,4 +1,4 @@
-body{overflow-y: hidden;}
+// body{overflow-y: hidden;}
 .conteiner-share-img{
     position: absolute;
     background-color: rgba(0, 0, 0, 0.5);
@@ -14,7 +14,7 @@ body{overflow-y: hidden;}
         position: absolute;
         top: 0px;
         right: 0px;
-        width: 55px;   
+        width: 55px;
     }
     .center-content{
         display: grid;
@@ -74,7 +74,7 @@ body{overflow-y: hidden;}
         border: 0;
         background-color: black;
     }
-    .submit{   
+    .submit{
         color: white;
         background: none;
         border: 0;

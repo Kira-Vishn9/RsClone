@@ -1,4 +1,5 @@
 import { DocumentReference } from 'firebase/firestore/lite';
+import IComment from '../../firebase/model/IComment';
 import IPosts from '../../firebase/model/IPosts';
 import PullPushImg from '../../firebase/pull-push-img/PullPushImg';
 import PostsService from '../../firebase/service/PostsService';
@@ -113,6 +114,7 @@ class PopUpUploadComponent {
                         likesCount: 0,
                         likesUsers: [],
                         commentsCount: 0,
+                        comments: [],
                         author: author,
                         time: Date.now(),
                         postID: '',

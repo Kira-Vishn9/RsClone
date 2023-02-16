@@ -9,6 +9,15 @@ class HomeView {
         this.addPostInDiv();
     }
 
+    private async addPostInDiv() {
+        this.postList?.insertAdjacentHTML('beforeend', await getAllPosts());
+        if (!this.postList) return;
+        const blocks = this.postList.querySelectorAll('.post__text');
+        blocks.forEach((item) => {
+            this.textLength(item as HTMLElement);
+        });
+    }
+
     private textLength(block: HTMLElement) {
         const div = block.closest('div');
         if (!div) return;
@@ -31,14 +40,7 @@ class HomeView {
         }
     }
 
-    private async addPostInDiv() {
-        this.postList?.insertAdjacentHTML('beforeend', await getAllPosts());
-        if (!this.postList) return;
-        const blocks = this.postList.querySelectorAll('.post__text');
-        blocks.forEach((item) => {
-            this.textLength(item as HTMLElement);
-        });
-    }
+    private addCommentsInPost() {}
 
     public unmount(): void {
         //
