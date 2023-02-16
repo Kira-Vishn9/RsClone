@@ -1,7 +1,7 @@
 import UserState from '../state/UserState';
 
 export class LocalStorage {
-    keyUser: string;
+    private keyUser: string;
     public static instance = new LocalStorage();
 
     private constructor() {
@@ -20,8 +20,10 @@ export class LocalStorage {
         const userLocalStorage = this.getUser();
         userLocalStorage.id = id;
         userLocalStorage.email = email;
-        UserState.instance.setUserID(id); //<< Doonn
         localStorage.setItem(this.keyUser, JSON.stringify(userLocalStorage));
+
+        // UserState.instance.setUserID(id); //<< Doonn
+
         return { userLocalStorage };
     }
 
