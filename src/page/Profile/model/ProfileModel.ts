@@ -3,6 +3,7 @@ import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
 import PullPushImg from '../../../firebase/pull-push-img/PullPushImg';
+import FollowersService from '../../../firebase/service/FollowersService';
 import PostsService from '../../../firebase/service/PostsService';
 import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
@@ -85,7 +86,7 @@ class ProfileModel {
     private async getFollowers(): Promise<void> {
         const userID = UserState.instance.UserID;
         if (userID === null) return;
-        const data = await UserService.instance.getFollowers(userID);
+        const data = await FollowersService.instance.getFollowers(userID);
         if (data === null) return;
         this.observer.emit(EventType.INIT_FOLLOWERS, data);
     }
