@@ -81,6 +81,7 @@ class Home extends Base {
                     if (count) {
                         countLikes = +count + 1;
                         countBlock.textContent = `${countLikes}`;
+
                         if (index === -1) {
                             postUsersLike.push(idUser);
                         }
