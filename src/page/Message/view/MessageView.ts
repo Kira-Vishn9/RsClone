@@ -1,10 +1,17 @@
+import Observer from '../../../app/observer/Observer';
+import IFollower from '../../../firebase/model/IFollower';
 import MessageModal from '../modal/messageModal';
+import EventType from '../type/EventType';
 import messageUser from '../ui/messageUser';
 import './messagePage.scss';
 
 class MessageView {
     private sendBth: HTMLElement | null = null;
     private root: HTMLElement | null = null;
+    private obServer: Observer;
+    constructor(obServer: Observer){
+      this.obServer = obServer;
+    }
     public init(): void {
         this.root = document.querySelector('.message-block');
         if (this.root) {
@@ -62,11 +69,16 @@ class MessageView {
     }
 
     private openModalM = () => {
-      console.log('hi')
-      const messageModal = new MessageModal();
-      this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
-      messageModal.init();
-      messageModal.makeItem("https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg", "Kira");
+      this.obServer.emit(EventType.openModal, {} , (followers: IFollower[]) => {
+        const messageModal = new MessageModal();
+        this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
+        messageModal.init();
+        for(let i = 0; i < followers.length; i++){
+          console.log(followers[i])
+        messageModal.makeItem(followers[i].avatar , followers[i].fullname, followers[i].userID);
+      }
+      })
+      
     }
 }
 
