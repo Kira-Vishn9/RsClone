@@ -1,15 +1,19 @@
+import MessageModal from '../modal/messageModal';
 import messageUser from '../ui/messageUser';
 import './messagePage.scss';
 
 class MessageView {
+    private sendBth: HTMLElement | null = null;
     private root: HTMLElement | null = null;
     public init(): void {
-        this.root = document.querySelector('.message-block__left-main');
+        this.root = document.querySelector('.message-block');
         if (this.root) {
             this.root.addEventListener('click', this.showMessage);
         } else {
             return;
         }
+        this.sendBth = this.root.querySelector('.send-btn');
+        this.sendBth?.addEventListener('click', this.openModalM)
     }
 
     public unmount(): void {
@@ -55,6 +59,14 @@ class MessageView {
             messageInfo.classList.remove('hidden');
             messageBlock.innerHTML = '';
         }
+    }
+
+    private openModalM = () => {
+      console.log('hi')
+      const messageModal = new MessageModal();
+      this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
+      messageModal.init();
+      messageModal.makeItem("https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg", "Kira");
     }
 }
 
