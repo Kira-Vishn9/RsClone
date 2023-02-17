@@ -1,7 +1,10 @@
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
+import { User } from 'firebase/auth';
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
 import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
+import Auth from '../auth/Auth';
 import app from '../config/config';
+import ISubscription from '../model/ISubscription';
 import IUser from '../model/IUser';
 
 class UserService {
@@ -32,7 +35,7 @@ class UserService {
             const result = docSnaphot.data() as IUser;
             const u = {
                 fullname: result.name,
-                nickName: result.nikName,
+                nickName: result.nickName,
             };
             UserState.instance.Author = u;
             return result;
@@ -53,8 +56,9 @@ class UserService {
             UserState.instance.setUserID(docRef.id);
             const u = {
                 fullname: user.name,
-                nickName: user.nikName,
+                nickName: user.nickName,
             };
+            user.id = id;
             UserState.instance.Author = u;
             await setDoc(docRef, user);
         } catch (error) {
@@ -62,7 +66,7 @@ class UserService {
         }
     }
 
-    // Обновить данные юзера
+    // Обновить Аватар юзера
     public async updateUserAvatar(urlImg: string): Promise<void> {
         const userID = UserState.instance.UserID;
         if (userID === null) return;
@@ -72,6 +76,19 @@ class UserService {
         await updateDoc(docRef, {
             avatar: urlImg,
         });
+    }
+
+    // Обновить данyые юзера
+    public async updateUserData(data: IUser): Promise<void> {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        const docRef = doc(this.data, userID);
+        await updateDoc(docRef, {
+            name: data.name,
+            nickName: data.nickName,
+            email: data.email,
+        });
+        await Auth.instance.updateAuth(data.email, data.password);
     }
 }
 

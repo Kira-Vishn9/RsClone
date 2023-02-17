@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
 const target = devMode ? 'web' : 'browserslist';
-const devtool = devMode ? 'source-map' : undefined;
+const devtool = devMode ? 'inline-source-map' : undefined;
 module.exports = {
     mode,
     target,
@@ -33,20 +33,22 @@ module.exports = {
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
         }),
-        new MiniCssExtractPlugin({
-            filename: 'main.css',
-        }),
-        new EslingPlugin({ extensions: 'ts' }),
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },
-                { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/image/' },
-                { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/svg/' },
-            ],
-        }),
-    ],
-    module: {
-        rules: [
+		new MiniCssExtractPlugin({
+			filename: 'main.css',
+		}),
+        new EslingPlugin({ 
+			overrideConfigFile: './.eslintrc.json',
+			extensions: ['ts', 'js'] 
+		}),
+		new CopyWebpackPlugin({
+			patterns: [
+			  { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },
+			  { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/image/' },
+			  { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/svg/' },
+			]}),
+	],
+	module: {
+		rules: [
             {
                 test: /\.ts$/i,
                 use: 'ts-loader',

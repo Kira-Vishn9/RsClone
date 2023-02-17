@@ -123,7 +123,8 @@ class AccountView {
     private async infoAuthor(id: string) {
         const data = await UserService.instance.getUser(id);
         if (data) {
-            LocalStorage.instance.putAuthor(data.name, data.nikName);
+            // LocalStorage.instance.putAuthor(data.name, data.nikName); // << Olga
+            LocalStorage.instance.putAuthor(data.name, data.nickName); // << Olga
         }
     }
 
@@ -140,18 +141,19 @@ class AccountView {
         const divRegErr: HTMLElement | null = this.root.querySelector('#divRegistrError');
         const email: HTMLInputElement | null = this.root.querySelector('.email-input__account');
         const name: HTMLInputElement | null = this.root.querySelector('.name-surname-input__account');
-        const nikName: HTMLInputElement | null = this.root.querySelector('.name-input__account');
+        const nickName: HTMLInputElement | null = this.root.querySelector('.name-input__account');
         const password: HTMLInputElement | null = this.root.querySelector('.password-input__account');
         e.preventDefault();
-        if (email && name && nikName && password && divRegErr) {
-            if (email.value && name.value && nikName.value && password.value) {
+        if (email && name && nickName && password && divRegErr) {
+            if (email.value && name.value && nickName.value && password.value) {
                 const user = {
                     email: email.value,
                     name: name.value,
-                    nikName: nikName.value,
+                    nickName: nickName.value,
                     password: password.value,
                 };
-                LocalStorage.instance.putAuthor(name.value, nikName.value);
+                // LocalStorage.instance.putAuthor(name.value, nikName.value); // << Olga
+                LocalStorage.instance.putAuthor(name.value, nickName.value); // << Olga
                 const authInfo = async (user: IUser) => {
                     let errCode = await Auth.instance.signupUser(user);
                     console.log(errCode);
@@ -179,7 +181,7 @@ class AccountView {
             }
             this.deFocus(email, divRegErr);
             this.deFocus(name, divRegErr);
-            this.deFocus(nikName, divRegErr);
+            this.deFocus(nickName, divRegErr);
             this.deFocus(password, divRegErr);
         }
     };

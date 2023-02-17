@@ -1,29 +1,29 @@
 import '../ui/style/block.profile.scss';
 import '../ui/style/data.profile.scss';
 
-class ProfileHeadComponent {
+class AnotherProfileHeadComponent {
     private parent: HTMLElement | null = null;
     private root: HTMLElement | null = null;
     private name: HTMLElement | null = null;
     private fullName: HTMLElement | null = null;
 
-    private inputAvatar: HTMLInputElement | null = null;
-    public get InputAvatar(): HTMLInputElement | null {
-        return this.inputAvatar;
-    }
     private imgAvatar: HTMLImageElement | null = null;
-
-    private btnSettings: HTMLElement | null = null;
-    public get BtnSettings() {
-        return this.btnSettings;
+    public get ImgAvatar() {
+        return this.imgAvatar?.src;
     }
 
-    private btnSubscriptions: HTMLElement | null = null;
-    public get BtnSubscriptions() {
-        return this.btnSubscriptions;
+    private btnSubUnSub: HTMLElement | null = null;
+    public get BtnSubUnSub() {
+        return this.btnSubUnSub;
     }
 
-    private btnFollowers: HTMLElement | null = null;
+    public get Fullname() {
+        return this.fullName?.textContent;
+    }
+
+    public get Name() {
+        return this.name?.textContent;
+    }
 
     // posts followers subscribtions
     private publications: HTMLElement | null = null;
@@ -36,11 +36,8 @@ class ProfileHeadComponent {
         if (this.root === null) return;
         this.name = this.root.querySelector('.name');
         this.fullName = this.root.querySelector('.full-name__profile');
-        this.inputAvatar = this.root.querySelector('.input-avatar__profile');
         this.imgAvatar = this.root.querySelector('.img-avatar__profile');
-        this.btnSettings = this.root.querySelector('.btn-settings__profile');
-
-        this.btnSubscriptions = this.root.querySelector('.subscriptions__profile');
+        this.btnSubUnSub = this.root.querySelector('.sub-unsub__profile');
 
         const publications: HTMLElement | null = this.root.querySelector('.publication__profile');
         const subsribtions: HTMLElement | null = this.root.querySelector('.subscriptions__profile');
@@ -57,13 +54,12 @@ class ProfileHeadComponent {
         <div class="data__profile">
             <div class="avatar__profile" style="position: relative">
                 <img class="img-avatar__profile" src="https://kipmu.ru/wp-content/uploads/jptr-1.jpg">
-                <input class="input-avatar__profile "type="file" style="position: absolute; top: 0; rigth: 0; botton: 0; left: 0; width: 100%; height: 100%; opacity: 0;">
             </div>
             
             <div class="root-block__profile">
                 <div class="block__profile">
                     <span class="name">${this.name?.textContent}</span>
-                    <button class="btn-settings__profile">Редактировать профиль</button>
+                    <button class="sub-unsub__profile">Подписаться</button>
                 </div>
                 ${this.makeDateProfileSocial()}
                 <span class="full-name__profile">${this.fullName?.textContent}</span>
@@ -125,4 +121,4 @@ class ProfileHeadComponent {
     }
 }
 
-export default ProfileHeadComponent;
+export default AnotherProfileHeadComponent;

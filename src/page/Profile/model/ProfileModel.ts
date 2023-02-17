@@ -1,11 +1,15 @@
 import Observer from '../../../app/observer/Observer';
 import IPosts from '../../../firebase/model/IPosts';
+import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
 import PullPushImg from '../../../firebase/pull-push-img/PullPushImg';
+import FollowersService from '../../../firebase/service/FollowersService';
 import PostsService from '../../../firebase/service/PostsService';
+import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
 import userState from '../../../state/user.state';
 import UserState from '../../../state/UserState';
+import EventType from '../types/EventType';
 
 class ProfileModel {
     private observer: Observer;
@@ -14,15 +18,20 @@ class ProfileModel {
         this.observer = observer;
     }
 
-    public execute(): void {
+    public mount(): void {
         this.getUser();
         this.getPost();
-
-        this.enable();
+        this.getSubscriptions();
+        this.getFollowers();
+        this.observer.subscribe('eventChangeAvatar', this.onChangeAvatar);
+        this.observer.subscribe(EventType.SUBSCRIPTIONS, this.onGetSubscriptions);
+        this.observer.subscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
     }
 
-    public enable(): void {
-        this.observer.subscribe('eventChangeAvatar', this.onChangeAvatar);
+    public unmount(): void {
+        this.observer.unsubscribe('eventChangeAvatar', this.onChangeAvatar);
+        this.observer.unsubscribe(EventType.SUBSCRIPTIONS, this.onGetSubscriptions);
+        this.observer.unsubscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
     }
 
     private async getPost(): Promise<void> {
@@ -34,13 +43,16 @@ class ProfileModel {
         const posts: IPosts[] | boolean = await PostsService.instance.getAllPosts();
         // const postsUser: IPosts[] = []; // << Возможно для считывания всех лайков и тд
         if (typeof posts === 'boolean') return;
+        const postArr: IPosts[] = [];
         for (let i = 0; i < posts.length; i++) {
             const post = posts[i];
             if (post.userID === userID) {
                 // postsUser.push(post);
-                this.observer.emit('eventPost', post);
+                postArr.push(post);
             }
         }
+
+        this.observer.emit('eventPost', postArr);
 
         // const allSocial = {
         //     publication: 0,
@@ -52,8 +64,6 @@ class ProfileModel {
         //     const post = postsUser[i];
         //     allSocial.publication = post.
         // }
-
-        window.location.href = '#/profile'; // << Костыль Типо >> Ререндер
     }
 
     private async getUser(): Promise<void> {
@@ -62,8 +72,23 @@ class ProfileModel {
 
         const user: IUser | null = await UserService.instance.getUser(userID);
         if (user === null) return;
-
         this.observer.emit('eventUser', user);
+    }
+
+    private async getSubscriptions(): Promise<void> {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        const data = await SubscriptionsService.instance.getSubscriptions(userID);
+        if (data === null) return;
+        this.observer.emit(EventType.INIT_SUBSCRIPTIONS, data);
+    }
+
+    private async getFollowers(): Promise<void> {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        const data = await FollowersService.instance.getFollowers(userID);
+        if (data === null) return;
+        this.observer.emit(EventType.INIT_FOLLOWERS, data);
     }
 
     private onChangeAvatar = (file: File, cb?: (args: string) => void) => {
@@ -75,6 +100,23 @@ class ProfileModel {
             }
         };
         fileReader.readAsDataURL(file);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private onGetSubscriptions = async (empty: object, cb?: (val: ISubscription[]) => void) => {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        const data = await SubscriptionsService.instance.getSubscriptions(userID);
+        if (data === null) return;
+        if (cb !== undefined) cb(data);
+    };
+
+    private onUnsubScriptions = (subID: string) => {
+        // UserService.instance.deleteSubscriptions(subID);
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        SubscriptionsService.instance.deleteSubscriptions(userID, subID);
+        this.observer.emit(EventType.RERENDER, {});
     };
 }
 

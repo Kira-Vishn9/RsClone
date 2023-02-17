@@ -11,6 +11,7 @@ class ProfileSettings extends Base {
     public mount(): void {
         console.log('MOUNT: ProfileSettings');
         this.view.init();
+        this.model.execute();
     }
 
     public unmount(): void {

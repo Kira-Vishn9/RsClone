@@ -1,6 +1,8 @@
 import Observer from '../../../app/observer/Observer';
+import IUser from '../../../firebase/model/IUser';
 import InputSettingsComponent from '../components/InputSettingsComponent';
 import '../style/settings.scss';
+import EventType from '../types/EventType';
 
 class SettingsView {
     private $observer: Observer;
@@ -11,6 +13,8 @@ class SettingsView {
     private inputNameComponent: InputSettingsComponent = new InputSettingsComponent();
     private inputUserNameComponent: InputSettingsComponent = new InputSettingsComponent();
     private inputEmailComponent: InputSettingsComponent = new InputSettingsComponent();
+
+    private submit: HTMLButtonElement | null = null;
 
     public constructor(observer: Observer) {
         this.$observer = observer;
@@ -25,11 +29,18 @@ class SettingsView {
         this.inputUserNameComponent.init(this.root);
         this.inputEmailComponent.init(this.root);
 
+        this.submit = this.root.querySelector('.submit__settings');
+
         this.itemsOption?.addEventListener('click', this.onOptions);
+        this.submit?.addEventListener('click', this.onSubmit);
+
+        this.$observer.subscribe(EventType.GET_USER, this.onUser);
     }
 
     public unmount(): void {
         this.itemsOption?.removeEventListener('click', this.onOptions);
+        this.submit?.removeEventListener('click', this.onSubmit);
+        this.$observer.unsubscribe(EventType.GET_USER, this.onUser);
     }
 
     public make(): string {
@@ -50,9 +61,11 @@ class SettingsView {
                 <li class="item__options">Помощь(Noup)</li>
             </ul>
             <div class="content__settings">
-                ${this.inputNameComponent.make('Имя')}
-                ${this.inputUserNameComponent.make('Имя Пользователя')}
-                ${this.inputEmailComponent.make('Эл. адрес')}
+                <div class="profile-edit__settings">
+                    ${this.inputNameComponent.make('Имя', 'input-name-id')}
+                    ${this.inputUserNameComponent.make('Имя Пользователя', 'input-user-name-id')}
+                    ${this.inputEmailComponent.make('Эл. адрес', 'input-email-id')}
+                </div>
                 <button class="submit__settings">Отправить</button>
             </div>
         </div>
@@ -61,6 +74,43 @@ class SettingsView {
 
     private onOptions = () => {
         //
+    };
+
+    private tempUser: IUser | null = null;
+    private onUser = (user: IUser) => {
+        this.tempUser = user;
+        this.inputNameComponent.changeInputValue(user.name);
+        this.inputUserNameComponent.changeInputValue(user.nickName);
+        this.inputEmailComponent.changeInputValue(user.email);
+    };
+
+    // TODO Refactoring
+    private onSubmit = () => {
+        if (this.tempUser === null) return;
+
+        const getName = this.inputNameComponent.getValue(); // << Тупое решения надо будет добавить проход циклом
+        if (getName !== null) {
+            this.tempUser.name = this.tempUser?.name === getName ? this.tempUser.name : getName;
+        }
+
+        const getUserName = this.inputUserNameComponent.getValue(); // << Тупое решения надо будет добавить проход циклом
+        if (getUserName !== null) {
+            this.tempUser.nickName = this.tempUser.nickName === getUserName ? this.tempUser.nickName : getUserName;
+        }
+
+        const getEmail = this.inputEmailComponent.getValue(); // << Тупое решения надо будет добавить проход циклом
+        if (getEmail !== null) {
+            this.tempUser.email = this.tempUser.email === getEmail ? this.tempUser.email : getEmail;
+        }
+
+        const updateUser = {
+            name: this.tempUser.name,
+            nickName: this.tempUser.nickName,
+            email: this.tempUser.email,
+        };
+        console.log('QQQQQQQQQQQQQQQQQQQQQQ');
+
+        this.$observer.emit(EventType.UPDATE_USER, updateUser);
     };
 }
 

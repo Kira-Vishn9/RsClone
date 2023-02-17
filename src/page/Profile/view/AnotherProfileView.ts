@@ -2,18 +2,16 @@ import Observer from '../../../app/observer/Observer';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
-import ProfileHeadComponent from '../components/ProfileHeadComponent';
-import SubFollModal from '../modals/SubFollModal';
-import '../style/profile.scss';
+import AnotherProfileHeadComponent from '../components/AnotherProfileHeadComponent';
 import EventType from '../types/EventType';
 import makePost from '../ui/item-profile';
 
-class ProfileView {
+class AnotherProfileView {
     private $observer: Observer;
     private root: HTMLElement | null = null;
     private postContainer: HTMLElement | null = null;
 
-    private profileHead: ProfileHeadComponent = new ProfileHeadComponent();
+    private profileHead: AnotherProfileHeadComponent = new AnotherProfileHeadComponent();
 
     public get Root() {
         return this.root;
@@ -34,9 +32,8 @@ class ProfileView {
         this.$observer.subscribe('eventPost', this.onGetPost);
         this.$observer.subscribe(EventType.INIT_SUBSCRIPTIONS, this.onGetSubscriptions);
         this.$observer.subscribe(EventType.INIT_FOLLOWERS, this.onGetFollowers);
-        this.profileHead.InputAvatar?.addEventListener('change', this.onChangeAvatar);
-        this.profileHead.BtnSettings?.addEventListener('click', this.onSettings);
-        this.profileHead.BtnSubscriptions?.addEventListener('click', this.onBtnSub);
+
+        this.profileHead.BtnSubUnSub?.addEventListener('click', this.onSubUnSub);
     }
 
     public unmount(): void {
@@ -45,9 +42,7 @@ class ProfileView {
         this.$observer.unsubscribe(EventType.INIT_SUBSCRIPTIONS, this.onGetSubscriptions);
         this.$observer.unsubscribe(EventType.INIT_FOLLOWERS, this.onGetFollowers);
 
-        this.profileHead.InputAvatar?.removeEventListener('change', this.onChangeAvatar);
-        this.profileHead.BtnSettings?.removeEventListener('click', this.onSettings);
-        this.profileHead.BtnSubscriptions?.removeEventListener('click', this.onBtnSub);
+        this.profileHead.BtnSubUnSub?.removeEventListener('click', this.onSubUnSub);
     }
 
     public make(): string {
@@ -77,16 +72,11 @@ class ProfileView {
     private onGetPost = (event: IPosts[]) => {
         console.log('ProfileView');
         console.log(event);
-
         event.forEach((post: IPosts) => {
             const createPost = makePost(post.fileURL);
             this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
         });
-
         this.profileHead.changeAmountPublications(event.length);
-
-        // this.profileHead?.changeName(event.author.nickName);
-        // this.profileHead.changeFullName(event.author.fullname);
     };
 
     private onGetSubscriptions = (data: ISubscription[]) => {
@@ -97,31 +87,21 @@ class ProfileView {
         this.profileHead.changeAmountFollowers(data.length);
     };
 
-    private onChangeAvatar = (event: Event) => {
-        if (!(event.target instanceof HTMLInputElement)) return;
-        const file = event.target.files;
-        if (file === null) return;
-        this.$observer.emit('eventChangeAvatar', file[0], (arg: string) => {
-            this.profileHead.changeAvatar(arg);
-        });
-    };
+    private onSubUnSub = () => {
+        const fullName = this.profileHead.Fullname;
+        const name = this.profileHead.Name;
+        if (fullName === null || name === null) return;
+        if (fullName === undefined || name === undefined) return;
 
-    private onSettings = () => {
-        window.location.href = '#/settings';
-    };
+        const sub: ISubscription = {
+            fullname: fullName,
+            nickName: name,
+            userID: '', // << Костыль запись ID Происходит в model
+            avatar: this.profileHead.ImgAvatar === undefined ? '' : this.profileHead.ImgAvatar,
+        };
 
-    // modal
-    private onBtnSub = () => {
-        this.$observer.emit(EventType.SUBSCRIPTIONS, {}, (data: ISubscription[]) => {
-            const modal = new SubFollModal(this.$observer);
-            this.root?.insertAdjacentHTML('afterend', modal.render());
-            modal.init();
-
-            data.forEach((sub: ISubscription) => {
-                modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
-            });
-        });
+        this.$observer.emit(EventType.SUB_UNSUB, sub);
     };
 }
 
-export default ProfileView;
+export default AnotherProfileView;
