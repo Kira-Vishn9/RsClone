@@ -1,5 +1,15 @@
 import { initializeApp } from 'firebase/app';
 
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyAIEPMLcikfCiDXT9DAhdFvqsy3Av76re0',
+//     authDomain: 'clon-insta-4d81b.firebaseapp.com',
+//     databaseURL: 'https://clon-insta-4d81b-default-rtdb.firebaseio.com',
+//     projectId: 'clon-insta-4d81b',
+//     storageBucket: 'clon-insta-4d81b.appspot.com',
+//     messagingSenderId: '32448233635',
+//     appId: '1:32448233635:web:304c3f503ac8f0d4a5ff16',
+// };
+
 const firebaseConfig = {
     apiKey: "AIzaSyAbrSlPJqm6a0sdSm-f4Ds7MWrIpoyIF-s",
     authDomain: "clone-instagram-7c300.firebaseapp.com",

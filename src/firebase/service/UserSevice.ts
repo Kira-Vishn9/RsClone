@@ -1,7 +1,10 @@
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
+import { User } from 'firebase/auth';
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
 import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
+import Auth from '../auth/Auth';
 import app from '../config/config';
+import ISubscription from '../model/ISubscription';
 import IUser from '../model/IUser';
 
 class UserService {
@@ -14,14 +17,14 @@ class UserService {
     }
 
     // Вернуть массив юзеров
-    private async getAllUser(): Promise<IUser[] | boolean> {
+    public async getAllUser(): Promise<IUser[] | null> {
         try {
             const collections = await getDocs(this.data);
             const data: IUser[] = collections.docs.map((doc) => doc.data()) as IUser[];
             return data;
         } catch (error: unknown) {
             console.error(error);
-            return false;
+            return null;
         }
     }
     // Вернуть юзера или null
@@ -30,6 +33,11 @@ class UserService {
             const docRef = doc(this.data, id);
             const docSnaphot = await getDoc(docRef);
             const result = docSnaphot.data() as IUser;
+            const u = {
+                fullname: result.name,
+                nickName: result.nickName,
+            };
+            UserState.instance.Author = u;
             return result;
         } catch (error) {
             console.log(error);
@@ -46,15 +54,41 @@ class UserService {
             console.log('setUserID: ' + docRef.id);
             userState.id = docRef.id;
             UserState.instance.setUserID(docRef.id);
+            const u = {
+                fullname: user.name,
+                nickName: user.nickName,
+            };
+            user.id = id;
+            UserState.instance.Author = u;
             await setDoc(docRef, user);
         } catch (error) {
             console.log(error);
         }
     }
 
-    // Обновить данные юзера
-    private async updateUser(): Promise<void> {
-        //
+    // Обновить Аватар юзера
+    public async updateUserAvatar(urlImg: string): Promise<void> {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        // const user = await this.getUser(userID);
+        const docRef = doc(this.data, userID);
+
+        await updateDoc(docRef, {
+            avatar: urlImg,
+        });
+    }
+
+    // Обновить данyые юзера
+    public async updateUserData(data: IUser): Promise<void> {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        const docRef = doc(this.data, userID);
+        await updateDoc(docRef, {
+            name: data.name,
+            nickName: data.nickName,
+            email: data.email,
+        });
+        await Auth.instance.updateAuth(data.email, data.password);
     }
 }
 

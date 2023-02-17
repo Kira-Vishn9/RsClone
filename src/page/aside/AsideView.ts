@@ -4,12 +4,23 @@ import PopUpUploadComponent from './PopUpUploadView';
 class AsideView {
     private root: HTMLElement | null = null;
     private upload: HTMLElement | null = null;
+    private search: HTMLElement | null = null;
+
+    public get Root() {
+        return this.root;
+    }
 
     public mount(): void {
         this.root = document.querySelector('.aside');
         if (this.root === null) return;
         this.upload = this.root.querySelector('.upload-btn');
         this.upload?.addEventListener('click', this.onUpload);
+        // this.search = this.root.querySelector('.search-btn');
+        // this.search?.addEventListener('click', this.searchQuery);
+    }
+
+    public unmount(): void {
+        this.upload?.removeEventListener('click', this.onUpload);
     }
 
     public render(): string {
@@ -21,6 +32,7 @@ class AsideView {
           <li class="aside__list-item"><a href="#/message"><span class="messenger-ico"></span>Messages</a></li>
           <li class="aside__list-item upload-btn"><a ><span class="new-posts-ico"></span>Upload</a></li>
           <li class="aside__list-item"><a href="#/profile"><span class="profile-ico"></span>My profile</a></li>
+          <li class="aside__list-item" search-btn><a href="#/search"><span class="search-ico"></span>Search</a></li>
         </ul>
       </aside>
         `;

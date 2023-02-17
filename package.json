@@ -1,8 +1,9 @@
 {
-  "name": "RsClone",
+  "name": "rs-clone",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private" : "true",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "start": "set NODE_ENV=development&&webpack serve",

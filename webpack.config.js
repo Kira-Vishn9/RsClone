@@ -8,27 +8,27 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
 const target = devMode ? 'web' : 'browserslist';
-const devtool = devMode ? 'source-map' : undefined;
+const devtool = devMode ? 'inline-source-map' : undefined;
 module.exports = {
-	mode,
-	target,
-	devtool,
-	devServer: {
-		port: 3000,
-		historyApiFallback: true,
-		contentBase: "./src",
-	},
+    mode,
+    target,
+    devtool,
+    devServer: {
+        port: 3000,
+        historyApiFallback: true,
+        contentBase: './src',
+    },
     entry: path.resolve(__dirname, './src/index.ts'),
-	output: {
-		filename: '[name].js',
-		publicPath: "/",
-		path: path.resolve(__dirname, 'dist'),
-	},
+    output: {
+        filename: '[name].js',
+        publicPath: '/',
+        path: path.resolve(__dirname, 'dist'),
+    },
     resolve: {
         extensions: ['.ts', '.js'],
     },
-	plugins: [
-		new CleanWebpackPlugin(),
+    plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
@@ -36,7 +36,10 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: 'main.css',
 		}),
-        new EslingPlugin({ extensions: 'ts' }),
+        new EslingPlugin({ 
+			overrideConfigFile: './.eslintrc.json',
+			extensions: ['ts', 'js'] 
+		}),
 		new CopyWebpackPlugin({
 			patterns: [
 			  { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },
@@ -47,42 +50,42 @@ module.exports = {
 	module: {
 		rules: [
             {
-				test: /\.ts$/i,
-				use: 'ts-loader',
-				exclude: /node_modules/,
-			},
-			{
-				test: /\.html$/i,
-				loader: 'html-loader',
-			},
-			{
-				test: /\.(png|svg|jpg|jpeg|gif)$/i,
-				type: 'asset/resource',
-			},
-			{
-				test: /\.s[ac]ss$/i,
-				use: [
-					devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-					'css-loader',
-					'sass-loader',
-					'postcss-loader',
-					{
-						loader: 'postcss-loader',
-						options: {
-							postcssOptions: {
-								plugins: [
-									[
-										'postcss-preset-env',
-										{
-											// Options
-										},
-									],
-								],
-							},
-						},
-					},
-				],
-			},
-		],
-	},
+                test: /\.ts$/i,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.html$/i,
+                loader: 'html-loader',
+            },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader',
+                    'postcss-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                            // Options
+                                        },
+                                    ],
+                                ],
+                            },
+                        },
+                    },
+                ],
+            },
+        ],
+    },
 };

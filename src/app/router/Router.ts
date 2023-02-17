@@ -1,9 +1,20 @@
+import { onAuthStateChanged, User } from 'firebase/auth';
+import Auth from '../../firebase/auth/Auth';
+import UserState from '../../state/UserState';
 import Base from '../base/Base';
+import Observer from '../observer/Observer';
 import findRoutes from '../routes/routes';
+import EventType from '../types/EventType';
 
 class Router {
+    private $observer: Observer;
+
     private app: HTMLElement | null = null;
     private container: HTMLElement | null = null;
+
+    public constructor(observer: Observer) {
+        this.$observer = observer;
+    }
 
     public init(): void {
         this.app = document.querySelector('#app');
@@ -14,7 +25,9 @@ class Router {
     }
 
     private getRoute(path: string): Base | null {
-        const name = path.replace('#/', '');
+        let name = path.replace('#/', '');
+        const nameSplit = name.split('/')[0];
+        name = nameSplit;
         const result = findRoutes(name);
         return result === null ? null : result;
     }
@@ -23,6 +36,9 @@ class Router {
 
     private onHascChange = () => {
         if (this.container === null) return;
+
+        this.accessСheck();
+
         if (this.tempRoute !== null && this.tempRoute.unmount) this.tempRoute.unmount();
         const route = this.getRoute(window.location.hash);
         this.tempRoute = route;
@@ -35,6 +51,22 @@ class Router {
             route.mount();
         }
     };
+
+    private async accessСheck(): Promise<void> {
+        onAuthStateChanged(Auth.instance.Auth, (user: User | null) => {
+            // << Проверка на Авторизаю Urer
+            if (user === null) {
+                window.location.hash = '#/account'; // << Проверка на Авторизаю User
+                this.$observer.emit(EventType.DENIED, {});
+            } else {
+                const temp = window.location.hash;
+                if (temp === '#/account' || temp === '' || temp === '#/') {
+                    window.location.hash = '#/profile';
+                }
+                this.$observer.emit(EventType.SUCCESS, {});
+            } // << Проверка на Авторизаю User
+        });
+    }
 }
 
 export default Router;

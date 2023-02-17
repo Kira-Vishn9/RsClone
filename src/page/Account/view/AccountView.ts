@@ -1,5 +1,7 @@
 import Auth from '../../../firebase/auth/Auth';
 import IUser from '../../../firebase/model/IUser';
+import UserService from '../../../firebase/service/UserSevice';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import userState from '../../../state/user.state';
 import Home from '../../Home/Home';
 import '../style/account.scss';
@@ -101,6 +103,8 @@ class AccountView {
                             // переход в профиль
                             location.hash = '#/home';
                             loginBtn?.removeEventListener('click', this.logHandler);
+                            const id = LocalStorage.instance.getUser().id;
+                            this.infoAuthor(id);
                         }
                     };
                     logInfo(email.value, password.value);
@@ -116,6 +120,14 @@ class AccountView {
         }
     };
 
+    private async infoAuthor(id: string) {
+        const data = await UserService.instance.getUser(id);
+        if (data) {
+            // LocalStorage.instance.putAuthor(data.name, data.nikName); // << Olga
+            LocalStorage.instance.putAuthor(data.name, data.nickName); // << Olga
+        }
+    }
+
     private async userRegistration() {
         if (this.root === null) return;
         const regBtn = this.root.querySelector('#btn__registr');
@@ -129,17 +141,19 @@ class AccountView {
         const divRegErr: HTMLElement | null = this.root.querySelector('#divRegistrError');
         const email: HTMLInputElement | null = this.root.querySelector('.email-input__account');
         const name: HTMLInputElement | null = this.root.querySelector('.name-surname-input__account');
-        const nikName: HTMLInputElement | null = this.root.querySelector('.name-input__account');
+        const nickName: HTMLInputElement | null = this.root.querySelector('.name-input__account');
         const password: HTMLInputElement | null = this.root.querySelector('.password-input__account');
         e.preventDefault();
-        if (email && name && nikName && password && divRegErr) {
-            if (email.value && name.value && nikName.value && password.value) {
+        if (email && name && nickName && password && divRegErr) {
+            if (email.value && name.value && nickName.value && password.value) {
                 const user = {
                     email: email.value,
                     name: name.value,
-                    nikName: nikName.value,
+                    nickName: nickName.value,
                     password: password.value,
                 };
+                // LocalStorage.instance.putAuthor(name.value, nikName.value); // << Olga
+                LocalStorage.instance.putAuthor(name.value, nickName.value); // << Olga
                 const authInfo = async (user: IUser) => {
                     let errCode = await Auth.instance.signupUser(user);
                     console.log(errCode);
@@ -167,7 +181,7 @@ class AccountView {
             }
             this.deFocus(email, divRegErr);
             this.deFocus(name, divRegErr);
-            this.deFocus(nikName, divRegErr);
+            this.deFocus(nickName, divRegErr);
             this.deFocus(password, divRegErr);
         }
     };

@@ -11,4 +11,4 @@ const app = new App();
 app.init();
 init();
 // const open = new OpenImg();
-// document.querySelector('body')?.insertAdjacentHTML( 'afterbegin' , open.Overflow());
+// document.querySelector('body')?.insertAdjacentHTML('afterbegin', open.Overflow());

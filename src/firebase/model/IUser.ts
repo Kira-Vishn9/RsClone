@@ -1,20 +1,18 @@
 import { DocumentData, DocumentReference } from 'firebase/firestore/lite';
 
 interface IUser {
+    id?: string;
     email: string;
     name: string;
-    nikName: string;
+    nickName: string;
     password: string;
     avatar?: string;
-
-    bio?: string; // << Зачем Хороший Вопрос ?
-    website?: string; // << Зачем Хороший Вопрос ?
 
     followers?: DocumentReference;
     followersCount?: number;
 
-    following?: DocumentReference;
-    followingCount?: number;
+    subscriptions?: DocumentReference;
+    subscriptionCount?: number;
 
     savedPosts?: DocumentReference;
     createAt?: Date;
