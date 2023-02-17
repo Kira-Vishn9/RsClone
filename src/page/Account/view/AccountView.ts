@@ -123,7 +123,8 @@ class AccountView {
     private async infoAuthor(id: string) {
         const data = await UserService.instance.getUser(id);
         if (data) {
-            LocalStorage.instance.putAuthor(data.name, data.nikName);
+            // LocalStorage.instance.putAuthor(data.name, data.nikName); // << Olga
+            LocalStorage.instance.putAuthor(data.name, data.nickName); // << Olga
         }
     }
 
@@ -151,7 +152,8 @@ class AccountView {
                     nickName: nickName.value,
                     password: password.value,
                 };
-                LocalStorage.instance.putAuthor(name.value, nikName.value);
+                // LocalStorage.instance.putAuthor(name.value, nikName.value); // << Olga
+                LocalStorage.instance.putAuthor(name.value, nickName.value); // << Olga
                 const authInfo = async (user: IUser) => {
                     let errCode = await Auth.instance.signupUser(user);
                     console.log(errCode);
