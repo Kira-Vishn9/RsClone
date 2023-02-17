@@ -1,4 +1,5 @@
-import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
+import UserState from '../../state/UserState';
 import app from '../config/config';
 import ISubscription from '../model/ISubscription';
 import FollowersService from './FollowersService';
@@ -45,13 +46,34 @@ class SubscriptionsService {
         }
     }
 
-    public async deleteSubscriptions(ownUserID: string, anotherUserID: string): Promise<void> {
+    public async getSubscription(subID: string): Promise<ISubscription | null> {
         try {
-            const userID = ownUserID;
-            if (userID === null) return;
+            const userID = UserState.instance.UserID;
+            if (userID === null) return null;
             const docRef = doc(this.data, userID);
             const subCollection = collection(docRef, this.pathSubscriptions);
-            const subDocRef = doc(subCollection, anotherUserID);
+            const subDocRef = doc(subCollection, subID);
+            const sub = await getDoc(subDocRef);
+            return sub.data() as ISubscription;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+    public async deleteSubscriptions(ownUserID: string, subID: string): Promise<void> {
+        try {
+            const docRef = doc(this.data, ownUserID);
+            const subCollection = collection(docRef, this.pathSubscriptions);
+            const subDocRef = doc(subCollection, subID);
+
+            const sub = await this.getSubscription(subID);
+            if (sub === null) return;
+            const getUser = await UserService.instance.getUser(sub.userID);
+            if (getUser === null || getUser.id === undefined) return;
+
+            await FollowersService.instance.deleteFollower(getUser.id);
+
             await deleteDoc(subDocRef);
         } catch (error) {
             console.log(error);
