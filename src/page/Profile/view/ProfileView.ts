@@ -118,7 +118,7 @@ class ProfileView {
             modal.init();
 
             data.forEach((sub: ISubscription) => {
-                modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id);
+                modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
             });
         });
     };
