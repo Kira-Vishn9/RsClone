@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
+import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
 import app from '../config/config';
 import IFollower from '../model/IFollower';
 import UserService from './UserSevice';
@@ -46,6 +46,20 @@ class FollowersService {
         } catch (error) {
             console.log(error);
             return null;
+        }
+    }
+
+    public async deleteFollower(userID: string): Promise<void> {
+        try {
+            const docRef = doc(this.data, userID);
+            const subCollection = collection(docRef, this.pathFollowers);
+            const searchFollower = await this.getFollowers(userID);
+            if (searchFollower === null) return;
+            const follower = searchFollower[0];
+            const subDocRef = doc(subCollection, follower.id);
+            await deleteDoc(subDocRef);
+        } catch (error) {
+            console.log(error);
         }
     }
 }
