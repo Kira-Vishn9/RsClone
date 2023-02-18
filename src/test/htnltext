@@ -1,0 +1,29 @@
+ <div class="wrapper-dialog-wondow">
+        <div class="conteiner-user">
+            <div>
+                <img class="user-photo"
+                src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="photoUser">
+                <span class="state"></span>
+            </div>
+            <div>
+                <p class="user_name">Lobach Nadezhda</p>
+                <p class="state">Сейчас в сети</p>
+            </div>
+        </div>
+
+
+        <div class="place-for-message">
+            <div class="interlocutor">
+                <img  src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="userPhoto">
+                <span>Привет меня зовут Надя. Давай дружить?</span>
+            </div>
+            <div class="you-message">
+                <span>Привет) Давай.Как говорил "Амарх Хаям":-'Дружбу сексом не испортишь'</span>
+            </div>
+        </div>
+
+        <div class="wrapper-input">
+            <textarea name="message" id="message" cols="" rows=""></textarea>
+            <span class="submit"></span>
+        </div>
+    </div>

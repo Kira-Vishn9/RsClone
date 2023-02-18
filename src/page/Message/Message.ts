@@ -1,6 +1,6 @@
 import Base from '../../app/base/Base';
 import Observer from '../../app/observer/Observer';
-import MessageModel from './model/MessageModal';
+import MessageModel from './model/MessageModel';
 
 import MessageView from './view/MessageView';
 

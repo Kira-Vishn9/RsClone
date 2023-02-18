@@ -1,19 +1,11 @@
-*p{
-    margin: 0;
-    padding: 0;
-}
-*img{
-    border: 5px solid green;
-        width: 50px;
-        border-radius: 100%;
-        margin-right: 8px ;
-}
-*li{
-    list-style-type: none;
-}
-
-// модалка для диалогов
 .wrapper-overflow{
+    *img{
+        border: 5px solid green;
+            width: 50px;
+            border-radius: 100%;
+            margin-right: 8px ;
+    }
+    
     display: flex;
     justify-content: center;
     position: absolute;

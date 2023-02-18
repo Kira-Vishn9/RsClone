@@ -70,7 +70,7 @@ class MessageView {
 
     private openModalM = () => {
       this.obServer.emit(EventType.openModal, {} , (followers: IFollower[]) => {
-        const messageModal = new MessageModal();
+        const messageModal = new MessageModal(this.obServer);
         this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
         messageModal.init();
         for(let i = 0; i < followers.length; i++){

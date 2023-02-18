@@ -1,12 +1,16 @@
 import { list } from 'firebase/storage';
+import Observer from '../../../app/observer/Observer';
+import EventType from '../type/EventType';
 import './style.scss';
 
 class MessageModal {
     private root: HTMLElement | null = null; 
     private listHuman: HTMLElement | null = null;
     private next: HTMLElement | null = null;
-    constructor(
-    ){}
+    private observer: Observer ;
+    constructor(observer: Observer){
+        this.observer = observer;
+    }
 
  public make () {
     const html = `
@@ -39,6 +43,7 @@ class MessageModal {
  public init (): void {
     this.root =  document.querySelector('.wrapper-overflow');
     if (this.root === null) { return } ;
+    this.root.addEventListener('click', this.removeWind)
     this.listHuman = this.root.querySelector('.list-human');
     this.next = this.root.querySelector('.next');
     this.next?.addEventListener('click', this.startDialog)
@@ -73,8 +78,21 @@ class MessageModal {
     }
 
     private startDialog = () => {
+        const WhatId = {
+            userID: '12',
+            recipientId: '13',
+        }
+        this.observer.emit(EventType.recipientDialog, WhatId)
         this.root?.remove;
         this.next?.removeEventListener('click', this.startDialog)
+    }
+
+    private removeWind = (e: Event) => {
+        if(e.target instanceof HTMLElement){
+            if (e.target.classList.contains('wrapper-overflow')){
+                this.root?.remove();
+            }
+        }
     }
 };
 

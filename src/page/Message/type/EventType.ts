@@ -1,5 +1,6 @@
 enum EventType {
-    openModal = 'eventOpenModal'
+    openModal = 'eventOpenModal',
+    recipientDialog = 'eventRecipientDialog',
 }
 
 export default EventType;

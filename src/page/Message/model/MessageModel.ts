@@ -19,8 +19,12 @@ private getFollows = async ({} ,callbackFollowers?: (folloers: IFollower[]) => v
         if(callbackFollowers !== undefined){
         callbackFollowers(myFollowers)}
 }
-
+private startDialog = (data: any) => {
+    console.log(data.userID)
+    console.log(data.recipientId)
+};
  public init () {
+    this.obServer.subscribe(EventType.recipientDialog, this.startDialog)
     this.obServer.subscribe(EventType.openModal, this.getFollows)
  }
 
