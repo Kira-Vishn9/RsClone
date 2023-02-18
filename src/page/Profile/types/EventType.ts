@@ -6,6 +6,7 @@ enum EventType {
     INIT_FOLLOWERS = 'eventInitFollowers',
     MODAL_UNSUBSCRIPTIONS = 'eventModalUnsubScriptions',
     RERENDER = 'eventReRender',
+    OPEN_MODAL_FOLLOWERS = 'eventOpenModalFollowers',
 }
 
 export default EventType;
