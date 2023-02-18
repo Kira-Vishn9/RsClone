@@ -86,6 +86,13 @@
         &-comments {
             padding: 10px 0;
             flex: 1 0 auto;
+            overflow-y: auto;
+
+            .comments-wrapper {
+                display: flex;
+                flex-direction: column;
+                height: 200px;
+            }
 
             .author-block {
                 margin: 10px 0;

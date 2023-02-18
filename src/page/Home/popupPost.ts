@@ -4,9 +4,10 @@ import { LocalStorage } from '../../localStorage/localStorage';
 import './popupPost.scss';
 import './view/mainHome.scss';
 class PopupPost {
-    static instance: PopupPost = new PopupPost();
+    // static instance: PopupPost = new PopupPost();
     private root: HTMLElement | null = null;
     private userId: string = LocalStorage.instance.getUser().id;
+    private nickNameLocal: string = LocalStorage.instance.getAuthor().nickName;
     private idPost: string | null = null;
     private likesUsersArr: string[] | null = null;
     private postInfo: IPosts | undefined;
@@ -17,18 +18,20 @@ class PopupPost {
         if (!this.postInfo) return;
 
         if (this.postInfo.likesUsers.indexOf(this.userId) !== -1) {
-            console.log(this.userId);
             this.likeBlack = 'icons__like-black';
         } else {
             this.likeBlack = '';
         }
 
-        const popupHtml = this.make();
+        const popupHtml = this.makeHtml();
 
         if (popupHtml) {
             document.body.insertAdjacentHTML('beforeend', popupHtml);
             this.root = document.querySelector('.popap-post');
             if (this.root === null) return;
+
+            this.viewComments();
+            this.focusMessage();
 
             this.idPost = this.root.id;
             this.likesUsersArr = this.postInfo.likesUsers;
@@ -44,9 +47,10 @@ class PopupPost {
     private addSubscriptions(root: HTMLElement) {
         root.addEventListener('click', this.closePost);
         root.addEventListener('click', this.addLikeInPopup);
+        root.addEventListener('click', this.addCommentInPopup);
     }
 
-    private make = (): string | undefined => {
+    private makeHtml = (): string | undefined => {
         if (!this.postInfo) return;
         const datePost = new Date(this.postInfo.time);
         const timePost = datePost.toString().slice(3, 24);
@@ -64,11 +68,12 @@ class PopupPost {
                                 <button class="btn-delete-post">Delete</button>
                             </div>
                             <div class="right-part-comments">
-                                <div class="author-block">
-                                    <img class="author-avatar" src="" alt="avatar">
-                                    <p class="author-text"><span class="author-nickname">${this.postInfo.author.nickName}</span>${this.postInfo.text}</p>
+                                <div class="comments-wrapper">
+                                    <div class="author-block">
+                                        <img class="author-avatar" src="" alt="avatar">
+                                        <p class="author-text"><span class="author-nickname">${this.postInfo.author.nickName}</span>${this.postInfo.text}</p>
+                                    </div>
                                 </div>
-
                             </div>
                             <div class="right-part-footer">
                                 <div class="icons">
@@ -157,7 +162,6 @@ class PopupPost {
     private async updatePostInfoInHome() {
         if (this.idPost) {
             const postInfo = await PostsService.instance.getPost(this.idPost);
-            console.log(postInfo);
             if (postInfo) {
                 const datePost = new Date(postInfo.time);
                 const timePost = datePost.toString().slice(3, 24);
@@ -192,6 +196,64 @@ class PopupPost {
             }
         }
     }
+
+    private viewComments = () => {
+        this.postInfo?.comments?.forEach((item) => {
+            const html = `
+                <div class="author-block">
+                    <img class="author-avatar" src="" alt="avatar">
+                    <p class="author-text"><span class="author-nickname">${item.nickName}</span>${item.text}</p>
+                </div>
+            `;
+            if (!this.root) return;
+            const commentBlock = this.root.querySelector('.comments-wrapper');
+
+            commentBlock?.insertAdjacentHTML('beforeend', html);
+        });
+    };
+
+    private focusMessage() {
+        const iconComment = this.root?.querySelector('.icons__comment') as HTMLElement;
+        const commentInput = this.root?.querySelector('.comment__input') as HTMLElement;
+        iconComment.addEventListener('click', () => {
+            commentInput.focus();
+        });
+    }
+
+    private addCommentInPopup = async (e: Event) => {
+        if (!e.target) return;
+        if (!this.root) return;
+        if (!this.idPost) return;
+        const commentWrap = this.root.querySelector('.comments-wrapper') as HTMLElement;
+        if (e.target instanceof HTMLElement) {
+            if (e.target.classList.contains('comment__btn')) {
+                const commentBlock = this.root.querySelector('.comment__input') as HTMLInputElement;
+                if (commentBlock.value) {
+                    console.log(this.nickNameLocal);
+                    console.log(this.userId);
+                    const html = `
+                    <div class="author-block">
+                    <img class="author-avatar" src="" alt="avatar">
+                    <p class="author-text"><span class="author-nickname">${this.nickNameLocal}</span>${commentBlock.value}</p>
+                    </div>
+                    `;
+
+                    commentWrap.insertAdjacentHTML('beforeend', html);
+
+                    const commentsArr = this.postInfo?.comments;
+
+                    const commentObj = {
+                        nickName: this.nickNameLocal,
+                        text: commentBlock.value,
+                        time: Date.now(),
+                    };
+                    commentsArr?.push(commentObj);
+                    await PostsService.instance.updatePosts(this.idPost, { comments: commentsArr });
+                    commentBlock.value = '';
+                }
+            }
+        }
+    };
 }
 
 export default PopupPost;
