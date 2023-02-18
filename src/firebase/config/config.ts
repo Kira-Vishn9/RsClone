@@ -23,6 +23,7 @@ import { initializeApp } from 'firebase/app';
 const firebaseConfig = {
   apiKey: 'AIzaSyBUzYL3IZqUD3gKEkhoeQesm5m6fkitS9Y',
   authDomain: 'rs-clone-insta.firebaseapp.com',
+  databaseURL: 'https://rs-clone-insta-default-rtdb.europe-west1.firebasedatabase.app',
   projectId: 'rs-clone-insta',
   storageBucket: 'rs-clone-insta.appspot.com',
   messagingSenderId: '238045707767',

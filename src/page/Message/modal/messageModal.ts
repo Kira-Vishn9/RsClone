@@ -1,7 +1,9 @@
 import { list } from 'firebase/storage';
 import Observer from '../../../app/observer/Observer';
+import UserState from '../../../state/UserState';
 import EventType from '../type/EventType';
 import './style.scss';
+
 
 class MessageModal {
     private root: HTMLElement | null = null; 
@@ -49,6 +51,9 @@ class MessageModal {
     this.next?.addEventListener('click', this.startDialog)
  }
 
+ private recepientId: string = '';
+ private avatarsUrl: string = '';
+ private resipientName: string = '';
  public makeItem (avatarsUrl: string, name: string, userID: string) {
     const html = `
     <li class="list-item" id = '${userID}'>
@@ -58,10 +63,15 @@ class MessageModal {
     </li>
 `;
     if(this.listHuman === null) return;
+    this.recepientId = userID;
+    this.avatarsUrl = avatarsUrl;
+    this.resipientName = name;
     this.listHuman?.insertAdjacentHTML('afterbegin', html);
     this.listHuman?.addEventListener('click', this.addActive);
     
  }
+
+    
 
     private addActive = (e: Event) => {
       if(!(e.target instanceof HTMLElement)) return
@@ -78,13 +88,17 @@ class MessageModal {
     }
 
     private startDialog = () => {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
         const WhatId = {
-            userID: '12',
-            recipientId: '13',
+            userID: userID,
+            recipientId: this.recepientId,
+            recipientAvatar: this.avatarsUrl,
+            recipientName: this.resipientName,
         }
-        this.observer.emit(EventType.recipientDialog, WhatId)
-        this.root?.remove;
-        this.next?.removeEventListener('click', this.startDialog)
+        this.observer.emit(EventType.recipientDialog, WhatId);
+        this.root?.remove();
+        this.next?.removeEventListener('click', this.startDialog);
     }
 
     private removeWind = (e: Event) => {
