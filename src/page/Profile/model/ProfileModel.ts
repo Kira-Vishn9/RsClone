@@ -1,4 +1,5 @@
 import Observer from '../../../app/observer/Observer';
+import IFollower from '../../../firebase/model/IFollower';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
@@ -7,7 +8,6 @@ import FollowersService from '../../../firebase/service/FollowersService';
 import PostsService from '../../../firebase/service/PostsService';
 import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
-import userState from '../../../state/user.state';
 import UserState from '../../../state/UserState';
 import EventType from '../types/EventType';
 
@@ -26,12 +26,14 @@ class ProfileModel {
         this.observer.subscribe('eventChangeAvatar', this.onChangeAvatar);
         this.observer.subscribe(EventType.SUBSCRIPTIONS, this.onGetSubscriptions);
         this.observer.subscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
+        this.observer.subscribe(EventType.OPEN_MODAL_FOLLOWERS, this.onGetFollowersForModal);
     }
 
     public unmount(): void {
         this.observer.unsubscribe('eventChangeAvatar', this.onChangeAvatar);
         this.observer.unsubscribe(EventType.SUBSCRIPTIONS, this.onGetSubscriptions);
         this.observer.unsubscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
+        this.observer.unsubscribe(EventType.OPEN_MODAL_FOLLOWERS, this.onGetFollowersForModal);
     }
 
     private async getPost(): Promise<void> {
@@ -90,6 +92,14 @@ class ProfileModel {
         if (data === null) return;
         this.observer.emit(EventType.INIT_FOLLOWERS, data);
     }
+
+    private onGetFollowersForModal = async (empty: object, cb?: (data: IFollower[]) => void) => {
+        const userID = UserState.instance.UserID;
+        if (userID === null) return;
+        const data = await FollowersService.instance.getFollowers(userID);
+        if (data === null) return;
+        if (cb !== undefined) cb(data);
+    };
 
     private onChangeAvatar = (file: File, cb?: (args: string) => void) => {
         const fileReader = new FileReader();
