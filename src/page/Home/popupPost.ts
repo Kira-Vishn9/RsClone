@@ -1,111 +1,196 @@
+import IPosts from '../../firebase/model/IPosts';
+import PostsService from '../../firebase/service/PostsService';
+import { LocalStorage } from '../../localStorage/localStorage';
+import './popupPost.scss';
+import './view/mainHome.scss';
 class PopupPost {
+    static instance: PopupPost = new PopupPost();
     private root: HTMLElement | null = null;
+    private userId: string = LocalStorage.instance.getUser().id;
+    private idPost: string | null = null;
+    private likesUsersArr: string[] | null = null;
+    private postInfo: IPosts | undefined;
+    private likeBlack = '';
 
-    private make(): string {
+    public async mount(id: string) {
+        this.postInfo = await PostsService.instance.getPost(id);
+        if (!this.postInfo) return;
+
+        if (this.postInfo.likesUsers.indexOf(this.userId) !== -1) {
+            console.log(this.userId);
+            this.likeBlack = 'icons__like-black';
+        } else {
+            this.likeBlack = '';
+        }
+
+        const popupHtml = this.make();
+
+        if (popupHtml) {
+            document.body.insertAdjacentHTML('beforeend', popupHtml);
+            this.root = document.querySelector('.popap-post');
+            if (this.root === null) return;
+
+            this.idPost = this.root.id;
+            this.likesUsersArr = this.postInfo.likesUsers;
+
+            this.addSubscriptions(this.root);
+        }
+    }
+
+    private unmount(): void {
+        //
+    }
+
+    private addSubscriptions(root: HTMLElement) {
+        root.addEventListener('click', this.closePost);
+        root.addEventListener('click', this.addLikeInPopup);
+    }
+
+    private make = (): string | undefined => {
+        if (!this.postInfo) return;
+        const datePost = new Date(this.postInfo.time);
+        const timePost = datePost.toString().slice(3, 24);
         return `
-            <div class="popap" id="popap-post">
+            <div class="popap popap-post" id="${this.postInfo.postID}">
                 <div class="popap-dark">
-                    <div class="popap-window">
-                        <div class="conteiner-share-img">
-                            <img class="close" src="../shared/Assets/svg/close_icon.svg" alt="exit">
-                            <div class="center-content">
-                              <div class="photo">
-                              <img class="photo-post" src="../shared/Assets/image/post-2.jpeg" alt=''>
-                              </div>
-                              <div class="info-photo">
-                                <div class="userName"></div>
-                                <div class="commets">
-                                <div class="wrapper-user">
-                                      <img class='userPhoto' src="../shared/Assets/image/post-1.jpg" alt="photo">
-                                      <span class="userNameComment">Kvishn9</span>
-                                </div>
-                                <ul class="plase-commets">
-                                  <li class = 'new-comment'>
-                                    <div
-                                    style="
-                                    display: flex;
-                                    align-items: center;
-                                      ">
-                                      <img src="../shared/Assets/image/post-1.jpg" class = 'user-comentator-photo' alt='photoUser'>
-                                      <span class= "name-comentator-photo">Regina</span>
-                                    </div>
-                                    <p class="text-comentator-photo">
-                                    Блин, сердце кровью обливается, вот всё у вас хорошо, посетителей нехватает чувствуется. От души советую vika_kaxova Виктория молодая опытная специалистка. с посещаемостью поможет- пишите в директ ей, ток скажите что вы от меня.
-                                    </p>
-                                  </li>
-                                  <li class = 'new-comment'>
-                                  <div
-                                  style="
-                                  display: flex;
-                                  align-items: center;
-                                    ">
-                                    <img src="../shared/Assets/image/post-1.jpg" class = 'user-comentator-photo' alt='photoUser'>
-                                    <span class= "name-comentator-photo">Regina</span>
-                                  </div>
-                                  <p class="text-comentator-photo">
-                                  Блин, сердце кровью обливается, вот всё у вас хорошо, посетителей нехватает чувствуется. От души советую vika_kaxova Виктория молодая опытная специалистка. с посещаемостью поможет- пишите в директ ей, ток скажите что вы от меня.
-                                  </p>
-                                </li>
-                                <li class = 'new-comment'>
-                                <div
-                                style="
-                                display: flex;
-                                align-items: center;
-                                  ">
-                                  <img src="../shared/Assets/image/post-1.jpg" class = 'user-comentator-photo' alt='photoUser'>
-                                  <span class= "name-comentator-photo">Regina</span>
-                                </div>
-                                <p class="text-comentator-photo">
-                                Блин, сердце кровью обливается, вот всё у вас хорошо, посетителей нехватает чувствуется. От души советую vika_kaxova Виктория молодая опытная специалистка. с посещаемостью поможет- пишите в директ ей, ток скажите что вы от меня.
-                                </p>
-                              </li>
-                              <li class = 'new-comment'>
-                              <div
-                              style="
-                              display: flex;
-                              align-items: center;
-                                ">
-                                <img src="../shared/Assets/image/post-1.jpg" class = 'user-comentator-photo' alt='photoUser'>
-                                <span class= "name-comentator-photo">Regina</span>
-                              </div>
-                              <p class="text-comentator-photo">
-                              Блин, сердце кровью обливается, вот всё у вас хорошо, посетителей нехватает чувствуется. От души советую vika_kaxova Виктория молодая опытная специалистка. с посещаемостью поможет- пишите в директ ей, ток скажите что вы от меня.
-                              </p>
-                            </li>
-                            <li class = 'new-comment'>
-                            <div
-                            style="
-                            display: flex;
-                            align-items: center;
-                              ">
-                              <img src="../shared/Assets/image/post-1.jpg" class = 'user-comentator-photo' alt='photoUser'>
-                              <span class= "name-comentator-photo">Regina</span>
+                    <div class="wrapper-post">
+                        <div class="left-part">
+                            <img class="post-image" src="${this.postInfo.fileURL}" alt="image">
+                        </div>
+                        <div class="right-part">
+                            <div class="right-part-header">
+                                <div class="popup-small-avatar"></div>
+                                <div class="popup-nickname">${this.postInfo.author.nickName}</div>
+                                <button class="btn-delete-post">Delete</button>
                             </div>
-                            <p class="text-comentator-photo">
-                            Блин, сердце кровью обливается, вот всё у вас хорошо, посетителей нехватает чувствуется. От души советую vika_kaxova Виктория молодая опытная специалистка. с посещаемостью поможет- пишите в директ ей, ток скажите что вы от меня.
-                            </p>
-                          </li>
-                                </ul>
+                            <div class="right-part-comments">
+                                <div class="author-block">
+                                    <img class="author-avatar" src="" alt="avatar">
+                                    <p class="author-text"><span class="author-nickname">${this.postInfo.author.nickName}</span>${this.postInfo.text}</p>
                                 </div>
-                                <div class="footer-content">
-                                    <img class = 'like' src="../shared/Assets/svg/like-icon-white.svg" width='30px' alt="like">
-                                    <img class = 'img-comment' src="../shared/Assets/svg/message-icon-white.svg" width='30px' alt="iconForComment">
-                                    <p>
-                                    <span>Нравится</span>
-                                    <span  class="whoLike"></span>
-                                    </p>
-                                  <div class="made-comment">
-                                    <textarea class="text-new-comment" contenteditable="true" rows = '4' name="textarea" cols="20"  placeholder= 'add new cooment...'></textarea>
-                                    <button class="submit">Опубликовать</button>
-                                  </div>
+
+                            </div>
+                            <div class="right-part-footer">
+                                <div class="icons">
+                                    <div class="icons-block">
+                                        <span class="icons__like ${this.likeBlack}"></span>
+                                        <span class="icons__comment"></span>
+                                        <span class="icons__save"></span>
+                                    </div>
+                                    <p class="count"><span class="count-likes">${this.postInfo.likesCount}</span> likes</p>
                                 </div>
-                              </div>
-                          </div>
-                      </div>
+                                <div class="post">
+                                    <p class="post__time">Published: <span class="time-ago">${timePost}</span></p>
+                                </div>
+                                <div class="comment">
+                                    <textarea class="comment__input" placeholder="Add a comment..."></textarea>
+                                    <button class="comment__btn">Post</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
+    };
+
+    private addLikeInPopup = (e: Event) => {
+        if (e.target instanceof HTMLElement) {
+            if (e.target.classList.contains('icons__like')) {
+                e.target.classList.toggle('icons__like-black');
+                const countLikeBlock = e.target.closest('.icons')?.querySelector('.count-likes');
+                const count = countLikeBlock?.textContent;
+                if (!countLikeBlock) return;
+                if (!count) return;
+                let countLike: number = 0;
+
+                if (e.target.classList.contains('icons__like-black')) {
+                    countLike = +count + 1;
+                    countLikeBlock.textContent = `${countLike}`;
+                    const index = this.likesUsersArr?.indexOf(this.userId);
+                    if (index === -1) {
+                        this.likesUsersArr?.push(this.userId);
+                    }
+                } else {
+                    if (+count > 0) {
+                        countLike = +count - 1;
+                        countLikeBlock.textContent = `${countLike}`;
+                        const index = this.likesUsersArr?.indexOf(this.userId);
+                        if (index !== -1 && index !== undefined) {
+                            this.likesUsersArr?.splice(index, 1);
+                        }
+                    }
+                }
+                const objUpdate = {
+                    likesCount: countLike,
+                    likesUsers: this.likesUsersArr,
+                };
+                console.log(objUpdate);
+                if (!this.idPost) return;
+                PostsService.instance.updatePosts(this.idPost, objUpdate);
+            }
+        }
+    };
+
+    private closePost = (event: Event) => {
+        if (this.root === null) return;
+
+        if (event.target instanceof HTMLElement) {
+            if (event.target.classList.contains('popap-dark')) {
+                this.root.remove();
+                document.body.classList.remove('covert');
+                this.updateHtmlPost();
+            }
+        }
+    };
+
+    private async updateHtmlPost() {
+        const postFooter = document.querySelector(`#${this.idPost}`)?.querySelector('.newsline__footer');
+        if (!postFooter) return;
+        postFooter.innerHTML = '';
+        const updateInfo = await this.updatePostInfoInHome();
+        if (updateInfo) {
+            postFooter.insertAdjacentHTML('afterbegin', updateInfo);
+        }
+    }
+
+    private async updatePostInfoInHome() {
+        if (this.idPost) {
+            const postInfo = await PostsService.instance.getPost(this.idPost);
+            console.log(postInfo);
+            if (postInfo) {
+                const datePost = new Date(postInfo.time);
+                const timePost = datePost.toString().slice(3, 24);
+
+                if (postInfo.likesUsers.indexOf(this.userId) !== -1) {
+                    this.likeBlack = 'icons__like-black';
+                } else {
+                    this.likeBlack = '';
+                }
+
+                return `
+                    <div class="icons">
+                        <div class="icons-block">
+                            <span class="icons__like ${this.likeBlack}"></span>
+                            <span class="icons__comment"></span>
+                            <span class="icons__save"></span>
+                        </div>
+                        <p class="count"><span class="count-likes">${postInfo.likesCount}</span> likes</p>
+                    </div>
+                    <div class="post">
+                        <p class="post__text"><span class="post__nickname">${postInfo.author.nickName}</span>${postInfo.text}</p>
+                        <div class="more-text">... more</div>
+                        <p class="post__time">Published: <span class="time-ago">${timePost}</span></p>
+                        <a class="post__comment">View all comments (<span class="count-comment">${postInfo.comments?.length}</span>)</a>
+                    </div>
+                    <div class="comments-all"></div>
+                    <div class="comment">
+                        <textarea class="comment__input" placeholder="Add a comment..."></textarea>
+                        <button class="comment__btn">Post</button>
+                    </div>
+                `;
+            }
+        }
     }
 }
 
