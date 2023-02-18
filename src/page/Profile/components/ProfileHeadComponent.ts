@@ -24,6 +24,9 @@ class ProfileHeadComponent {
     }
 
     private btnFollowers: HTMLElement | null = null;
+    public get BtnFollowers() {
+        return this.btnFollowers;
+    }
 
     // posts followers subscribtions
     private publications: HTMLElement | null = null;
@@ -41,6 +44,7 @@ class ProfileHeadComponent {
         this.btnSettings = this.root.querySelector('.btn-settings__profile');
 
         this.btnSubscriptions = this.root.querySelector('.subscriptions__profile');
+        this.btnFollowers = this.root.querySelector('.followers__profile');
 
         const publications: HTMLElement | null = this.root.querySelector('.publication__profile');
         const subsribtions: HTMLElement | null = this.root.querySelector('.subscriptions__profile');
