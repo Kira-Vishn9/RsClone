@@ -107,8 +107,9 @@ class MessageView {
         this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
         messageModal.init();
         for(let i = 0; i < followers.length; i++){
-          console.log(followers[i])
-        messageModal.makeItem(followers[i].avatar , followers[i].fullname, followers[i].userID);
+         let avatar = followers[i].avatar;
+         if(avatar === undefined) continue;
+        messageModal.makeItem(avatar, followers[i].fullname, followers[i].userID);
       }
       })
       
