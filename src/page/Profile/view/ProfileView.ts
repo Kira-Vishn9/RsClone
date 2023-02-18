@@ -1,4 +1,5 @@
 import Observer from '../../../app/observer/Observer';
+import IFollower from '../../../firebase/model/IFollower';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
@@ -37,6 +38,7 @@ class ProfileView {
         this.profileHead.InputAvatar?.addEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.addEventListener('click', this.onSettings);
         this.profileHead.BtnSubscriptions?.addEventListener('click', this.onBtnSub);
+        this.profileHead.BtnFollowers?.addEventListener('click', this.onOpenModalFollowers);
     }
 
     public unmount(): void {
@@ -48,6 +50,7 @@ class ProfileView {
         this.profileHead.InputAvatar?.removeEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.removeEventListener('click', this.onSettings);
         this.profileHead.BtnSubscriptions?.removeEventListener('click', this.onBtnSub);
+        this.profileHead.BtnFollowers?.removeEventListener('click', this.onOpenModalFollowers);
     }
 
     public make(): string {
@@ -118,6 +121,19 @@ class ProfileView {
             modal.init();
 
             data.forEach((sub: ISubscription) => {
+                modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
+            });
+        });
+    };
+
+    private onOpenModalFollowers = () => {
+        console.log('aaa');
+        this.$observer.emit(EventType.OPEN_MODAL_FOLLOWERS, {}, (data: IFollower[]) => {
+            const modal = new SubFollModal(this.$observer);
+            this.root?.insertAdjacentHTML('afterend', modal.render());
+            modal.init();
+
+            data.forEach((sub: IFollower) => {
                 modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
             });
         });
