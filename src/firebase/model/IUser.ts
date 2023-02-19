@@ -5,7 +5,7 @@ interface IUser {
     name: string;
     nikName: string;
     password: string;
-    avatar?: string;
+    avatar: string;
 
     bio?: string; // << Зачем Хороший Вопрос ?
     website?: string; // << Зачем Хороший Вопрос ?

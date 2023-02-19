@@ -57,6 +57,8 @@ class UserService {
             };
             UserState.instance.Author = u;
             await setDoc(docRef, user);
+
+            this.updateUserAvatar('./assets/image/user.png');
         } catch (error) {
             console.log(error);
         }

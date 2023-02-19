@@ -1,7 +1,9 @@
 import IPosts from '../../firebase/model/IPosts';
 import PostsService from '../../firebase/service/PostsService';
 import { LocalStorage } from '../../localStorage/localStorage';
+import Home from './Home';
 import './popupPost.scss';
+import HomeView from './view/HomeView';
 import './view/mainHome.scss';
 class PopupPost {
     // static instance: PopupPost = new PopupPost();
@@ -48,12 +50,17 @@ class PopupPost {
         root.addEventListener('click', this.closePost);
         root.addEventListener('click', this.addLikeInPopup);
         root.addEventListener('click', this.addCommentInPopup);
+        root.addEventListener('click', this.deletePost);
     }
 
     private makeHtml = (): string | undefined => {
         if (!this.postInfo) return;
         const datePost = new Date(this.postInfo.time);
         const timePost = datePost.toString().slice(3, 24);
+        let disabledBtn = 'disabled';
+        if (this.postInfo.userID === this.userId) {
+            disabledBtn = '';
+        }
         return `
             <div class="popap popap-post" id="${this.postInfo.postID}">
                 <div class="popap-dark">
@@ -65,7 +72,7 @@ class PopupPost {
                             <div class="right-part-header">
                                 <div class="popup-small-avatar"></div>
                                 <div class="popup-nickname">${this.postInfo.author.nickName}</div>
-                                <button class="btn-delete-post">Delete</button>
+                                <button class="btn-delete-post" ${disabledBtn}>Delete</button>
                             </div>
                             <div class="right-part-comments">
                                 <div class="comments-wrapper">
@@ -97,6 +104,24 @@ class PopupPost {
                 </div>
             </div>
         `;
+    };
+
+    private deletePost = (e: Event) => {
+        if (!this.root) return;
+        if (e.target instanceof HTMLElement) {
+            if (e.target.classList.contains('btn-delete-post')) {
+                if (!this.idPost) return;
+                PostsService.instance.deletePosts(this.idPost);
+                this.root.remove();
+                document.body.classList.remove('covert');
+                // перезалить Home
+                if (location.hash.includes('home')) {
+                    const homeView = new HomeView();
+                    homeView.init();
+                }
+                // перезалить Profile
+            }
+        }
     };
 
     private addLikeInPopup = (e: Event) => {

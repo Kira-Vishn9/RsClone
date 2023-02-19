@@ -1,6 +1,7 @@
 import Observer from '../../../app/observer/Observer';
 import IPosts from '../../../firebase/model/IPosts';
 import IUser from '../../../firebase/model/IUser';
+import PopupPost from '../../Home/popupPost';
 import ProfileHeadComponent from '../components/ProfileHeadComponent';
 import '../style/profile.scss';
 import makePost from '../ui/item-profile';
@@ -31,6 +32,8 @@ class ProfileView {
         this.$observer.subscribe('eventPost', this.onGetPost);
         this.profileHead.InputAvatar?.addEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.addEventListener('click', this.onSettings);
+
+        this.root.addEventListener('click', this.openPost);
     }
 
     public unmount(): void {
@@ -45,7 +48,7 @@ class ProfileView {
                 ${this.profileHead.make()}
 
                 <div class="items-grid__profile">
-                    
+
                 </div>
             </section>
         `.trim();
@@ -61,11 +64,11 @@ class ProfileView {
         if (event.avatar !== undefined) this.profileHead.changeAvatar(event.avatar);
     };
 
-    private onGetPost = (event: IPosts) => {
+    private onGetPost = async (event: IPosts) => {
         console.log('ProfileView');
         console.log(event);
 
-        const createPost = makePost(event.fileURL);
+        const createPost = makePost(event.fileURL, event.likesUsers.length, event.comments.length, event.postID);
         // this.profileHead?.changeName(event.author.nickName);
         // this.profileHead.changeFullName(event.author.fullname);
         this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
@@ -82,6 +85,16 @@ class ProfileView {
 
     private onSettings = () => {
         window.location.href = '#/settings';
+    };
+
+    private openPost = (e: Event) => {
+        if (e.target instanceof HTMLElement) {
+            const postBlock = e.target.closest('.item__profile');
+            if (postBlock) {
+                const popup = new PopupPost();
+                popup.mount(postBlock.id);
+            }
+        }
     };
 }
 

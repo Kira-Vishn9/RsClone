@@ -8,12 +8,15 @@ function postView(
     time: string,
     postID: string,
     likeBlack: string,
-    numberComment: number
+    numberComment: number,
+    avatar: string
 ): string {
     return `
       <div class="newsline" id="${postID}">
         <div class="newsline__header">
-          <div class="user__avatar small-avatar"></div>
+          <div class="user__avatar small-avatar">
+            <img class="img-avatar" src="${avatar}" alt="avatar">
+          </div>
           <div class="user__name">${nickName}</div>
         </div>
         <div class="newsline__main">

@@ -81,6 +81,16 @@
                     opacity: .7;
                 }
             }
+
+            .btn-delete-post[disabled] {
+                background-color: #8e8e8e;
+                color: #fff;
+
+                &:hover {
+                    cursor: auto;
+                    opacity: 1;
+                }
+            }
         }
 
         &-comments {

@@ -62,8 +62,6 @@ class Home extends Base {
             if (e.target.classList.contains('icons__comment') || e.target.classList.contains('post__comment')) {
                 const postBlock = e.target.closest('.newsline') as HTMLElement;
                 const idPost = postBlock.id;
-                console.log(LocalStorage.instance.getAuthor().nickName);
-                console.log(LocalStorage.instance.getUser().id);
                 const popupPost = new PopupPost();
                 popupPost.mount(idPost);
                 // PopupPost.instance.mount(idPost);

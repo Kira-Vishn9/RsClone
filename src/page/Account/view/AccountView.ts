@@ -150,6 +150,7 @@ class AccountView {
                     name: name.value,
                     nikName: nikName.value,
                     password: password.value,
+                    avatar: '',
                 };
                 LocalStorage.instance.putAuthor(name.value, nikName.value);
                 const authInfo = async (user: IUser) => {

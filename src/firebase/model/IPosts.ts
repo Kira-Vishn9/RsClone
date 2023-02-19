@@ -13,7 +13,7 @@ interface IPosts {
     likesCount: number;
     likesUsers: string[];
 
-    comments?: IComment[];
+    comments: IComment[];
     commentsCount: number;
 
     createdAt?: Date;
