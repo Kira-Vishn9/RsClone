@@ -14,9 +14,22 @@ module.exports = {
     target,
     devtool,
     devServer: {
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
         port: 3000,
-        historyApiFallback: true,
-        contentBase: './src',
+        // historyApiFallback: true,
+        // contentBase: './src',
+        compress: true,
+        open: false,
+        hot: true,
+        client: {
+            progress: true,
+            overlay: {
+                errors: true,
+                warnings: false,
+            },
+        },
     },
     entry: path.resolve(__dirname, './src/index.ts'),
     output: {
@@ -33,22 +46,23 @@ module.exports = {
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
         }),
-		new MiniCssExtractPlugin({
-			filename: 'main.css',
-		}),
-        new EslingPlugin({ 
-			overrideConfigFile: './.eslintrc.json',
-			extensions: ['ts', 'js'] 
-		}),
-		new CopyWebpackPlugin({
-			patterns: [
-			  { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },
-			  { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/image/' },
-			  { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/svg/' },
-			]}),
-	],
-	module: {
-		rules: [
+        new MiniCssExtractPlugin({
+            filename: 'main.css',
+        }),
+        new EslingPlugin({
+            overrideConfigFile: './.eslintrc.json',
+            extensions: ['ts', 'js'],
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },
+                { from: path.resolve(__dirname, './src/shared/Assets/image'), to: './assets/image/' },
+                { from: path.resolve(__dirname, './src/shared/Assets/svg'), to: './assets/svg/' },
+            ],
+        }),
+    ],
+    module: {
+        rules: [
             {
                 test: /\.ts$/i,
                 use: 'ts-loader',
