@@ -1,5 +1,7 @@
 import IPosts from '../../firebase/model/IPosts';
+import IUser from '../../firebase/model/IUser';
 import PostsService from '../../firebase/service/PostsService';
+import UserService from '../../firebase/service/UserSevice';
 import { LocalStorage } from '../../localStorage/localStorage';
 import Home from './Home';
 import './popupPost.scss';
@@ -14,10 +16,13 @@ class PopupPost {
     private likesUsersArr: string[] | null = null;
     private postInfo: IPosts | undefined;
     private likeBlack = '';
+    private user: IUser | null = null;
 
     public async mount(id: string) {
         this.postInfo = await PostsService.instance.getPost(id);
         if (!this.postInfo) return;
+
+        this.user = await UserService.instance.getUser(this.userId);
 
         if (this.postInfo.likesUsers.indexOf(this.userId) !== -1) {
             this.likeBlack = 'icons__like-black';
@@ -61,6 +66,17 @@ class PopupPost {
         if (this.postInfo.userID === this.userId) {
             disabledBtn = '';
         }
+
+        let postDescription = '';
+        if (this.postInfo.text) {
+            postDescription = `
+                <div class="author-block">
+                    <img class="author-avatar" src="${this.postInfo.avatar}" alt="avatar">
+                    <p class="author-text"><span class="author-nickname">${this.postInfo.author.nickName}</span>${this.postInfo.text}</p>
+                </div>
+            `;
+        }
+
         return `
             <div class="popap popap-post" id="${this.postInfo.postID}">
                 <div class="popap-dark">
@@ -70,16 +86,15 @@ class PopupPost {
                         </div>
                         <div class="right-part">
                             <div class="right-part-header">
-                                <div class="popup-small-avatar"></div>
+                                <div class="popup-small-avatar">
+                                    <img class="img-avatar" src="${this.postInfo.avatar}" alt="avatar">
+                                </div>
                                 <div class="popup-nickname">${this.postInfo.author.nickName}</div>
                                 <button class="btn-delete-post" ${disabledBtn}>Delete</button>
                             </div>
                             <div class="right-part-comments">
                                 <div class="comments-wrapper">
-                                    <div class="author-block">
-                                        <img class="author-avatar" src="" alt="avatar">
-                                        <p class="author-text"><span class="author-nickname">${this.postInfo.author.nickName}</span>${this.postInfo.text}</p>
-                                    </div>
+                                    ${postDescription}
                                 </div>
                             </div>
                             <div class="right-part-footer">
@@ -175,7 +190,9 @@ class PopupPost {
     };
 
     private async updateHtmlPost() {
+        console.log(document.querySelector(`.posts-list`));
         const postFooter = document.querySelector(`#${this.idPost}`)?.querySelector('.newsline__footer');
+        console.log(postFooter);
         if (!postFooter) return;
         postFooter.innerHTML = '';
         const updateInfo = await this.updatePostInfoInHome();
@@ -226,7 +243,7 @@ class PopupPost {
         this.postInfo?.comments?.forEach((item) => {
             const html = `
                 <div class="author-block">
-                    <img class="author-avatar" src="" alt="avatar">
+                    <img class="author-avatar" src="${item.avatar}" alt="avatar">
                     <p class="author-text"><span class="author-nickname">${item.nickName}</span>${item.text}</p>
                 </div>
             `;
@@ -254,11 +271,10 @@ class PopupPost {
             if (e.target.classList.contains('comment__btn')) {
                 const commentBlock = this.root.querySelector('.comment__input') as HTMLInputElement;
                 if (commentBlock.value) {
-                    console.log(this.nickNameLocal);
-                    console.log(this.userId);
+                    if (!this.user) return;
                     const html = `
                     <div class="author-block">
-                    <img class="author-avatar" src="" alt="avatar">
+                    <img class="author-avatar" src="${this.user.avatar}" alt="avatar">
                     <p class="author-text"><span class="author-nickname">${this.nickNameLocal}</span>${commentBlock.value}</p>
                     </div>
                     `;
@@ -266,11 +282,11 @@ class PopupPost {
                     commentWrap.insertAdjacentHTML('beforeend', html);
 
                     const commentsArr = this.postInfo?.comments;
-
                     const commentObj = {
                         nickName: this.nickNameLocal,
                         text: commentBlock.value,
                         time: Date.now(),
+                        avatar: this.user.avatar,
                     };
                     commentsArr?.push(commentObj);
                     await PostsService.instance.updatePosts(this.idPost, { comments: commentsArr });

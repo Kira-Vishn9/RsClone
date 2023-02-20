@@ -1,6 +1,9 @@
 import Observer from '../../../app/observer/Observer';
 import IPosts from '../../../firebase/model/IPosts';
 import IUser from '../../../firebase/model/IUser';
+import Posts from '../../../firebase/posts/posts';
+import PostsService from '../../../firebase/service/PostsService';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import PopupPost from '../../Home/popupPost';
 import ProfileHeadComponent from '../components/ProfileHeadComponent';
 import '../style/profile.scss';
@@ -80,8 +83,26 @@ class ProfileView {
         if (file === null) return;
         this.$observer.emit('eventChangeAvatar', file[0], (arg: string) => {
             this.profileHead.changeAvatar(arg);
+            this.ava(arg);
         });
     };
+
+    private async ava(arg: string) {
+        const post = await Posts.init.getAllPosts();
+        post.forEach((item) => {
+            if (item.userID === LocalStorage.instance.getUser().id) {
+                PostsService.instance.updatePosts(item.postID, { avatar: arg });
+            }
+            const commentArr = item.comments;
+            const updateArr = commentArr.map((com) => {
+                if (com.nickName === LocalStorage.instance.getAuthor().nickName) {
+                    com.avatar = arg;
+                }
+                return com;
+            });
+            PostsService.instance.updatePosts(item.postID, { comments: updateArr });
+        });
+    }
 
     private onSettings = () => {
         window.location.href = '#/settings';

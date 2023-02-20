@@ -13,7 +13,7 @@ class App {
         if (app) {
             // app.insertAdjacentHTML('afterbegin', aside);
             const aside = new AsideView();
-            app.insertAdjacentHTML('afterbegin', aside.render());
+            app.insertAdjacentHTML('afterbegin', await aside.render());
             aside.mount();
         }
         // const upload = document.querySelector('.upload-btn') as HTMLElement;

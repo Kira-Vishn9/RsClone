@@ -3,6 +3,7 @@ import IComment from '../../firebase/model/IComment';
 import IPosts from '../../firebase/model/IPosts';
 import PullPushImg from '../../firebase/pull-push-img/PullPushImg';
 import PostsService from '../../firebase/service/PostsService';
+import UserService from '../../firebase/service/UserSevice';
 import { LocalStorage } from '../../localStorage/localStorage';
 import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
@@ -106,6 +107,10 @@ class PopUpUploadComponent {
 
                     // const author = UserState.instance.Author;
                     const author = LocalStorage.instance.getAuthor();
+                    const user = await UserService.instance.getUser(userID);
+                    if (!user) return;
+                    console.log(user.avatar);
+                    console.log(1);
                     const post: IPosts = {
                         userID: userID, // Формирования запроса
                         fileName: `${userID}.${file[0].name}`, // Формирования запроса
@@ -118,6 +123,7 @@ class PopUpUploadComponent {
                         author: author,
                         time: Date.now(),
                         postID: '',
+                        avatar: user.avatar,
                     }; // Формирования запроса
                     const urlImg = await PullPushImg.instance.upload(file[0], post.fileName); // Запись Картинки
                     if (typeof urlImg === 'string') {

@@ -20,6 +20,7 @@ interface IPosts {
     author: { fullname: string; nickName: string };
     time: number;
     postID: string;
+    avatar: string;
 }
 
 export default IPosts;

@@ -17,7 +17,7 @@ async function getAllPosts() {
         let numberComment = 0;
 
         const commentsArr = item.comments;
-        if (!commentsArr) return null;
+        if (!commentsArr) return;
         numberComment = commentsArr.length;
         commentsArr.sort((a, b) => a.time - b.time);
 
@@ -33,7 +33,7 @@ async function getAllPosts() {
             item.postID,
             likeBlack,
             numberComment,
-            ''
+            item.avatar
         );
     });
     return postsHtml;
