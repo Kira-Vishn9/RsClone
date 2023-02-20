@@ -1,0 +1,157 @@
+.message-block {
+    width: 880px;
+    height: 671px;
+    display: flex;
+    margin: 0 auto;
+    padding-top: 30px;
+
+    &__left {
+        width: 300px;
+        border: 1px solid #dbdbdb;
+
+        &-header {
+            height: 60px;
+            border-bottom: 1px solid #dbdbdb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+    }
+
+    .message-name {
+        font-weight: 900;
+        font-size: 16px;
+        line-height: 24px;
+        color: #262626;
+    }
+
+    .message-btn {
+        width: 24px;
+        height: 24px;
+        background: url('../../../shared/Assets/icon/new-mes.svg');
+        cursor: pointer;
+    }
+
+    .message-user {
+        height: 72px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .message-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        margin-right: 12px;
+    }
+
+    .message-content {
+        font-size: 14px;
+        line-height: 11px;
+        width: 242px;
+
+        &-title {
+            margin-bottom: 8px;
+            color: #262626;
+        }
+
+        &-subtitle {
+            color: #8e8e8e;
+        }
+    }
+
+    &__right {
+        border: 1px solid #dbdbdb;
+        width: 580px;
+
+        &-header {
+            height: 60px;
+            border-bottom: 1px solid #dbdbdb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+
+            .user-message {
+                display: flex;
+                font-weight: 900;
+                font-size: 16px;
+                line-height: 24px;
+                color: #262626;
+            }
+
+            .user-avatar {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .user-name {
+              transition: .3s;
+
+              &:hover {
+                opacity: .5;
+              }
+            }
+        }
+
+        &-main {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &-img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: 3px solid #000000;
+            background: url('../../../shared/Assets/icon/share-post.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        &-title {
+            margin-top: 16px;
+            font-weight: 900;
+            font-size: 22px;
+            color: #262626;
+        }
+
+        &-text {
+            margin-top: 16px;
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+    }
+}
+
+.send-btn {
+    margin-top: 34px;
+    width: 145px;
+    height: 35px;
+    background: #0095f6;
+    border-radius: 4px;
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 18px;
+    color: #ffffff;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    transition: 0.5s;
+
+    &:hover {
+        background: #1877f2;
+    }
+}
+
+.hidden {
+    visibility: hidden;
+}
