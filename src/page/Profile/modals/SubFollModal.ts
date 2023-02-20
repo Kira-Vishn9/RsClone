@@ -36,7 +36,14 @@ class SubFollModal {
     }
 
     // eslint-disable-next-line prettier/prettier
-    public makeItem(avatar: string = '', fullName: string, nickName: string, subID: string = '', userID: string, btnName: string = 'Отписаться'): void {
+    public makeItem(
+        avatar: string = '',
+        fullName: string,
+        nickName: string,
+        subID: string = '',
+        userID: string,
+        btnName: string = 'Отписаться'
+    ): void {
         const item = `
         <div class="item__sub-foll" sub-id="${subID}" user-id="${userID}">
             <div class="content__item">
@@ -96,8 +103,7 @@ class SubFollModal {
         if (item === null) return;
         const getUserID = item?.getAttribute('user-id');
         const nickName = item.querySelector('.nick-name__item');
-        console.log(nickName);
-        console.log(getUserID);
+
         if (getUserID === null || nickName === null) return;
 
         UserState.instance.AnotherUserID = getUserID; // << КОСТЫЛЬ //TODO Refactor
