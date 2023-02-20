@@ -9,13 +9,11 @@ class ProfileSettings extends Base {
     private model: SettingsModel = new SettingsModel(this.observer);
 
     public mount(): void {
-        console.log('MOUNT: ProfileSettings');
         this.view.init();
         this.model.execute();
     }
 
     public unmount(): void {
-        console.log('UNMOUNT: ProfileSettings');
         this.view.unmount();
     }
 

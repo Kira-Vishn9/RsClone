@@ -69,18 +69,15 @@ class ProfileView {
     private onGetUser = (event: IUser) => {
         const fullname = event.name;
         const nickName = event.nickName;
-        console.log('NICK:' + event.nickName);
+
         this.profileHead.changeFullName(fullname);
-        console.log('FULLNAME: ' + fullname);
+
         this.profileHead.changeNickName(nickName);
 
         if (event.avatar !== undefined) this.profileHead.changeAvatar(event.avatar);
     };
 
     private onGetPost = (event: IPosts[]) => {
-        console.log('ProfileView');
-        console.log(event);
-
         event.forEach((post: IPosts) => {
             const createPost = makePost(post.fileURL);
             this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
@@ -127,7 +124,6 @@ class ProfileView {
     };
 
     private onOpenModalFollowers = () => {
-        console.log('aaa');
         this.$observer.emit(EventType.OPEN_MODAL_FOLLOWERS, {}, (data: IFollower[]) => {
             const modal = new SubFollModal(this.$observer);
             this.root?.insertAdjacentHTML('afterend', modal.render());
