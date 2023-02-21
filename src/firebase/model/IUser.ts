@@ -6,7 +6,7 @@ interface IUser {
     name: string;
     nickName: string;
     password: string;
-    avatar?: string;
+    avatar: string;
 
     followers?: DocumentReference;
     followersCount?: number;

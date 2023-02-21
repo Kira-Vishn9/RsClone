@@ -1,5 +1,5 @@
 .aside {
-  width: 12%;
+  width: 17%;
   padding: 30px;
   font-size: 18px;
   position: fixed;
@@ -9,14 +9,19 @@
     display: flex;
     flex-direction: column;
 
-    &-item a {
-      margin-bottom: 15px;
+    &-item {
       display: flex;
-      align-items: center;
-      color: #262626;
 
-      &:hover {
-        cursor: pointer;
+      a {
+        flex-shrink: 1;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        color: #262626;
+
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
 

@@ -60,10 +60,10 @@ class ProfileHeadComponent {
         return `
         <div class="data__profile">
             <div class="avatar__profile" style="position: relative">
-                <img class="img-avatar__profile" src="https://kipmu.ru/wp-content/uploads/jptr-1.jpg">
+                <img class="img-avatar__profile" src="./assets/image/user.png">
                 <input class="input-avatar__profile "type="file" style="position: absolute; top: 0; rigth: 0; botton: 0; left: 0; width: 100%; height: 100%; opacity: 0;">
             </div>
-            
+
             <div class="root-block__profile">
                 <div class="block__profile">
                     <span class="name">${this.name?.textContent}</span>
@@ -88,7 +88,7 @@ class ProfileHeadComponent {
                 <span>${this.followers?.textContent === undefined ? 0 : this.followers?.textContent}</span>
                 <span>Подписчиков</span>
             </div>
-        
+
             <div class="item-social subscriptions__profile">
                 <span>${this.subsribtions?.textContent === undefined ? 0 : this.subsribtions?.textContent}</span>
                 <span>Подписок</span>

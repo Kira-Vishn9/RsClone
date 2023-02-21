@@ -1,0 +1,137 @@
+// body{overflow-y: hidden;}
+.popap {
+    position: fixed;
+    top: 0;
+    z-index: 110;
+
+    &-dark {
+        background: rgba(0, 0, 0, 0.7);
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-y: scroll;
+    }
+
+    .wrapper-post {
+        background-color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        width: 825px;
+        height: 680px;
+        overflow: hidden;
+    }
+
+    .left-part {
+        width: 60%;
+        height: 100%;
+        background: #000;
+        overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .post-image {
+            width: auto;
+            height: 100%;
+        }
+    }
+
+    .right-part {
+        width: 40%;
+        padding: 10px 5px;
+        display: flex;
+        flex-direction: column;
+
+        &-header {
+            display: flex;
+            align-items: center;
+            font-weight: 900;
+            margin-bottom: 10px;
+
+            .popup-small-avatar {
+                width: 42px;
+                height: 42px;
+                margin-right: 20px;
+                border-radius: 50%;
+                background-color: #8e8e8e;
+            }
+
+            .popup-nickname {
+                padding-top: 3px;
+                font-size: 14px;
+                line-height: 11px;
+                text-transform: lowercase;
+                color: #262626;
+            }
+
+            .btn-delete-post {
+                color: #ED4956;
+                margin-left: auto;
+                width: 70px;
+                height: 25px;
+                border: 1px solid #8e8e8e;
+                border-radius: 5px;
+                transition: .3s;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: .7;
+                }
+            }
+
+            .btn-delete-post[disabled] {
+                background-color: #8e8e8e;
+                color: #fff;
+
+                &:hover {
+                    cursor: auto;
+                    opacity: 1;
+                }
+            }
+        }
+
+        &-comments {
+            padding: 10px 0;
+            flex: 1 0 auto;
+            overflow-y: auto;
+
+            .comments-wrapper {
+                display: flex;
+                flex-direction: column;
+                height: 200px;
+            }
+
+            .author-block {
+                margin: 10px 0;
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+            }
+
+            .author-avatar {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                margin-right: 10px;
+                align-self: start;
+                flex-shrink: 0;
+            }
+
+            .author-nickname {
+                font-weight: 900;
+                margin-right: 10px;
+            }
+
+        }
+
+        &-footer {
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 auto;
+        }
+    }
+}
+

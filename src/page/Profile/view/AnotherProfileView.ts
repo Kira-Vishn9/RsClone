@@ -52,7 +52,7 @@ class AnotherProfileView {
                 ${this.profileHead.make()}
 
                 <div class="items-grid__profile">
-                    
+
                 </div>
             </section>
         `.trim();
@@ -71,7 +71,7 @@ class AnotherProfileView {
 
     private onGetPost = (event: IPosts[]) => {
         event.forEach((post: IPosts) => {
-            const createPost = makePost(post.fileURL);
+            const createPost = makePost(post.fileURL, post.likesUsers.length, post.comments.length, post.postID);
             this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
         });
         this.profileHead.changeAmountPublications(event.length);

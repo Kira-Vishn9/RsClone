@@ -2,8 +2,6 @@ import Auth from '../../../firebase/auth/Auth';
 import IUser from '../../../firebase/model/IUser';
 import UserService from '../../../firebase/service/UserSevice';
 import { LocalStorage } from '../../../localStorage/localStorage';
-import userState from '../../../state/user.state';
-import Home from '../../Home/Home';
 import '../style/account.scss';
 const logo = '../../../shared/Assets/svg/instagram-logo.svg';
 enum StateBlockChangeAccount {
@@ -151,6 +149,7 @@ class AccountView {
                     name: name.value,
                     nickName: nickName.value,
                     password: password.value,
+                    avatar: '',
                 };
                 // LocalStorage.instance.putAuthor(name.value, nikName.value); // << Olga
                 LocalStorage.instance.putAuthor(name.value, nickName.value); // << Olga
