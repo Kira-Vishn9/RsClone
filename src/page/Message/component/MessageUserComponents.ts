@@ -35,6 +35,7 @@ class MessageUserComponents {
       `;
     }
 
+    // Вызывается во view
     private elem: HTMLElement | null = null;
     public setRecipientHTML(elem: HTMLElement | null): void {
         if (elem === null) return;
