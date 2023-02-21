@@ -109,8 +109,6 @@ class PopUpUploadComponent {
                     const author = LocalStorage.instance.getAuthor();
                     const user = await UserService.instance.getUser(userID);
                     if (!user) return;
-                    console.log(user.avatar);
-                    console.log(1);
                     const post: IPosts = {
                         userID: userID, // Формирования запроса
                         fileName: `${userID}.${file[0].name}`, // Формирования запроса

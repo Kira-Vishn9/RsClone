@@ -27,7 +27,6 @@ function postView(
             <div class="icons-block">
                 <span class="icons__like ${likeBlack}"></span>
                 <span class="icons__comment"></span>
-                <span class="icons__save"></span>
             </div>
             <p class="count"><span class="count-likes">${likes}</span> likes</p>
           </div>

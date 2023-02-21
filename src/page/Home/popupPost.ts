@@ -3,7 +3,6 @@ import IUser from '../../firebase/model/IUser';
 import PostsService from '../../firebase/service/PostsService';
 import UserService from '../../firebase/service/UserSevice';
 import { LocalStorage } from '../../localStorage/localStorage';
-import Home from './Home';
 import './popupPost.scss';
 import HomeView from './view/HomeView';
 import './view/mainHome.scss';
@@ -170,7 +169,6 @@ class PopupPost {
                     likesCount: countLike,
                     likesUsers: this.likesUsersArr,
                 };
-                console.log(objUpdate);
                 if (!this.idPost) return;
                 PostsService.instance.updatePosts(this.idPost, objUpdate);
             }
@@ -190,9 +188,7 @@ class PopupPost {
     };
 
     private async updateHtmlPost() {
-        console.log(document.querySelector(`.posts-list`));
         const postFooter = document.querySelector(`#${this.idPost}`)?.querySelector('.newsline__footer');
-        console.log(postFooter);
         if (!postFooter) return;
         postFooter.innerHTML = '';
         const updateInfo = await this.updatePostInfoInHome();

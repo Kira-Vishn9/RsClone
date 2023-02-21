@@ -11,13 +11,10 @@ class App {
         // панель навигации
         const app = document.querySelector('#app');
         if (app) {
-            // app.insertAdjacentHTML('afterbegin', aside);
             const aside = new AsideView();
             app.insertAdjacentHTML('afterbegin', await aside.render());
             aside.mount();
         }
-        // const upload = document.querySelector('.upload-btn') as HTMLElement;
-        // upload.addEventListener('click', createPopap);
 
         const container = document.querySelector('.container');
         if (container) {

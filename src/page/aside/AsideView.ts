@@ -21,18 +21,18 @@ class AsideView {
         const id = LocalStorage.instance.getUser().id;
 
         return `
-        <aside class="aside">
-        <img src="./assets/image/logo.png" alt="instagram" class="logo">
-        <ul class="aside__list">
-          <li class="aside__list-item aside__list-active"><a href="#/home"><span class="home-ico"></span>Home</a></li>
-          <li class="aside__list-item"><a href="#/message"><span class="messenger-ico"></span>Messages</a></li>
-          <li class="aside__list-item upload-btn"><a ><span class="new-posts-ico"></span>Upload</a></li>
-          <li class="aside__list-item"><a href="#/profile"><img class="profile-ico" src="${await this.getAvatarUser(
-              id
-          )}">My profile</a></li>
-          <li class="aside__list-item" search-btn><a href="#/search"><span class="search-ico"></span>Search</a></li>
-        </ul>
-      </aside>
+            <aside class="aside">
+                <img src="./assets/image/logo.png" alt="instagram" class="logo">
+                <ul class="aside__list">
+                    <li class="aside__list-item aside__list-active"><a href="#/home"><span class="home-ico"></span>Home</a></li>
+                    <li class="aside__list-item"><a href="#/message"><span class="messenger-ico"></span>Messages</a></li>
+                    <li class="aside__list-item upload-btn"><a ><span class="new-posts-ico"></span>Upload</a></li>
+                    <li class="aside__list-item"><a href="#/profile"><img class="profile-ico" src="${await this.getAvatarUser(
+                        id
+                    )}">My profile</a></li>
+                    <li class="aside__list-item" search-btn><a href="#/search"><span class="search-ico"></span>Search</a></li>
+                </ul>
+            </aside>
         `;
     }
 

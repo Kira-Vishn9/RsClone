@@ -69,7 +69,6 @@ class Home extends Base {
                 const idPost = postBlock.id;
                 const popupPost = new PopupPost();
                 popupPost.mount(idPost);
-                // PopupPost.instance.mount(idPost);
                 document.body.classList.add('covert');
             }
         }
