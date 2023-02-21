@@ -31,10 +31,10 @@ class App {
         this.aside.Root?.remove();
     };
 
-    private onSuccess = () => {
+    private onSuccess = async () => {
         if (this.app) {
             this.aside.Root?.remove();
-            this.app.insertAdjacentHTML('afterbegin', this.aside.render());
+            this.app.insertAdjacentHTML('afterbegin', await this.aside.render());
             this.aside.mount();
         }
     };

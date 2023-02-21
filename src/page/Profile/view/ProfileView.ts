@@ -3,6 +3,10 @@ import IFollower from '../../../firebase/model/IFollower';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
+import Posts from '../../../firebase/posts/posts';
+import PostsService from '../../../firebase/service/PostsService';
+import { LocalStorage } from '../../../localStorage/localStorage';
+import PopupPost from '../../Home/popupPost';
 import ProfileHeadComponent from '../components/ProfileHeadComponent';
 import SubFollModal from '../modals/SubFollModal';
 import '../style/profile.scss';
@@ -37,6 +41,9 @@ class ProfileView {
         this.$observer.subscribe(EventType.INIT_FOLLOWERS, this.onGetFollowers);
         this.profileHead.InputAvatar?.addEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.addEventListener('click', this.onSettings);
+
+        this.root.addEventListener('click', this.openPost);
+
         this.profileHead.BtnSubscriptions?.addEventListener('click', this.onBtnSub);
         this.profileHead.BtnFollowers?.addEventListener('click', this.onOpenModalFollowers);
     }
@@ -60,7 +67,7 @@ class ProfileView {
                 ${this.profileHead.make()}
 
                 <div class="items-grid__profile">
-                    
+
                 </div>
             </section>
         `.trim();
@@ -79,7 +86,7 @@ class ProfileView {
 
     private onGetPost = (event: IPosts[]) => {
         event.forEach((post: IPosts) => {
-            const createPost = makePost(post.fileURL);
+            const createPost = makePost(post.fileURL, post.likesUsers.length, post.comments.length, post.postID);
             this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
         });
 
@@ -103,11 +110,39 @@ class ProfileView {
         if (file === null) return;
         this.$observer.emit('eventChangeAvatar', file[0], (arg: string) => {
             this.profileHead.changeAvatar(arg);
+            this.ava(arg);
         });
     };
 
+    private async ava(arg: string) {
+        const post = await Posts.init.getAllPosts();
+        post.forEach((item) => {
+            if (item.userID === LocalStorage.instance.getUser().id) {
+                PostsService.instance.updatePosts(item.postID, { avatar: arg });
+            }
+            const commentArr = item.comments;
+            const updateArr = commentArr.map((com) => {
+                if (com.nickName === LocalStorage.instance.getAuthor().nickName) {
+                    com.avatar = arg;
+                }
+                return com;
+            });
+            PostsService.instance.updatePosts(item.postID, { comments: updateArr });
+        });
+    }
+
     private onSettings = () => {
         window.location.href = '#/settings';
+    };
+
+    private openPost = (e: Event) => {
+        if (e.target instanceof HTMLElement) {
+            const postBlock = e.target.closest('.item__profile');
+            if (postBlock) {
+                const popup = new PopupPost();
+                popup.mount(postBlock.id);
+            }
+        }
     };
 
     // modal

@@ -11,13 +11,14 @@ interface IPosts {
     likesCount: number;
     likesUsers: string[];
 
-    comments?: IComment[];
+    comments: IComment[];
     commentsCount: number;
 
     createdAt?: Date;
     author: { fullname: string; nickName: string };
     time: number;
     postID: string;
+    avatar: string;
 }
 
 export default IPosts;
