@@ -1,12 +1,15 @@
+import Observer from '../../../app/observer/Observer';
 import getAllPosts from '../getAllPost';
 import './mainHome.scss';
 
 class HomeView {
     private postList: HTMLElement | null = null;
+
     public init() {
         this.postList = document.querySelector('.posts-list') as HTMLElement;
         this.postList.innerHTML = '';
         this.addPostInDiv();
+        //
     }
 
     private async addPostInDiv() {

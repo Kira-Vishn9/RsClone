@@ -2,7 +2,6 @@ import Base from '../../app/base/Base';
 import PostsService from '../../firebase/service/PostsService';
 import UserService from '../../firebase/service/UserSevice';
 import { LocalStorage } from '../../localStorage/localStorage';
-import OpenImg from '../../profileOpenImg/OpenImg';
 import PopupPost from './popupPost';
 import HomeView from './view/HomeView';
 
@@ -10,7 +9,6 @@ class Home extends Base {
     private view: HomeView = new HomeView();
 
     public mount(): void {
-        console.log('HOME: MOUNT');
         this.view.init();
         const postList = document.querySelector('.posts-list');
         postList?.addEventListener('click', this.addLike);
@@ -94,6 +92,7 @@ class Home extends Base {
                     if (count) {
                         countLikes = +count + 1;
                         countBlock.textContent = `${countLikes}`;
+
                         if (index === -1) {
                             postUsersLike.push(idUser);
                         }
@@ -117,7 +116,6 @@ class Home extends Base {
     }
 
     public unmount(): void {
-        console.log('HOME: UNMOUNT');
         this.view.unmount();
     }
 

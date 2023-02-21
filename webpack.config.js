@@ -8,15 +8,28 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
 const target = devMode ? 'web' : 'browserslist';
-const devtool = devMode ? 'source-map' : undefined;
+const devtool = devMode ? 'inline-source-map' : undefined;
 module.exports = {
     mode,
     target,
     devtool,
     devServer: {
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
         port: 3000,
-        historyApiFallback: true,
-        contentBase: './src',
+        // historyApiFallback: true,
+        // contentBase: './src',
+        compress: true,
+        open: false,
+        hot: true,
+        client: {
+            progress: true,
+            overlay: {
+                errors: true,
+                warnings: false,
+            },
+        },
     },
     entry: path.resolve(__dirname, './src/index.ts'),
     output: {
@@ -36,7 +49,10 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'main.css',
         }),
-        new EslingPlugin({ extensions: 'ts' }),
+        new EslingPlugin({
+            overrideConfigFile: './.eslintrc.json',
+            extensions: ['ts', 'js'],
+        }),
         new CopyWebpackPlugin({
             patterns: [
                 { from: path.resolve(__dirname, './src/shared/Assets/icon'), to: './assets/icon/' },

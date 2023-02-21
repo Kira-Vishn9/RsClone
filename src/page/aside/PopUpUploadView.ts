@@ -131,7 +131,6 @@ class PopUpUploadComponent {
                         this.root?.remove();
                     }
                     document.body.classList.remove('covert');
-                    console.log(`KEK: ${urlImg}`);
                 });
         };
         fileReader.readAsDataURL(file[0]);

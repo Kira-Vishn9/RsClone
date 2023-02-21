@@ -18,6 +18,21 @@ class ProfileHeadComponent {
         return this.btnSettings;
     }
 
+    private btnSubscriptions: HTMLElement | null = null;
+    public get BtnSubscriptions() {
+        return this.btnSubscriptions;
+    }
+
+    private btnFollowers: HTMLElement | null = null;
+    public get BtnFollowers() {
+        return this.btnFollowers;
+    }
+
+    // posts followers subscribtions
+    private publications: HTMLElement | null = null;
+    private subsribtions: HTMLElement | null = null;
+    private followers: HTMLElement | null = null;
+
     public init(parent: HTMLElement) {
         this.parent = parent;
         this.root = this.parent.querySelector('.data__profile');
@@ -27,6 +42,18 @@ class ProfileHeadComponent {
         this.inputAvatar = this.root.querySelector('.input-avatar__profile');
         this.imgAvatar = this.root.querySelector('.img-avatar__profile');
         this.btnSettings = this.root.querySelector('.btn-settings__profile');
+
+        this.btnSubscriptions = this.root.querySelector('.subscriptions__profile');
+        this.btnFollowers = this.root.querySelector('.followers__profile');
+
+        const publications: HTMLElement | null = this.root.querySelector('.publication__profile');
+        const subsribtions: HTMLElement | null = this.root.querySelector('.subscriptions__profile');
+        const followers: HTMLElement | null = this.root.querySelector('.followers__profile');
+
+        if (publications === null || subsribtions === null || followers === null) return;
+        this.publications = publications?.querySelector('span');
+        this.subsribtions = subsribtions?.querySelector('span');
+        this.followers = followers.querySelector('span');
     }
 
     public make(): string {
@@ -42,28 +69,28 @@ class ProfileHeadComponent {
                     <span class="name">${this.name?.textContent}</span>
                     <button class="btn-settings__profile">Редактировать профиль</button>
                 </div>
-                ${this.makeDateProfileSocial(154, 155, 177)}
+                ${this.makeDateProfileSocial()}
                 <span class="full-name__profile">${this.fullName?.textContent}</span>
             </div>
         </div>
         `;
     }
 
-    private makeDateProfileSocial(publication: number = 0, subscribers: number = 0, subscriptions: number = 0): string {
+    private makeDateProfileSocial(): string {
         return `
         <div class="social__profile">
             <div class="item-social publication__profile">
-                <span>${publication}</span>
+                <span>${this.publications?.textContent === undefined ? 0 : this.publications?.textContent}</span>
                 <span>Публикации</span>
             </div>
 
-            <div class="item-social subscribers__profile">
-                <span>${subscribers}</span>
+            <div class="item-social followers__profile">
+                <span>${this.followers?.textContent === undefined ? 0 : this.followers?.textContent}</span>
                 <span>Подписчиков</span>
             </div>
 
             <div class="item-social subscriptions__profile">
-                <span>${subscriptions}</span>
+                <span>${this.subsribtions?.textContent === undefined ? 0 : this.subsribtions?.textContent}</span>
                 <span>Подписок</span>
             </div>
         </div>
@@ -87,15 +114,18 @@ class ProfileHeadComponent {
     }
 
     public changeAmountPublications(amount: number): void {
-        //
+        if (this.publications === null) return;
+        this.publications.textContent = `${amount}`;
     }
 
-    public changeAmountSubscribers(amount: number): void {
-        //
+    public changeAmountFollowers(amount: number): void {
+        if (this.followers === null) return;
+        this.followers.textContent = `${amount}`;
     }
 
     public changeAmountSubscriptions(amount: number): void {
-        //
+        if (this.subsribtions === null) return;
+        this.subsribtions.textContent = `${amount}`;
     }
 }
 

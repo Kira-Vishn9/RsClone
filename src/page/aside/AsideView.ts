@@ -8,6 +8,10 @@ class AsideView {
     private upload: HTMLElement | null = null;
     private search: HTMLElement | null = null;
 
+    public get Root() {
+        return this.root;
+    }
+
     public mount(): void {
         this.root = document.querySelector('.aside');
         if (this.root === null) return;
@@ -17,9 +21,12 @@ class AsideView {
         // this.search?.addEventListener('click', this.searchQuery);
     }
 
+    public unmount(): void {
+        this.upload?.removeEventListener('click', this.onUpload);
+    }
+
     public async render(): Promise<string> {
         const id = LocalStorage.instance.getUser().id;
-
         return `
             <aside class="aside">
                 <img src="./assets/image/logo.png" alt="instagram" class="logo">

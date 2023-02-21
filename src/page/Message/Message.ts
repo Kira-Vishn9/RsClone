@@ -1,16 +1,22 @@
 import Base from '../../app/base/Base';
+import Observer from '../../app/observer/Observer';
+import MessageModel from './model/MessageModel';
+
 import MessageView from './view/MessageView';
+
 class Message extends Base {
-    private view: MessageView = new MessageView();
+    private obServer: Observer = new Observer();
+    private view: MessageView = new MessageView(this.obServer);
+    private messageModel: MessageModel = new MessageModel(this.obServer);
 
     public mount(): void {
-        console.log('MESSAGE: MOUNT');
         this.view.init();
+        this.messageModel.init();
     }
 
     public unmount(): void {
-        console.log('MESSAGE: UNMOUNT');
         this.view.unmount();
+        this.messageModel.unmount();
     }
 
     public render(): string {
