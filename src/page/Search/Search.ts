@@ -9,13 +9,11 @@ class Search extends Base {
     private model: SearchModel = new SearchModel(this.$observer);
 
     public mount(): void {
-        console.log('Search: MOUNT');
         this.model.mount();
         this.view.init();
     }
 
     public unmount(): void {
-        console.log('Search: UNMOUNT');
         this.model.unmount();
         this.view.unmount();
     }

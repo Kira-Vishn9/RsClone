@@ -82,7 +82,7 @@ class AnotherProfileModel {
         if (userID === null) return;
         const data = await FollowersService.instance.getFollowers(userID);
         if (data === null) return;
-        console.log(data);
+
         this.$observer.emit(EventType.INIT_FOLLOWERS, data);
     }
 

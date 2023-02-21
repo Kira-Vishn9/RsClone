@@ -45,6 +45,7 @@ class Auth {
         try {
             const create = await createUserWithEmailAndPassword(this.auth, email, pass);
             UserService.instance.setUser(create.user.uid, user);
+            await updateProfile(create.user, { displayName: user.nickName });
             await this.monitorAuthState();
             return '';
         } catch (error) {
@@ -54,16 +55,13 @@ class Auth {
         }
     }
 
-    public test: IUser | null = null;
     public async signinUser(email: string, password: string) {
         try {
             const userAuth = await signInWithEmailAndPassword(this.auth, email, password);
-            console.log(userAuth.user);
             await this.monitorAuthState();
             return false;
         } catch (error) {
             if (error instanceof FirebaseError) {
-                console.log(error.code);
                 if (error.code === AuthErrorCodes.INVALID_EMAIL) {
                     return 'Wrong email. Try again.';
                 } else if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
@@ -82,11 +80,8 @@ class Auth {
                 userStore.id = user.uid;
                 userStore.email = user.email || '';
                 LocalStorage.instance.putUser(userStore.id, userStore.email);
-                UserState.instance.User = user;
-                console.log('LOGIN_IN');
             } else {
-                UserState.instance.User = null;
-                console.log('NOT_LOGIN');
+                //
             }
         });
     }

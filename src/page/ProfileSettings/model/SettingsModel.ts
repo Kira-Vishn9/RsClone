@@ -30,9 +30,6 @@ class SettingsModel {
     }
 
     private onUpdateUserData = async (user: IUser) => {
-        console.log('UPDATE');
-        console.log(user);
-
         await UserService.instance.updateUserData(user);
         window.location.href = '#/account';
     };

@@ -44,7 +44,7 @@ class Router {
         this.tempRoute = route;
 
         if (route === null) {
-            console.log('NOT FOUND PAGE');
+            ('NOT FOUND PAGE');
         } else {
             this.container.innerHTML = '';
             this.container.insertAdjacentHTML('afterbegin', route.render());
@@ -65,6 +65,7 @@ class Router {
                 }
                 this.$observer.emit(EventType.SUCCESS, {});
             } // << Проверка на Авторизаю User
+            UserState.instance.CurrentUser = user;
         });
     }
 }

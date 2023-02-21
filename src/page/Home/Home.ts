@@ -8,7 +8,6 @@ class Home extends Base {
     private view: HomeView = new HomeView();
 
     public mount(): void {
-        console.log('HOME: MOUNT');
         this.view.init();
         const postList = document.querySelector('.posts-list');
         postList?.addEventListener('click', this.addLike);
@@ -56,7 +55,7 @@ class Home extends Base {
         if (!e.target) return;
         if (e.target instanceof HTMLElement) {
             if (e.target.classList.contains('icons__comment') || e.target.classList.contains('post__comment')) {
-                console.log('open popup post');
+                //
             }
         }
     }
@@ -105,7 +104,6 @@ class Home extends Base {
     }
 
     public unmount(): void {
-        console.log('HOME: UNMOUNT');
         this.view.unmount();
     }
 

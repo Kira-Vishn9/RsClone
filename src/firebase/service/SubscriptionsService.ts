@@ -26,7 +26,7 @@ class SubscriptionsService {
             sub.id = subDocRef.id;
             await setDoc(subDocRef, sub);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 
@@ -41,7 +41,6 @@ class SubscriptionsService {
             const data: ISubscription[] = subs.docs.map((sub) => sub.data()) as ISubscription[];
             return data;
         } catch (error) {
-            console.log(error);
             return null;
         }
     }
@@ -56,7 +55,6 @@ class SubscriptionsService {
             const sub = await getDoc(subDocRef);
             return sub.data() as ISubscription;
         } catch (error) {
-            console.log(error);
             return null;
         }
     }
@@ -76,7 +74,7 @@ class SubscriptionsService {
 
             await deleteDoc(subDocRef);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 }

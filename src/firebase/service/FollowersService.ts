@@ -29,7 +29,7 @@ class FollowersService {
             };
             await setDoc(subDocRef, follower);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 
@@ -44,7 +44,6 @@ class FollowersService {
             const data: IFollower[] = subs.docs.map((sub) => sub.data()) as IFollower[];
             return data;
         } catch (error) {
-            console.log(error);
             return null;
         }
     }
@@ -59,7 +58,7 @@ class FollowersService {
             const subDocRef = doc(subCollection, follower.id);
             await deleteDoc(subDocRef);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 }

@@ -44,7 +44,6 @@ class PostsService {
             const result = dataSnap.data() as IPosts;
             return result;
         } catch (error) {
-            console.log(error);
             // return false;
         }
     }
@@ -60,7 +59,7 @@ class PostsService {
             });
             UserState.instance.addPostID(test.id);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 
@@ -68,7 +67,7 @@ class PostsService {
         try {
             await updateDoc(doc(this.db, 'Posts', id), obj);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 }

@@ -1,0 +1,92 @@
+.wrapper-overflow{
+    *img{
+        border: 5px solid green;
+            width: 50px;
+            border-radius: 100%;
+            margin-right: 8px ;
+    }
+    
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    z-index: 3;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(1, 1, 1, 0.5);
+    color: white;
+    top: 0;
+    left: 0;
+    width: 100%;
+    .wrapper{
+        background: rgb(38, 38, 38);
+        height: 500px;
+        width: 350px;
+        border: 0px solid;
+        border-radius: 25px;
+        padding: 20px;
+        .title{
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid white;
+            height: min-content;
+            padding-bottom: 8px;
+            .close{
+                display: flex;
+                .line1{
+                    width: 2px !important;
+                    background-color: #fff;
+                    height: 20px !important;
+                    transform: rotate(45deg);
+                    position: relative;
+                }
+                .line2{
+                    width: 2px !important;
+                    background-color: #fff;
+                    height: 20px !important;
+                    transform: rotate(-45deg);
+                    position: relative;
+                    left: -2px;
+                }
+            }
+        }
+        .search-peaple{
+            margin-top: 10px;
+            margin-bottom: 20px;
+            .who{
+                margin-bottom: 10px;
+            }
+            .look_for{
+                border: 0px;
+                color: #fff;
+                background-color: rgb(38, 38, 38);
+                font-size: 20px;
+                height: 40px;
+                width: 100%;
+            }
+        }
+        .choose{
+            
+            .list-human{
+                padding: 0;
+                overflow: scroll;
+                height: 330px;
+                .list-item{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    .circule{
+                        width: 16px;
+                        height: 16px;
+                        border: 3px solid #fff;
+                        border-radius: 100%;
+                    }
+                    .active{
+                        border: 0px solid;
+                        background-color: blue;
+                    }
+                }
+            }
+        }   
+    }
+}

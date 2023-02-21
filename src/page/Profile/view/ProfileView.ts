@@ -1,4 +1,5 @@
 import Observer from '../../../app/observer/Observer';
+import IFollower from '../../../firebase/model/IFollower';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
@@ -37,6 +38,7 @@ class ProfileView {
         this.profileHead.InputAvatar?.addEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.addEventListener('click', this.onSettings);
         this.profileHead.BtnSubscriptions?.addEventListener('click', this.onBtnSub);
+        this.profileHead.BtnFollowers?.addEventListener('click', this.onOpenModalFollowers);
     }
 
     public unmount(): void {
@@ -48,6 +50,7 @@ class ProfileView {
         this.profileHead.InputAvatar?.removeEventListener('change', this.onChangeAvatar);
         this.profileHead.BtnSettings?.removeEventListener('click', this.onSettings);
         this.profileHead.BtnSubscriptions?.removeEventListener('click', this.onBtnSub);
+        this.profileHead.BtnFollowers?.removeEventListener('click', this.onOpenModalFollowers);
     }
 
     public make(): string {
@@ -66,18 +69,15 @@ class ProfileView {
     private onGetUser = (event: IUser) => {
         const fullname = event.name;
         const nickName = event.nickName;
-        console.log('NICK:' + event.nickName);
+
         this.profileHead.changeFullName(fullname);
-        console.log('FULLNAME: ' + fullname);
+
         this.profileHead.changeNickName(nickName);
 
         if (event.avatar !== undefined) this.profileHead.changeAvatar(event.avatar);
     };
 
     private onGetPost = (event: IPosts[]) => {
-        console.log('ProfileView');
-        console.log(event);
-
         event.forEach((post: IPosts) => {
             const createPost = makePost(post.fileURL);
             this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
@@ -118,6 +118,18 @@ class ProfileView {
             modal.init();
 
             data.forEach((sub: ISubscription) => {
+                modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
+            });
+        });
+    };
+
+    private onOpenModalFollowers = () => {
+        this.$observer.emit(EventType.OPEN_MODAL_FOLLOWERS, {}, (data: IFollower[]) => {
+            const modal = new SubFollModal(this.$observer);
+            this.root?.insertAdjacentHTML('afterend', modal.render());
+            modal.init();
+
+            data.forEach((sub: IFollower) => {
                 modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
             });
         });

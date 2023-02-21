@@ -26,7 +26,7 @@ class App {
     }
 
     private onDenied = () => {
-        console.log('ASIDE');
+        ('ASIDE');
         this.aside.unmount();
         this.aside.Root?.remove();
     };

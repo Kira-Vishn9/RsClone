@@ -156,7 +156,7 @@ class AccountView {
                 LocalStorage.instance.putAuthor(name.value, nickName.value); // << Olga
                 const authInfo = async (user: IUser) => {
                     let errCode = await Auth.instance.signupUser(user);
-                    console.log(errCode);
+
                     if (errCode) {
                         if (errCode.includes('invalid-email')) {
                             divRegErr.innerHTML = 'Wrong email. Try again.';
