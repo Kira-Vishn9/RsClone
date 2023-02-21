@@ -58,10 +58,10 @@ class MessageModal {
 
     public makeItem(avatarsUrl: string, name: string, userID: string) {
         const html = `
-        <li class="list-item" id = '${userID}'>
-        <img class="userPhoto" src="${avatarsUrl}" alt="userPhoto">
-        <span class="userName">${name}</span>
-        <span class="circule"></span>
+        <li class="list-item" user-id="${userID}">
+            <img class="userPhoto" src="${avatarsUrl}" alt="userPhoto">
+            <span class="userName">${name}</span>
+            <span class="circule"></span>
         </li>
     `;
         if (this.listHuman === null) return;
@@ -77,6 +77,7 @@ class MessageModal {
         const target = e.target;
         const up = target.closest('.list-item');
         if (up) {
+            this.recepientId = up.getAttribute('user-id') as string;
             up.querySelector('.circule')?.classList.toggle('active');
             const input: HTMLInputElement | null | undefined = this.root?.querySelector('.look_for');
             if (!(input instanceof HTMLInputElement)) return;
@@ -85,6 +86,7 @@ class MessageModal {
                 input.value = textName;
             }
         }
+        console.log(this.recepientId);
     };
 
     private startDialog = () => {
