@@ -52,7 +52,7 @@ class AsideView {
         if (user && user.avatar) {
             return user.avatar;
         } else {
-            return '';
+            return './assets/image/user.png';
         }
     }
 }

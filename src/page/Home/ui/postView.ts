@@ -11,6 +11,13 @@ function postView(
     numberComment: number,
     avatar: string
 ): string {
+    let postText = '';
+    if (text) {
+        postText = `
+          <span class="post__nickname">${nickName}</span>${text}
+        `;
+    }
+
     return `
       <div class="newsline" id="${postID}">
         <div class="newsline__header">
@@ -31,7 +38,7 @@ function postView(
             <p class="count"><span class="count-likes">${likes}</span> likes</p>
           </div>
           <div class="post">
-            <p class="post__text"><span class="post__nickname">${nickName}</span>${text}</p>
+            <p class="post__text">${postText}</p>
             <div class="more-text">... more</div>
             <p class="post__time">Published: <span class="time-ago">${time}</span></p>
             <a class="post__comment">View all comments (<span class="count-comment">${numberComment}</span>)</a>
