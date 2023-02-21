@@ -8,6 +8,8 @@ import MessageModal from '../modal/messageModal';
 import EventType from '../type/EventType';
 import MessageUserComponents from '../component/MessageUserComponents';
 import '../style/message-page.scss';
+import ISubscription from '../../../firebase/model/ISubscription';
+import SubFolType from '../type/SubFolType';
 
 class MessageView {
     private sendBth: HTMLElement | null = null;
@@ -133,12 +135,12 @@ class MessageView {
         data.rooms.forEach((room) => {
             const findUser = data.users.find((user) => {
                 if (user.id === undefined) return;
-                if (room.userID === user.id) {
+                if (room.recipientID === user.id) {
                     return user.id;
-                } else {
-                    return room.recipientID;
                 }
             });
+
+            console.log(findUser);
 
             if (findUser !== undefined && this.root !== null) {
                 const component = new MessageUserComponents(this.$observer);
@@ -164,13 +166,14 @@ class MessageView {
 
     private openModalM = () => {
         const messageModal = new MessageModal(this.$observer);
-        this.$observer.emit(EventType.openModal, {}, (followers: IFollower[]) => {
+        this.$observer.emit(EventType.openModal, {}, (data: SubFolType[]) => {
             this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
             messageModal.init();
-            for (let i = 0; i < followers.length; i++) {
-                let avatar = followers[i].avatar;
+
+            for (let i = 0; i < data.length; i++) {
+                let avatar = data[i].avatar;
                 if (avatar === undefined) continue;
-                messageModal.makeItem(avatar, followers[i].fullname, followers[i].userID);
+                messageModal.makeItem(avatar, data[i].fullname, data[i].userID);
             }
         });
     };
