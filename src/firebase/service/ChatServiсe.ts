@@ -18,6 +18,7 @@ import {
     DocumentData,
     DocumentReference,
 } from 'firebase/firestore';
+import EventBus from '../../app/event_bus/EventBus';
 import UserState from '../../state/UserState';
 import Auth from '../auth/Auth';
 import app from '../config/config';
@@ -68,19 +69,40 @@ class ChatServiсe {
             const rooms = await getDocs(coll);
             const chatRooms = rooms.docs.map((room) => room.data());
             const chatRoomsTest = rooms.docs.map((room) => room.ref);
-
-            this.test(chatRoomsTest);
+            this.loadMessage(chatRoomsTest);
             return chatRooms as IChatRoom[];
         } catch (error) {
             return null;
         }
     }
 
-    public async test(data: DocumentReference<DocumentData>[]) {
+    public async getAllMessagesByRoomID(roomID: string): Promise<INewMessage[] | null> {
+        try {
+            const docRefRoom = doc(this.chatRooms, roomID);
+            const messageCollection = collection(docRefRoom, this.pathMessage);
+            const messageQuery = query(messageCollection, orderBy('timestamp', 'asc'));
+            const docRefMessage = await getDocs(messageQuery);
+            const messageArr = docRefMessage.docs.map((message) => message.data()) as INewMessage[];
+            return messageArr;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
+    public async loadMessage(data: DocumentReference<DocumentData>[]) {
         data.forEach((ref) => {
             const messageCollection = collection(ref, this.pathMessage);
             const messageQuery = query(messageCollection, orderBy('timestamp', 'desc'), limit(1));
-            const unSub = onSnapshot(messageQuery, (snapshot) => {});
+            const unSub = onSnapshot(messageQuery, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'added') {
+                        const data = change.doc.data() as INewMessage;
+                        console.log(data);
+                        EventBus.instance.emit(EventBus.instance.eventType.LOAD_MESSAGE, data); //<< Глобальный Event
+                    }
+                });
+            });
         });
         // const docRoom = doc(data, this.roomID);
         // const coll = collection(docRoom, this.pathMessage);
@@ -103,13 +125,14 @@ class ChatServiсe {
         //     timestamp: Timestamp.now(),
         // };
         const message: INewMessage = {
+            userID: UserState.instance.CurrentUser?.uid,
             text: messageText,
             avatarURL: 's',
             name: user.displayName,
             timestamp: serverTimestamp(),
         };
-        await setDoc(docRef, message);
-        // await addDoc(docRef, message);
+        // await setDoc(docRef, message);
+        await addDoc(messageCollection, message);
     }
 
     // public async loadMessage(cb?: (message: INewMessage) => void): Promise<void> {
@@ -174,21 +197,3 @@ class ChatServiсe {
 }
 
 export default ChatServiсe;
-
-const database = getFirestore(app);
-const chatRooms = collection(database, 'ChatRooms');
-async function test() {
-    // const coll = collection(chatRooms, 'message');
-    const tt = onSnapshot(chatRooms, (snapshot) => {});
-}
-
-test();
-
-// const docRoom = doc(chatRooms, 'z1RYnLhTmQsFvO3LnnGX');
-// // const docRoom = doc(chatRooms);
-// const coll = collection(chatRooms, 'message');
-// const messageQuery = query(coll, orderBy('timestamp', 'desc'), limit(1));
-// // const messageQuery = query(chatRooms);
-// const tt = onSnapshot(messageQuery, (snapshot) => {
-//
-// });

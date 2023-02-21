@@ -100,7 +100,7 @@
         }
 
         &-main {
-            height: 100%;
+            height: calc(100% - 60px);
             display: flex;
             flex-direction: column;
             justify-content: center;
