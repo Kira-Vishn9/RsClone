@@ -12,13 +12,18 @@ class AnotherProfileHeadComponent {
         return this.imgAvatar?.src;
     }
 
-    private btnSubUnSub: HTMLElement | null = null;
+    private btnSubUnSub: HTMLButtonElement | null = null;
     public get BtnSubUnSub() {
         return this.btnSubUnSub;
     }
 
     public get Fullname() {
         return this.fullName?.textContent;
+    }
+
+    private attributeUserID: string | null = null;
+    public get UserID() {
+        return this.attributeUserID;
     }
 
     public get Name() {
@@ -49,20 +54,28 @@ class AnotherProfileHeadComponent {
         this.followers = followers.querySelector('span');
     }
 
-    public make(): string {
+    // eslint-disable-next-line prettier/prettier
+    public make(
+        avatars: string | null,
+        userFullname: string | null,
+        userNickName: string | null,
+        btnTextSubUnSub: string,
+        userID: string
+    ): string {
+        this.attributeUserID = userID;
         return `
-        <div class="data__profile">
+        <div class="data__profile" user-id="${userID}">
             <div class="avatar__profile" style="position: relative">
-                <img class="img-avatar__profile" src="https://kipmu.ru/wp-content/uploads/jptr-1.jpg">
+                <img class="img-avatar__profile" src="${avatars}">
             </div>
             
             <div class="root-block__profile">
                 <div class="block__profile">
-                    <span class="name">${this.name?.textContent}</span>
-                    <button class="sub-unsub__profile">Подписаться</button>
+                    <span class="name">${userNickName}</span>
+                    <button class="sub-unsub__profile">${btnTextSubUnSub}</button>
                 </div>
                 ${this.makeDateProfileSocial()}
-                <span class="full-name__profile">${this.fullName?.textContent}</span>
+                <span class="full-name__profile">${userFullname}</span>
             </div>
         </div>
         `;
@@ -87,6 +100,27 @@ class AnotherProfileHeadComponent {
             </div>
         </div>
     `;
+    }
+
+    public btnUnSubscribed(): void {
+        if (this.btnSubUnSub === null) return;
+        this.btnSubUnSub.textContent = 'Отписаться';
+    }
+
+    public btnSubscribed(): void {
+        if (this.btnSubUnSub === null) return;
+        this.btnSubUnSub.textContent = 'Подписаться';
+    }
+
+    public checkBtnState(): boolean | null {
+        if (this.btnSubUnSub === null) return null;
+        const text = this.btnSubUnSub.textContent;
+        if (text === null) return null;
+        if (text === 'Подписаться') {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public changeAvatar(urlImg: string): void {
