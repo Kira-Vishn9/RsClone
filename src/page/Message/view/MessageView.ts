@@ -17,6 +17,7 @@ class MessageView {
     private placeChat: HTMLElement | null = null;
     private $observer: Observer;
     private chat: ChatComponent;
+    private topMessageBtn: HTMLElement | null = null;
 
     private name: HTMLElement | null = null;
     private recipientName: HTMLElement | null = null;
@@ -31,6 +32,7 @@ class MessageView {
     public init(): void {
         this.root = document.querySelector('.message-block');
         if (this.root === null) return;
+        this.topMessageBtn = this.root.querySelector('.message-btn');
 
         this.containerBlockLeft = this.root.querySelector('.message-block__left-main');
 
@@ -39,24 +41,35 @@ class MessageView {
         this.name = this.root.querySelector('.message-name');
         this.recipientName = this.root.querySelector('.user-name');
 
-        this.sendBth?.addEventListener('click', this.openModalM);
-        this.root.addEventListener('click', this.showMessage);
+        // this.root.addEventListener('click', this.showMessage);
 
-        this.$observer.subscribe(EventType.INIT_CHAT_ROOM, this.onApendUserToMessageBlockLeft);
-        this.$observer.subscribe(EventType.GET_ALL_CHAT_ROOM, this.onGetAllChatRooms);
-        this.$observer.subscribe(EventType.START_DIALOG, this.onStartDialog);
+        // this.$observer.subscribe(EventType.INIT_CHAT_ROOM, this.onApendUserToMessageBlockLeft);
+        // this.$observer.subscribe(EventType.GET_ALL_CHAT_ROOM, this.onGetAllChatRooms);
+        // this.$observer.subscribe(EventType.START_DIALOG, this.onStartDialog);
+        this.enable();
     }
 
     public unmount(): void {
         this.chat.unmount();
-        this.$observer.unsubscribe(EventType.INIT_CHAT_ROOM, this.onApendUserToMessageBlockLeft);
-        this.$observer.unsubscribe(EventType.GET_ALL_CHAT_ROOM, this.onGetAllChatRooms);
-        this.$observer.unsubscribe(EventType.START_DIALOG, this.onStartDialog);
+        // this.$observer.unsubscribe(EventType.INIT_CHAT_ROOM, this.onApendUserToMessageBlockLeft);
+        // this.$observer.unsubscribe(EventType.GET_ALL_CHAT_ROOM, this.onGetAllChatRooms);
+        // this.$observer.unsubscribe(EventType.START_DIALOG, this.onStartDialog);
 
-        this.messageUserComponentArr.forEach((elem) => {
-            elem.unmount();
-        });
-        this.messageUserComponentArr = [];
+        // this.messageUserComponentArr.forEach((elem) => {
+        //     elem.unmount();
+        // });
+        // this.messageUserComponentArr = [];
+        this.disable();
+    }
+
+    private enable(): void {
+        this.topMessageBtn?.addEventListener('click', this.onOpenModal);
+        this.sendBth?.addEventListener('click', this.onOpenModal);
+    }
+
+    private disable(): void {
+        this.topMessageBtn?.removeEventListener('click', this.onOpenModal);
+        this.sendBth?.removeEventListener('click', this.onOpenModal);
     }
 
     public make(): string {
@@ -110,73 +123,81 @@ class MessageView {
     //   `.trim();
     // }
 
-    private onStartDialog = (recipientID: string) => {
-        if (this.placeChat === null) return;
-        this.placeChat.innerHTML = '';
-        this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
-        this.chat.init(this.placeChat);
+    // Открывает модальное окно для добавления user в чат комнату
+    private onOpenModal = () => {
+        if (this.root === null) return;
+
+        const modal = new MessageModal(this.$observer);
+        modal.init(this.root);
     };
 
-    private messageUserComponentArr: MessageUserComponents[] = [];
-    private onApendUserToMessageBlockLeft = (user: IUser) => {
-        const component = new MessageUserComponents(this.$observer);
-        const make = component.make(user.avatar, user.nickName, 'Hello', user.id);
-        this.containerBlockLeft?.insertAdjacentHTML('afterbegin', make);
-        if (this.root !== null) {
-            component.init(this.root);
-            component.setRecipientHTML(this.recipientName);
-        }
-        this.messageUserComponentArr.push(component);
-    };
+    // private onStartDialog = (recipientID: string) => {
+    //     if (this.placeChat === null) return;
+    //     this.placeChat.innerHTML = '';
+    //     this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
+    //     this.chat.init(this.placeChat);
+    // };
 
-    private onGetAllChatRooms = (data: { users: IUser[]; rooms: IChatRoom[] }) => {
-        if (this.containerBlockLeft === null) return;
+    // private messageUserComponentArr: MessageUserComponents[] = [];
+    // private onApendUserToMessageBlockLeft = (user: IUser) => {
+    //     const component = new MessageUserComponents(this.$observer);
+    //     const make = component.make(user.avatar, user.nickName, 'Hello', user.id);
+    //     this.containerBlockLeft?.insertAdjacentHTML('afterbegin', make);
+    //     if (this.root !== null) {
+    //         component.init(this.root);
+    //         component.setRecipientHTML(this.recipientName);
+    //     }
+    //     this.messageUserComponentArr.push(component);
+    // };
 
-        data.rooms.forEach((room) => {
-            const findUser = data.users.find((user) => {
-                if (user.id === undefined) return;
-                if (room.recipientID === user.id) {
-                    return user.id;
-                }
-            });
+    // private onGetAllChatRooms = (data: { users: IUser[]; rooms: IChatRoom[] }) => {
+    //     if (this.containerBlockLeft === null) return;
 
-            console.log(findUser);
+    //     data.rooms.forEach((room) => {
+    //         const findUser = data.users.find((user) => {
+    //             if (user.id === undefined) return;
+    //             if (room.recipientID === user.id) {
+    //                 return user.id;
+    //             }
+    //         });
 
-            if (findUser !== undefined && this.root !== null) {
-                const component = new MessageUserComponents(this.$observer);
-                const make = component.make(findUser.avatar, findUser.nickName, 'Hello', room.chatID);
-                this.containerBlockLeft?.insertAdjacentHTML('afterbegin', make);
+    //         console.log(findUser);
 
-                component.init(this.root);
-                component.setRecipientHTML(this.recipientName);
+    //         if (findUser !== undefined && this.root !== null) {
+    //             const component = new MessageUserComponents(this.$observer);
+    //             const make = component.make(findUser.avatar, findUser.nickName, 'Hello', room.chatID);
+    //             this.containerBlockLeft?.insertAdjacentHTML('afterbegin', make);
 
-                this.messageUserComponentArr.push(component);
-            }
-        });
-    };
+    //             component.init(this.root);
+    //             component.setRecipientHTML(this.recipientName);
 
-    private showMessage(): void {
-        const messageInfo = document.querySelector('.message-block__right-header');
-        const messageBlock = document.querySelector('.message-block__right-main');
-        if (messageInfo && messageBlock) {
-            messageInfo.classList.remove('hidden');
-            // messageBlock.innerHTML = '';
-        }
-    }
+    //             this.messageUserComponentArr.push(component);
+    //         }
+    //     });
+    // };
 
-    private openModalM = () => {
-        const messageModal = new MessageModal(this.$observer);
-        this.$observer.emit(EventType.openModal, {}, (data: SubFolType[]) => {
-            this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
-            messageModal.init();
+    // private showMessage(): void {
+    //     const messageInfo = document.querySelector('.message-block__right-header');
+    //     const messageBlock = document.querySelector('.message-block__right-main');
+    //     if (messageInfo && messageBlock) {
+    //         messageInfo.classList.remove('hidden');
+    //         // messageBlock.innerHTML = '';
+    //     }
+    // }
 
-            for (let i = 0; i < data.length; i++) {
-                let avatar = data[i].avatar;
-                if (avatar === undefined) continue;
-                messageModal.makeItem(avatar, data[i].fullname, data[i].userID);
-            }
-        });
-    };
+    // private openModalM = () => {
+    //     const messageModal = new MessageModal(this.$observer);
+    //     this.$observer.emit(EventType.openModal, {}, (data: SubFolType[]) => {
+    //         this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
+    //         messageModal.init();
+
+    //         for (let i = 0; i < data.length; i++) {
+    //             let avatar = data[i].avatar;
+    //             if (avatar === undefined) continue;
+    //             messageModal.makeItem(avatar, data[i].fullname, data[i].userID);
+    //         }
+    //     });
+    // };
 }
 
 export default MessageView;
