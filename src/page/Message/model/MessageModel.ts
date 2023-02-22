@@ -93,6 +93,7 @@ class MessageModel {
         const user = await UserService.instance.getUser(recipientID);
         this.$observer.emit(EventType.INIT_CHAT_ROOM, user);
     }
+    // << END
 
     // Получить все Комнаты чатов где есть self user id
     private async getRooms(): Promise<void> {
