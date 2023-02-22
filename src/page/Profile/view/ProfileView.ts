@@ -46,6 +46,7 @@ class ProfileView {
 
         this.profileHead.BtnSubscriptions?.addEventListener('click', this.onBtnSub);
         this.profileHead.BtnFollowers?.addEventListener('click', this.onOpenModalFollowers);
+        this.profileHead.BtnLogOut?.addEventListener('click', this.onBtnLogOut);
     }
 
     public unmount(): void {
@@ -58,6 +59,7 @@ class ProfileView {
         this.profileHead.BtnSettings?.removeEventListener('click', this.onSettings);
         this.profileHead.BtnSubscriptions?.removeEventListener('click', this.onBtnSub);
         this.profileHead.BtnFollowers?.removeEventListener('click', this.onOpenModalFollowers);
+        this.profileHead.BtnLogOut?.removeEventListener('click', this.onBtnLogOut);
     }
 
     public make(): string {
@@ -168,6 +170,11 @@ class ProfileView {
                 modal.makeItem(sub.avatar, sub.fullname, sub.nickName, sub.id, sub.userID);
             });
         });
+    };
+
+    private onBtnLogOut = () => {
+        console.log('LOGOUT');
+        this.$observer.emit(EventType.CLICK_BTN_LOG_OUT, {});
     };
 }
 
