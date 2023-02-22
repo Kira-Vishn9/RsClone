@@ -1,4 +1,5 @@
 import Observer from '../../../app/observer/Observer';
+import Auth from '../../../firebase/auth/Auth';
 import IFollower from '../../../firebase/model/IFollower';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
@@ -27,6 +28,7 @@ class ProfileModel {
         this.observer.subscribe(EventType.SUBSCRIPTIONS, this.onGetSubscriptions);
         this.observer.subscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
         this.observer.subscribe(EventType.OPEN_MODAL_FOLLOWERS, this.onGetFollowersForModal);
+        this.observer.subscribe(EventType.CLICK_BTN_LOG_OUT, this.onLogOut);
     }
 
     public unmount(): void {
@@ -34,6 +36,7 @@ class ProfileModel {
         this.observer.unsubscribe(EventType.SUBSCRIPTIONS, this.onGetSubscriptions);
         this.observer.unsubscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
         this.observer.unsubscribe(EventType.OPEN_MODAL_FOLLOWERS, this.onGetFollowersForModal);
+        this.observer.unsubscribe(EventType.CLICK_BTN_LOG_OUT, this.onLogOut);
     }
 
     private async getPost(): Promise<void> {
@@ -127,6 +130,11 @@ class ProfileModel {
         if (userID === null) return;
         SubscriptionsService.instance.deleteSubscriptions(userID, subID);
         this.observer.emit(EventType.RERENDER, {});
+    };
+
+    // Выход из accounts
+    private onLogOut = async () => {
+        await Auth.instance.logOutAccount();
     };
 }
 
