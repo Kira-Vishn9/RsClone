@@ -34,14 +34,15 @@ class Router {
 
     private tempRoute: Base | null = null;
 
-    private onHascChange = () => {
+    private onHascChange = async () => {
+        console.log(window.location.hash);
         if (this.container === null) return;
-
-        this.accessСheck();
 
         if (this.tempRoute !== null && this.tempRoute.unmount) this.tempRoute.unmount();
         const route = this.getRoute(window.location.hash);
         this.tempRoute = route;
+
+        this.accessСheck();
 
         if (route === null) {
             ('NOT FOUND PAGE');
@@ -52,7 +53,7 @@ class Router {
         }
     };
 
-    private async accessСheck(): Promise<void> {
+    private accessСheck(): void {
         onAuthStateChanged(Auth.instance.Auth, (user: User | null) => {
             // << Проверка на Авторизаю Urer
             if (user === null) {
@@ -61,7 +62,7 @@ class Router {
             } else {
                 const temp = window.location.hash;
                 if (temp === '#/account' || temp === '' || temp === '#/') {
-                    window.location.hash = '#/profile';
+                    window.location.hash = '#/home';
                 }
                 this.$observer.emit(EventType.SUCCESS, {});
             } // << Проверка на Авторизаю User
