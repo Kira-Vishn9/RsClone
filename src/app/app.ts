@@ -26,7 +26,6 @@ class App {
     }
 
     private onDenied = () => {
-        ('ASIDE');
         this.aside.unmount();
         this.aside.Root?.remove();
     };
@@ -34,7 +33,8 @@ class App {
     private onSuccess = async () => {
         if (this.app) {
             this.aside.Root?.remove();
-            this.app.insertAdjacentHTML('afterbegin', await this.aside.render());
+            const render = await this.aside.render();
+            this.app.insertAdjacentHTML('afterbegin', render);
             this.aside.mount();
         }
     };
