@@ -27,18 +27,18 @@ class Profile extends Base {
     }
 
     public unmount(): void {
-        this.observer.unsubscribe(EventType.RERENDER, this.onReRender);
         this.unmountState();
+        this.observer.unsubscribe(EventType.RERENDER, this.onReRender);
     }
 
     public render(): string {
         this.checkCurrentRoute();
-
         switch (this.state) {
             case ProfileState.OWN_PROFILE:
                 return this.view.make();
 
             case ProfileState.ANOTHER_PROFILE:
+                console.log('ANOTHER');
                 return this.anotherView.make();
         }
     }
