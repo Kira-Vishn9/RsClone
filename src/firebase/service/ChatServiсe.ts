@@ -42,6 +42,8 @@ class ChatServiсe {
     public get RoomID() {
         return this.roomID;
     }
+
+    //TODO Check function checkDubplicat Refactor
     public async createChatRoom(firstID: string, secondID: string): Promise<void> {
         try {
             const findDublicat = await this.checkDubplicat(firstID, secondID);
@@ -90,6 +92,7 @@ class ChatServiсe {
         }
     }
 
+    // TODO Решить проблему с subscription, unsubscription Refactor
     public async loadMessage(data: DocumentReference<DocumentData>[]) {
         data.forEach((ref) => {
             const messageCollection = collection(ref, this.pathMessage);
@@ -165,6 +168,7 @@ class ChatServiсe {
     // const recentMessagesQuery = query(qur, sort);
     // }
 
+    // TODO wrong incorect check by duplicat Refactor
     private async checkDubplicat(id: string, secondID: string): Promise<boolean | FirebaseError> {
         try {
             const rooms = await this.getAllChatRoomBySelfUserID(id);
