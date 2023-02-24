@@ -33,6 +33,11 @@ class ProfileHeadComponent {
     private subsribtions: HTMLElement | null = null;
     private followers: HTMLElement | null = null;
 
+    private btnLogOut: HTMLButtonElement | null = null;
+    public get BtnLogOut() {
+        return this.btnLogOut;
+    }
+
     public init(parent: HTMLElement) {
         this.parent = parent;
         this.root = this.parent.querySelector('.data__profile');
@@ -45,6 +50,7 @@ class ProfileHeadComponent {
 
         this.btnSubscriptions = this.root.querySelector('.subscriptions__profile');
         this.btnFollowers = this.root.querySelector('.followers__profile');
+        this.btnLogOut = this.root.querySelector('.profile__btn-logout');
 
         const publications: HTMLElement | null = this.root.querySelector('.publication__profile');
         const subsribtions: HTMLElement | null = this.root.querySelector('.subscriptions__profile');
@@ -68,6 +74,7 @@ class ProfileHeadComponent {
                 <div class="block__profile">
                     <span class="name">${this.name?.textContent}</span>
                     <button class="btn-settings__profile">Редактировать профиль</button>
+                    <button class="profile__btn-logout">Выйти</button>
                 </div>
                 ${this.makeDateProfileSocial()}
                 <span class="full-name__profile">${this.fullName?.textContent}</span>

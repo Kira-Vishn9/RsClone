@@ -73,6 +73,10 @@ class Auth {
         }
     }
 
+    public async logOutAccount(): Promise<void> {
+        await signOut(this.auth);
+    }
+
     public async monitorAuthState() {
         onAuthStateChanged(this.auth, (user) => {
             if (user) {
