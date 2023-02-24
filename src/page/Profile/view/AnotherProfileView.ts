@@ -2,7 +2,9 @@ import Observer from '../../../app/observer/Observer';
 import IPosts from '../../../firebase/model/IPosts';
 import ISubscription from '../../../firebase/model/ISubscription';
 import IUser from '../../../firebase/model/IUser';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import UserState from '../../../state/UserState';
+import anotherKeyID from '../common/local.storage.key';
 import AnotherProfileHeadComponent from '../components/AnotherProfileHeadComponent';
 import AnotherEventType from '../types/AnotherEventType';
 import EventType from '../types/EventType';
@@ -60,12 +62,14 @@ class AnotherProfileView {
 
     private onGetUser = (event: SubscribedType) => {
         console.log('adsadasdad');
+        console.log(event.user.id);
         if (this.root === null) return;
         if (event.user.id === undefined) return;
         const avatars = event.user.avatar;
         const fullname = event.user.name;
         const nickName = event.user.nickName;
-
+        console.log('event', event.user);
+        LocalStorage.instance.setData(anotherKeyID, event.user.id);
         if (event.subscribed === null) {
             this.root.insertAdjacentHTML(
                 'afterbegin',
@@ -189,10 +193,12 @@ class AnotherProfileView {
             userID: id,
             avatar: this.profileHead.ImgAvatar === undefined ? '' : this.profileHead.ImgAvatar,
         };
-
+        console.log('534534789553');
         const btn = this.profileHead.BtnSubUnSub;
         if (btn === null) return;
         btn.disabled = true;
+        console.log('agagaggaga', sub);
+
         this.$observer.emit(AnotherEventType.BUTTON_CLICK_SUBSCRIBE, sub, () => {
             this.profileHead.btnUnSubscribed();
             btn.disabled = false;
