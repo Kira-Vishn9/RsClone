@@ -22,11 +22,7 @@ class SubscriptionsService {
     private readonly pathSubscriptions = 'Subscriptions';
 
     // eslint-disable-next-line prettier/prettier
-    public async setSubscriptions(
-        userID: string,
-        sub: ISubscription,
-        cb?: () => void
-    ): Promise<void> {
+    public async setSubscriptions(userID: string, sub: ISubscription, cb?: () => void): Promise<void> {
         try {
             // const userID = UserState.instance.UserID;
             if (userID === null) return;
@@ -41,14 +37,17 @@ class SubscriptionsService {
                 console.log('Такой Документ Существует!!!!');
                 return;
             }
-
+            console.log('aga');
             await this.checkForDuplicateSubscriptions(subCollection, async (data: DocumentChangeType) => {
                 if (data === 'added') {
                     if (subUser !== null && subUser.id !== undefined) {
                         const follower = await FollowersService.instance.setFollower(subUser.id, userID);
                     }
+                    console.log('aga2');
+
                     const subDocRef = doc(subCollection);
                     sub.id = subDocRef.id;
+                    console.log('sub', sub);
                     await setDoc(subDocRef, sub);
                     if (cb !== undefined) {
                         cb();
@@ -119,8 +118,11 @@ class SubscriptionsService {
             const subDocRef = doc(subCollection, subID);
             console.log('deleteSub');
             const sub = await this.getSubscription(subID);
+            console.log('qqqqqqqqqqq', sub);
             if (sub === null) return;
             const getUser = await UserService.instance.getUser(sub.userID);
+            console.log('qqqqqqqqqqq');
+
             if (getUser === null || getUser.id === undefined) return;
 
             await FollowersService.instance.deleteFollower(getUser.id);
