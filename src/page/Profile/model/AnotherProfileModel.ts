@@ -7,7 +7,9 @@ import FollowersService from '../../../firebase/service/FollowersService';
 import PostsService from '../../../firebase/service/PostsService';
 import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import UserState from '../../../state/UserState';
+import anotherKeyID from '../common/local.storage.key';
 import AnotherEventType from '../types/AnotherEventType';
 import EventType from '../types/EventType';
 import SubscribedType from '../types/SubscribedType';
@@ -22,9 +24,7 @@ class AnotherProfileModel {
 
     public mount(): void {
         this.getUser();
-        this.getPost();
-        this.getSubscriptions();
-        this.getFollowers();
+
         this.$observer.subscribe(EventType.SUB_UNSUB, this.onSubscriptions);
         // this.$observer.subscribe(EventType.MODAL_UNSUBSCRIPTIONS, this.onUnsubScriptions);
         this.$observer.subscribe(AnotherEventType.BUTTON_CLICK_UNSUBSCRIBE, this.onUnsubScriptions);
@@ -67,10 +67,22 @@ class AnotherProfileModel {
     }
 
     private async getUser(): Promise<void> {
+        // let anotherID = LocalStorage.instance.getData(anotherKeyID);
+        // console.log('ANOTHERIDV2:: ', anotherID);
+        // if (anotherID === null) return;
+        // UserState.instance.AnotherUserID = anotherID;
         const myID = UserState.instance.UserID;
-        const userID = UserState.instance.AnotherUserID;
-        this.userID = userID as string;
-        if (userID === null) return;
+        let userID = UserState.instance.AnotherUserID;
+        console.log('MYID:: ', myID);
+        if (myID === null) return;
+
+        if (userID === null) {
+            let anotherID = LocalStorage.instance.getData(anotherKeyID);
+            if (anotherID === null) return;
+            UserState.instance.AnotherUserID = anotherID;
+            userID = UserState.instance.AnotherUserID;
+            if (userID === null) return;
+        }
 
         const user: IUser | null = await UserService.instance.getUser(userID);
 
@@ -88,6 +100,10 @@ class AnotherProfileModel {
         }
 
         this.$observer.emit('eventUser', data);
+
+        this.getPost();
+        this.getSubscriptions();
+        this.getFollowers();
     }
 
     private async getSubscriptions(): Promise<void> {
@@ -109,10 +125,16 @@ class AnotherProfileModel {
     }
 
     private onSubscriptions = async (sub: ISubscription, cb?: () => void) => {
-        console.log(sub);
+        console.log('kekt:', sub);
         const userID = UserState.instance.UserID;
+        console.log('kektV2:', sub);
         if (userID === null) return;
-        sub.userID = this.userID;
+        console.log('kektV3:', sub);
+
+        // sub.userID = this.userID;
+        console.log('jifdgjhgfjhgfdjh', sub);
+        console.log('kektV4:', sub);
+
         // UserService.instance.setSubscriptions(userID, sub, false);
         await SubscriptionsService.instance.setSubscriptions(userID, sub, async () => {
             // const findUser = await SubscriptionsService.instance.findSubscraptions(userID, sub.userID);
