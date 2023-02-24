@@ -46,4 +46,15 @@ export class LocalStorage {
         localStorage.setItem(this.keyAuthor, JSON.stringify(userLocalStorage));
         return { userLocalStorage };
     }
+
+    public setData(key: string, data: object | string): void {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public getData(key: string): any | null {
+        const data = localStorage.getItem(key);
+        if (data === null) return null;
+        return JSON.parse(data);
+    }
 }
