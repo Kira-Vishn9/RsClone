@@ -1,7 +1,7 @@
 import './style/item.profile.scss';
-function makePost(imgUrl: string, amountLike: number = 0, amountMessage: number = 0): string {
+function makePost(imgUrl: string, amountLike: number, amountMessage: number, idPost: string): string {
     return `
-    <div class="item__profile">
+    <div class="item__profile" id="${idPost}">
         <img src="${imgUrl}">
         <div class="like-message__item">
             <div class="like__item">

@@ -39,13 +39,29 @@
         display: flex;
         align-items: center;
         cursor: pointer;
+
+        &__left {
+            position: relative;
+            display: flex;
+            margin-right: 12px;
+        }
+
+        &__notifications {
+            position: absolute;
+            right: 0px;
+            bottom: 5px;
+
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
     }
 
     .message-avatar {
         width: 42px;
         height: 42px;
         border-radius: 50%;
-        margin-right: 12px;
     }
 
     .message-content {
@@ -100,7 +116,7 @@
         }
 
         &-main {
-            height: 100%;
+            height: calc(100% - 60px);
             display: flex;
             flex-direction: column;
             justify-content: center;

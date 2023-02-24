@@ -6,6 +6,7 @@ import Auth from '../auth/Auth';
 import app from '../config/config';
 import ISubscription from '../model/ISubscription';
 import IUser from '../model/IUser';
+import PullPushImg from '../pull-push-img/PullPushImg';
 
 class UserService {
     public static instance: UserService = new UserService();
@@ -40,7 +41,6 @@ class UserService {
             UserState.instance.Author = u;
             return result;
         } catch (error) {
-            console.log(error);
             return null;
         }
     }
@@ -51,7 +51,7 @@ class UserService {
             // const docRef = doc(this.data);
             const data = collection(this.db, 'Users');
             const docRef = doc(data, id);
-            console.log('setUserID: ' + docRef.id);
+
             userState.id = docRef.id;
             UserState.instance.setUserID(docRef.id);
             const u = {
@@ -61,8 +61,10 @@ class UserService {
             user.id = id;
             UserState.instance.Author = u;
             await setDoc(docRef, user);
+
+            this.updateUserAvatar('./assets/image/user.png');
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 
@@ -70,7 +72,6 @@ class UserService {
     public async updateUserAvatar(urlImg: string): Promise<void> {
         const userID = UserState.instance.UserID;
         if (userID === null) return;
-        // const user = await this.getUser(userID);
         const docRef = doc(this.data, userID);
 
         await updateDoc(docRef, {

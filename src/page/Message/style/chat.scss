@@ -1,0 +1,84 @@
+.wrapper-dialog-window {
+    display: grid;
+    grid-template-rows: 90% auto;
+    width: 100%;
+    height: 100%;
+}
+
+.place-for-message {
+    height: 100%;
+    margin: 10px 0;
+    padding: 0 10px;
+    overflow: left scroll;
+}
+
+.interlocutor {
+    display: flex;
+    text-align: left;
+    align-items: center;
+    margin-bottom: 15px;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        background-color: #fbb573;
+        border-radius: 5px;
+    }
+
+    &__name {
+        font-size: 1.3rem;
+        color: #004a7e;
+    }
+
+    &__text {
+        font-size: 1.1rem;
+        color: white;
+    }
+}
+
+.you-message {
+    margin-bottom: 15px;
+    text-align: right;
+
+    &__content {
+    }
+
+    &__text {
+        background-color: #399cfb;
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        color: white;
+    }
+}
+
+.wrapper-input {
+    display: flex;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+
+    textarea {
+        box-shadow: none;
+        border: none;
+        outline: none;
+        resize: none;
+    }
+
+    &__textarea {
+        width: 100%;
+        font-size: 18px;
+    }
+
+    &__submit {
+        width: 40px;
+        background: url('https://deploy-preview-19--tubular-hummingbird-1be2ec.netlify.app/8c2d4d902321820398f2.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+
+        cursor: pointer;
+    }
+}

@@ -26,15 +26,15 @@ class App {
     }
 
     private onDenied = () => {
-        console.log('ASIDE');
         this.aside.unmount();
         this.aside.Root?.remove();
     };
 
-    private onSuccess = () => {
+    private onSuccess = async () => {
         if (this.app) {
             this.aside.Root?.remove();
-            this.app.insertAdjacentHTML('afterbegin', this.aside.render());
+            const render = await this.aside.render();
+            this.app.insertAdjacentHTML('afterbegin', render);
             this.aside.mount();
         }
     };

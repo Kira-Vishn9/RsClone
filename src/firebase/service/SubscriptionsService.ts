@@ -1,4 +1,13 @@
-import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore/lite';
+import { FirebaseError } from 'firebase/app';
+import {
+    CollectionReference,
+    DocumentChangeType,
+    DocumentData,
+    DocumentReference,
+    onSnapshot,
+    query,
+} from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
 import UserState from '../../state/UserState';
 import app from '../config/config';
 import ISubscription from '../model/ISubscription';
@@ -12,22 +21,65 @@ class SubscriptionsService {
     private readonly data = collection(this.db, 'Users');
     private readonly pathSubscriptions = 'Subscriptions';
 
-    public async setSubscriptions(userID: string, sub: ISubscription): Promise<void> {
+    // eslint-disable-next-line prettier/prettier
+    public async setSubscriptions(userID: string, sub: ISubscription, cb?: () => void): Promise<void> {
         try {
             // const userID = UserState.instance.UserID;
             if (userID === null) return;
             const docRef = doc(this.data, userID);
             const subCollection = collection(docRef, this.pathSubscriptions);
             const subUser = await UserService.instance.getUser(sub.userID);
-            if (subUser !== null && subUser.id !== undefined) {
-                const follower = await FollowersService.instance.setFollower(subUser.id, userID);
+
+            const find = await this.findSubscraptions(userID, sub.userID);
+            console.log(find);
+            if (find instanceof FirebaseError) return;
+            if (find !== null) {
+                console.log('Такой Документ Существует!!!!');
+                return;
             }
-            const subDocRef = doc(subCollection);
-            sub.id = subDocRef.id;
-            await setDoc(subDocRef, sub);
+            console.log('aga');
+            await this.checkForDuplicateSubscriptions(subCollection, async (data: DocumentChangeType) => {
+                if (data === 'added') {
+                    if (subUser !== null && subUser.id !== undefined) {
+                        const follower = await FollowersService.instance.setFollower(subUser.id, userID);
+                    }
+                    console.log('aga2');
+
+                    const subDocRef = doc(subCollection);
+                    sub.id = subDocRef.id;
+                    console.log('sub', sub);
+                    await setDoc(subDocRef, sub);
+                    if (cb !== undefined) {
+                        cb();
+                    }
+                    console.log('Записал в Подписчик');
+                }
+            });
         } catch (error) {
-            console.log(error);
+            //
         }
+    }
+
+    // eslint-disable-next-line prettier/prettier
+    private async checkForDuplicateSubscriptions(
+        docRef: CollectionReference<DocumentData>,
+        cb: (data: DocumentChangeType) => void
+    ): Promise<void> {
+        // const tt = query(docRef);
+        const eventSnapshot = onSnapshot(docRef, (snaphot) => {
+            if (snaphot.empty) {
+                cb('added');
+                eventSnapshot();
+                return;
+            }
+
+            snaphot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    cb(change.type);
+                }
+            });
+            eventSnapshot();
+        });
     }
 
     public async getSubscriptions(userID: string): Promise<ISubscription[] | null> {
@@ -41,7 +93,6 @@ class SubscriptionsService {
             const data: ISubscription[] = subs.docs.map((sub) => sub.data()) as ISubscription[];
             return data;
         } catch (error) {
-            console.log(error);
             return null;
         }
     }
@@ -56,7 +107,6 @@ class SubscriptionsService {
             const sub = await getDoc(subDocRef);
             return sub.data() as ISubscription;
         } catch (error) {
-            console.log(error);
             return null;
         }
     }
@@ -66,17 +116,38 @@ class SubscriptionsService {
             const docRef = doc(this.data, ownUserID);
             const subCollection = collection(docRef, this.pathSubscriptions);
             const subDocRef = doc(subCollection, subID);
-
+            console.log('deleteSub');
             const sub = await this.getSubscription(subID);
+            console.log('qqqqqqqqqqq', sub);
             if (sub === null) return;
             const getUser = await UserService.instance.getUser(sub.userID);
+            console.log('qqqqqqqqqqq');
+
             if (getUser === null || getUser.id === undefined) return;
 
             await FollowersService.instance.deleteFollower(getUser.id);
 
             await deleteDoc(subDocRef);
         } catch (error) {
+            //
+        }
+    }
+
+    public async findSubscraptions(ownUserID: string, subID: string): Promise<ISubscription | null | FirebaseError> {
+        try {
+            const docRef = doc(this.data, ownUserID);
+            const subCollection = collection(docRef, this.pathSubscriptions);
+            const sub = await getDocs(subCollection);
+            const data = sub.docs.map((document) => document.data()) as ISubscription[];
+            const findUser = data.find((sub) => sub.userID === subID);
+            if (findUser) {
+                return findUser;
+            } else {
+                return null;
+            }
+        } catch (error) {
             console.log(error);
+            return error as FirebaseError;
         }
     }
 }

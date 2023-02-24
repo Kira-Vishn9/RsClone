@@ -7,6 +7,7 @@ async function getAllPosts() {
     const arrPosts = await Posts.init.getAllPosts();
     let postsHtml = '';
     arrPosts.sort((a, b) => b.time - a.time);
+
     arrPosts.forEach((item) => {
         const datePost = new Date(item.time);
         const timePost = datePost.toString().slice(3, 24);
@@ -27,7 +28,8 @@ async function getAllPosts() {
             timePost,
             item.postID,
             likeBlack,
-            numberComment
+            numberComment,
+            item.avatar
         );
     });
     return postsHtml;

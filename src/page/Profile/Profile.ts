@@ -22,25 +22,23 @@ class Profile extends Base {
     private state: ProfileState = ProfileState.OWN_PROFILE;
 
     public mount(): void {
-        console.log('Profile: MOUNT');
         this.mountState();
         this.observer.subscribe(EventType.RERENDER, this.onReRender);
     }
 
     public unmount(): void {
-        console.log('Profile: UNMOUNT');
-        this.observer.unsubscribe(EventType.RERENDER, this.onReRender);
         this.unmountState();
+        this.observer.unsubscribe(EventType.RERENDER, this.onReRender);
     }
 
     public render(): string {
         this.checkCurrentRoute();
-
         switch (this.state) {
             case ProfileState.OWN_PROFILE:
                 return this.view.make();
 
             case ProfileState.ANOTHER_PROFILE:
+                console.log('ANOTHER');
                 return this.anotherView.make();
         }
     }
@@ -76,7 +74,6 @@ class Profile extends Base {
         let val = window.location.hash;
         val = val.replace('#/', '');
 
-        console.log('VAL: ', val);
         const valSplit = val.split('/');
 
         if (valSplit.length > 1) {
@@ -87,7 +84,6 @@ class Profile extends Base {
     }
 
     private onReRender = () => {
-        console.log('RERENDER');
         this.render();
     };
 }

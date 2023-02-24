@@ -5,12 +5,10 @@ class Account extends Base {
     private view: AccountView = new AccountView();
 
     public mount(): void {
-        console.log('ACCOUNT: MOUNT');
         this.view.init();
     }
 
     public unmount(): void {
-        console.log('ACCOUNT: UNMOUNT');
         this.view.unmount();
     }
 

@@ -7,6 +7,7 @@ import {
     getDoc,
     setDoc,
     DocumentData,
+    deleteDoc,
 } from 'firebase/firestore/lite';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import app from '../config/config';
@@ -44,7 +45,6 @@ class PostsService {
             const result = dataSnap.data() as IPosts;
             return result;
         } catch (error) {
-            console.log(error);
             // return false;
         }
     }
@@ -60,13 +60,21 @@ class PostsService {
             });
             UserState.instance.addPostID(test.id);
         } catch (error) {
-            console.log(error);
+            //
         }
     }
 
     public async updatePosts(id: string, obj: {}) {
         try {
             await updateDoc(doc(this.db, 'Posts', id), obj);
+        } catch (error) {
+            //
+        }
+    }
+
+    public async deletePosts(id: string) {
+        try {
+            await deleteDoc(doc(this.db, 'Posts', id));
         } catch (error) {
             console.log(error);
         }

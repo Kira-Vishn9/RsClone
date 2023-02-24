@@ -108,7 +108,6 @@ class SettingsView {
             nickName: this.tempUser.nickName,
             email: this.tempUser.email,
         };
-        console.log('QQQQQQQQQQQQQQQQQQQQQQ');
 
         this.$observer.emit(EventType.UPDATE_USER, updateUser);
     };

@@ -35,34 +35,40 @@ class Router {
     private tempRoute: Base | null = null;
 
     private onHascChange = () => {
-        if (this.container === null) return;
-
-        this.accessСheck();
-
+        console.log(window.location.hash);
         if (this.tempRoute !== null && this.tempRoute.unmount) this.tempRoute.unmount();
         const route = this.getRoute(window.location.hash);
         this.tempRoute = route;
-
-        if (route === null) {
-            console.log('NOT FOUND PAGE');
-        } else {
-            this.container.innerHTML = '';
-            this.container.insertAdjacentHTML('afterbegin', route.render());
-            route.mount();
-        }
+        this.accessСheck();
     };
 
-    private async accessСheck(): Promise<void> {
-        onAuthStateChanged(Auth.instance.Auth, (user: User | null) => {
+    private executeRooute(): void {
+        if (this.container === null) return;
+
+        if (this.tempRoute === null) {
+            ('NOT FOUND PAGE');
+        } else {
+            this.container.innerHTML = '';
+            this.container.insertAdjacentHTML('afterbegin', this.tempRoute.render());
+            this.tempRoute.mount();
+        }
+    }
+
+    private accessСheck(): void {
+        const event = onAuthStateChanged(Auth.instance.Auth, (user: User | null) => {
             // << Проверка на Авторизаю Urer
+            UserState.instance.CurrentUser = user;
             if (user === null) {
                 window.location.hash = '#/account'; // << Проверка на Авторизаю User
                 this.$observer.emit(EventType.DENIED, {});
+                this.executeRooute();
+                event();
             } else {
                 const temp = window.location.hash;
                 if (temp === '#/account' || temp === '' || temp === '#/') {
-                    window.location.hash = '#/profile';
+                    window.location.hash = '#/home';
                 }
+                this.executeRooute();
                 this.$observer.emit(EventType.SUCCESS, {});
             } // << Проверка на Авторизаю User
         });
