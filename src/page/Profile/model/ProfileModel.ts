@@ -9,6 +9,7 @@ import FollowersService from '../../../firebase/service/FollowersService';
 import PostsService from '../../../firebase/service/PostsService';
 import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import UserState from '../../../state/UserState';
 import EventType from '../types/EventType';
 
@@ -128,6 +129,7 @@ class ProfileModel {
         // UserService.instance.deleteSubscriptions(subID);
         const userID = UserState.instance.UserID;
         if (userID === null) return;
+        console.log(subID);
         SubscriptionsService.instance.deleteSubscriptions(userID, subID);
         this.observer.emit(EventType.RERENDER, {});
     };
