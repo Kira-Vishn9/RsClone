@@ -147,11 +147,22 @@ class MessageModel {
         console.log('Получил ЭВЕНТ');
     };
 
-    // запоминаем ид команты
+    // запоминаем ид команты когда нажали комнату
     private onGetRoomID = (roomID: RecipientStartDialog) => {
         this.chatRoomID = roomID.roomID;
         console.log('SAVE ROOM ID:: ', this.chatRoomID);
+        this.getAllMessageForRoom();
     };
+
+    // Получаем все message при инициализации или обновления браузера когда нажали на комнату
+    private async getAllMessageForRoom(): Promise<void> {
+        if (this.chatRoomID === null) return;
+        const messageArr = await ChatServiсe.instance.getAllMessagesByRoomID(this.chatRoomID);
+        console.log(messageArr);
+        messageArr?.forEach((message) => {
+            this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
+        });
+    }
 
     // Отпровлчем сообщения
     private onSendMessage = async (message: string) => {
