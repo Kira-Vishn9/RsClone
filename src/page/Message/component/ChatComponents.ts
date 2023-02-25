@@ -81,7 +81,7 @@ class ChatComponent {
     private makeInterLocutorsMessages(photoURL: string | null, name: string, message: string): void {
         const data = `
         <div class="interlocutor">
-            <img src="${photoURL}" alt="userPhoto" style="width: 25px; height: 25px;">
+            <img class="interlocutor__img" src="${photoURL}" alt="userPhoto"">
             <div class="interlocutor__content">
                 <span class="interlocutor__name">${name}</span>
                 <span class="interlocutor__text">${message}</span>
@@ -127,7 +127,7 @@ class ChatComponent {
         if (message.userID === UserState.instance.CurrentUser?.uid) {
             this.makeOwnMessage(message.text);
         } else {
-            this.makeInterLocutorsMessages('', message.name, message.text);
+            this.makeInterLocutorsMessages(this.recipientAvatar, message.name, message.text);
         }
     };
 
@@ -136,7 +136,7 @@ class ChatComponent {
         if (this.placeMessage === null) return;
 
         this.placeMessage.innerHTML = '';
-
+        console.log('avatar::', this.recipientAvatar);
         messageArr.forEach((message: INewMessage) => {
             if (message.userID === UserState.instance.CurrentUser?.uid) {
                 this.makeOwnMessage(message.text);
