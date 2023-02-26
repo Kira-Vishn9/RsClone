@@ -30,15 +30,24 @@ import { initializeApp } from 'firebase/app';
 //     appId: '1:238045707767:web:94f7fa1a43cf21a25502f2',
 // };
 
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyBArE9ymJXKuYsS8_DOsar1Ebb5n29Byc8',
+//     authDomain: 'my-last-project-30f8a.firebaseapp.com',
+//     databaseURL: 'https://my-last-project-30f8a-default-rtdb.europe-west1.firebasedatabase.app',
+//     projectId: 'my-last-project-30f8a',
+//     storageBucket: 'my-last-project-30f8a.appspot.com',
+//     messagingSenderId: '20021421397',
+//     appId: '1:20021421397:web:a89788389263b370053bdc',
+//     measurementId: 'G-22K4SGNZG8',
+// };
+
 const firebaseConfig = {
-    apiKey: 'AIzaSyBArE9ymJXKuYsS8_DOsar1Ebb5n29Byc8',
-    authDomain: 'my-last-project-30f8a.firebaseapp.com',
-    databaseURL: 'https://my-last-project-30f8a-default-rtdb.europe-west1.firebasedatabase.app',
-    projectId: 'my-last-project-30f8a',
-    storageBucket: 'my-last-project-30f8a.appspot.com',
-    messagingSenderId: '20021421397',
-    appId: '1:20021421397:web:a89788389263b370053bdc',
-    measurementId: 'G-22K4SGNZG8',
+    apiKey: 'AIzaSyBA2_iDvz0S3dD5DdrwYj3CEqyTQ53DWhg',
+    authDomain: 'clone-rs-insta.firebaseapp.com',
+    projectId: 'clone-rs-insta',
+    storageBucket: 'clone-rs-insta.appspot.com',
+    messagingSenderId: '776294553380',
+    appId: '1:776294553380:web:6fc53a7e835b2561f885b1',
 };
 
 const app = initializeApp(firebaseConfig);
