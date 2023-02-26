@@ -19,10 +19,12 @@ class MessageUserComponents {
         this.root = parent.querySelector('.message-user');
         if (this.root === null) return;
         this.root.addEventListener('click', this.onSelectChatRoom);
+        this.$observer.subscribe(EventType.NOTIFICATION, this.onNotification);
     }
 
     public unmount(): void {
         this.root?.removeEventListener('click', this.onSelectChatRoom);
+        this.$observer.unsubscribe(EventType.NOTIFICATION, this.onNotification);
     }
 
     public make(avatar: string | undefined, name: string, message: string, attrib: string | undefined): string {
@@ -62,6 +64,22 @@ class MessageUserComponents {
         };
         // LocalStorage.instance.setData(key, this.attribute);
         this.$observer.emit(EventType.START_DIALOG, startDialogInfo);
+    };
+
+    private onNotification = (notifi: { roomID: string; countMessage: number }[]) => {
+        if (this.root === null) return;
+        const notifiHtmlElem: HTMLElement | null = this.root?.querySelector('.message-user__notifications');
+        if (notifiHtmlElem === null) return;
+        const nt = notifi[0];
+        if (nt.roomID === this.attribute) {
+            if (nt.countMessage > 0) {
+                console.log('qweqweqweqweqweqwe');
+                notifiHtmlElem.classList.remove('hidden');
+                notifiHtmlElem.textContent = `${nt.countMessage}`;
+            } else {
+                notifiHtmlElem.classList.add('hidden');
+            }
+        }
     };
 }
 
