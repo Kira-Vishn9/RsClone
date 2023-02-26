@@ -161,7 +161,7 @@ class MessageModel {
         if (this.chatRoomID !== null) {
             const notifi = [{ roomID: this.chatRoomID, countMessage: 0 }];
             // ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
-            this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
+            // this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
         }
     };
 
@@ -172,7 +172,7 @@ class MessageModel {
         console.log(messageArr);
         messageArr?.forEach((message) => {
             console.log('notification::<<::', message);
-            this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
+            // this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
         });
     }
 
