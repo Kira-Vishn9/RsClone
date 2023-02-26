@@ -5,9 +5,10 @@ interface INewMessage {
     messageID?: string;
     userID?: string;
     name: string;
-    avatarURL: string;
+    imgURL?: string;
     text: string;
     timestamp: FieldValue;
+    isRead?: boolean;
 }
 
 export default INewMessage;
