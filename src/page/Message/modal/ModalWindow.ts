@@ -4,15 +4,17 @@ import IChatRoom from '../../../firebase/model/IChatRoom';
 import UserState from '../../../state/UserState';
 import EventType from '../type/EventType';
 import '../style/message-modal.scss';
+import ISubscription from '../../../firebase/model/ISubscription';
+import IFollower from '../../../firebase/model/IFollower';
 
-class MessageModal {
+class ModalWindow {
     private root: HTMLElement | null = null;
     private listHuman: HTMLElement | null = null;
-    private next: HTMLElement | null = null;
-    private observer: Observer;
+    private btnNext: HTMLElement | null = null;
+    private $observer: Observer;
 
     constructor(observer: Observer) {
-        this.observer = observer;
+        this.$observer = observer;
     }
 
     public init(parent: HTMLElement): void {
@@ -21,17 +23,19 @@ class MessageModal {
         if (this.root === null) return;
 
         this.listHuman = this.root.querySelector('.list-human');
-        this.next = this.root.querySelector('.next');
+        this.btnNext = this.root.querySelector('.next');
+        this.initFollowersAndSubscribtions();
         this.enable();
     }
 
     private enable(): void {
-        this.root?.addEventListener('click', this.closeModal);
-        // this.next?.addEventListener('click', this.startDialog);
+        this.root?.addEventListener('click', this.onCloseModal);
+        this.btnNext?.addEventListener('click', this.onClickBtnNext);
     }
 
     private disable(): void {
-        this.root?.removeEventListener('click', this.closeModal);
+        this.root?.removeEventListener('click', this.onCloseModal);
+        this.btnNext?.addEventListener('click', this.onClickBtnNext);
     }
 
     private make(): string {
@@ -60,8 +64,18 @@ class MessageModal {
     `;
     }
 
+    private usersIdArr: string[] = [];
+
+    private initFollowersAndSubscribtions(): void {
+        this.$observer.emit(EventType.INIT_OPEN_MODAL, {}, (data: (ISubscription & IFollower)[]) => {
+            data.forEach((val) => {
+                this.addUser(val.avatar, val.nickName, val.userID);
+            });
+        });
+    }
+
     private listHumanArr: HTMLElement[] = [];
-    public addUser(avatarsUrl: string, name: string, userID: string) {
+    private addUser(avatarsUrl: string | undefined, name: string, userID: string): void {
         const html = `
         <li class="list-item" user-id="${userID}">
             <img class="userPhoto" src="${avatarsUrl}" alt="userPhoto">
@@ -93,39 +107,34 @@ class MessageModal {
             input.value = textName;
         }
 
-        console.log(recepientId);
+        this.usersIdArr.push(recepientId);
     };
 
-    // private startDialog = () => {
-    //     const userID = UserState.instance.UserID;
-    //     if (userID === null) return;
-    //     // const WhatId = {
-    //     //     userID: userID,
-    //     //     recipientId: this.recepientId,
-    //     //     recipientAvatar: this.avatarsUrl,
-    //     //     recipientName: this.resipientName,
-    //     // };
-    //     const createChatRoom = {
-    //         firstID: userID,
-    //         secondID: this.recepientId,
-    //     };
-    //     this.observer.emit(EventType.CREATE_CHAT_ROOM, createChatRoom);
-    //     this.root?.remove();
-    //     this.next?.removeEventListener('click', this.startDialog);
-    // };
-
-    private closeModal = (e: Event) => {
-        if (e.target instanceof HTMLElement) {
-            if (e.target.classList.contains('wrapper-overflow')) {
-                this.listHumanArr.forEach((elem) => {
-                    elem.removeEventListener('click', this.addActive);
-                });
-                this.listHumanArr = [];
-                this.disable();
-                this.root?.remove();
+    private onClickBtnNext = (event: Event) => {
+        if (event.target instanceof HTMLElement) {
+            if (event.target.closest('.wrapper-overflow')) {
+                this.$observer.emit(EventType.CREATE_CHAT_ROOM, this.usersIdArr);
+                this.selfDestroy();
             }
         }
     };
+
+    private onCloseModal = (e: Event) => {
+        if (e.target instanceof HTMLElement) {
+            if (e.target.classList.contains('wrapper-overflow')) {
+                this.selfDestroy();
+            }
+        }
+    };
+
+    private selfDestroy(): void {
+        this.listHumanArr.forEach((elem) => {
+            elem.removeEventListener('click', this.addActive);
+        });
+        this.listHumanArr = [];
+        this.disable();
+        this.root?.remove();
+    }
 }
 
-export default MessageModal;
+export default ModalWindow;

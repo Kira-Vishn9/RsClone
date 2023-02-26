@@ -1,4 +1,5 @@
 import { FirebaseError } from 'firebase/app';
+import { Unsubscribe } from 'firebase/auth';
 import {
     addDoc,
     collection,
@@ -26,6 +27,8 @@ import IChatRoom from '../model/IChatRoom';
 import IMessage from '../model/IMessage';
 import INewMessage from '../model/INewMessage';
 
+type ReciveRoom = (room: IChatRoom) => void;
+
 class ChatServiсe {
     public static instance: ChatServiсe = new ChatServiсe();
     // private database = getDatabase(app);
@@ -46,11 +49,14 @@ class ChatServiсe {
     //TODO Check function checkDubplicat Refactor
     public async createChatRoom(firstID: string, secondID: string): Promise<void> {
         try {
-            const findDublicat = await this.checkDubplicat(firstID, secondID);
-
+            const findDublicat = await this.findDublicate(firstID, secondID);
             if (findDublicat instanceof FirebaseError) return;
 
-            if (findDublicat === true) return;
+            if (findDublicat) {
+                console.log('Такая Комната Чата Существует!!!');
+                return;
+            }
+            console.log('Такой Комнаты НЕМА!!!');
 
             const docRef = doc(this.chatRooms);
             this.roomID = docRef.id;
@@ -60,19 +66,41 @@ class ChatServiсe {
                 recipientID: secondID,
             };
             await setDoc(docRef, chatRoom);
+            this.eventSnapShot(docRef);
         } catch (error) {
-            //
+            console.log(error);
         }
     }
+
+    public eventSnapShot(data: DocumentReference<DocumentData>): void {
+        const event = onSnapshot(data, (snaphot) => {
+            console.log(snaphot.data());
+            console.log('ahahah');
+            const chatRoom = snaphot.data() as IChatRoom;
+
+            if (this.recieveEventGetRoom !== null) this.recieveEventGetRoom(chatRoom);
+            event();
+        });
+    }
+
+    public recieveEventGetRoom: ReciveRoom | null = null;
 
     public async getAllChatRoomBySelfUserID(id: string): Promise<IChatRoom[] | null> {
         try {
             const coll = collection(this.database, this.pathChatsRoom);
             const rooms = await getDocs(coll);
-            const chatRooms = rooms.docs.map((room) => room.data());
-            const chatRoomsTest = rooms.docs.map((room) => room.ref);
-            this.loadMessage(chatRoomsTest);
-            return chatRooms as IChatRoom[];
+            const chatRooms = rooms.docs.map((room) => room.data()) as IChatRoom[];
+            const filterChatRooms = chatRooms.filter((room) => room.userID === id || room.recipientID === id);
+
+            const test = rooms.docs.filter((room) => room.data().userID === id || room.data().recipientID === id);
+            test.forEach((t) => {
+                console.log('test::', t.ref);
+
+                const messageCollection = collection(t.ref, 'message');
+
+                this.loadMessage(messageCollection);
+            });
+            return filterChatRooms;
         } catch (error) {
             return null;
         }
@@ -93,20 +121,28 @@ class ChatServiсe {
     }
 
     // TODO Решить проблему с subscription, unsubscription Refactor
-    public async loadMessage(data: DocumentReference<DocumentData>[]) {
-        data.forEach((ref) => {
-            const messageCollection = collection(ref, this.pathMessage);
-            const messageQuery = query(messageCollection, orderBy('timestamp', 'desc'), limit(1));
-            const unSub = onSnapshot(messageQuery, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === 'added') {
-                        const data = change.doc.data() as INewMessage;
-                        console.log(data);
-                        EventBus.instance.emit(EventBus.instance.eventType.LOAD_MESSAGE, data); //<< Глобальный Event
-                    }
-                });
+    private eventLoadMessage: Unsubscribe | null = null;
+    public async loadMessage(data: CollectionReference<DocumentData>) {
+        if (this.eventLoadMessage !== null) this.eventLoadMessage();
+        let test = 0;
+        // data.forEach((ref) => {
+        // const messageCollection = collection(ref, this.pathMessage);
+        const messageQuery = query(data, orderBy('timestamp', 'desc'), limit(1));
+        this.eventLoadMessage = onSnapshot(messageQuery, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'added') {
+                    const data = change.doc.data() as INewMessage;
+                    test += 1;
+                    console.log('LOAD__MESSAGE::', data);
+                    EventBus.instance.emit(EventBus.instance.eventType.LOAD_MESSAGE, data); //<< Глобальный Event
+                    // unSub();
+                }
             });
+            console.log('TEST:: <<', test);
+            // unSub();
         });
+        // unSub();
+        // });
         // const docRoom = doc(data, this.roomID);
         // const coll = collection(docRoom, this.pathMessage);
     }
@@ -136,6 +172,7 @@ class ChatServiсe {
         };
         // await setDoc(docRef, message);
         await addDoc(messageCollection, message);
+        // this.loadMessage(messageCollection);
     }
 
     // public async loadMessage(cb?: (message: INewMessage) => void): Promise<void> {
@@ -168,36 +205,26 @@ class ChatServiсe {
     // const recentMessagesQuery = query(qur, sort);
     // }
 
-    // TODO wrong incorect check by duplicat Refactor
-    private async checkDubplicat(id: string, secondID: string): Promise<boolean | FirebaseError> {
+    private async findDublicate(id: string, secondID: string): Promise<IChatRoom | null | FirebaseError> {
         try {
             const rooms = await this.getAllChatRoomBySelfUserID(id);
-            const find = rooms?.find((room) => room.userID === id && room.recipientID === secondID);
-            if (find === undefined) {
+            const find = rooms?.find((room) => {
+                if (room.userID === id || room.recipientID === secondID) {
+                    return true;
+                } else if (room.userID === secondID || room.recipientID === id) {
+                    return true;
+                }
                 return false;
+            });
+            if (find === undefined) {
+                return null;
             } else {
-                return true;
+                return find;
             }
         } catch (error) {
             return error as FirebaseError;
         }
     }
-
-    // << OLD
-    // public push(arg: IMessage, callback: (data: DataSnapshot) => void) {
-    //     const id = push(child(ref(this.database), this.message)).key;
-    //     set(ref(this.database, `messages/${this.sortName('kira', arg.recipientName)}/` + id), {
-    //         name: 'kira',
-    //         message: arg.message,
-    //     });
-
-    //     const newMsg = ref(this.database, `messages/${this.sortName('kira', arg.recipientName)}/`);
-    //     onChildAdded(newMsg, callback);
-    // }
-
-    // private sortName(name1: string, name2: string) {
-    //     return [name1, name2].sort().join('');
-    // }
 }
 
 export default ChatServiсe;

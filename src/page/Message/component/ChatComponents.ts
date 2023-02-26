@@ -4,6 +4,7 @@ import INewMessage from '../../../firebase/model/INewMessage';
 import EventType from '../type/EventType';
 import '../style/chat.scss';
 import UserState from '../../../state/UserState';
+import RecipientStartDialog from '../type/RecipientStartDialog';
 
 class ChatComponent {
     private root: HTMLElement | null = null;
@@ -16,6 +17,13 @@ class ChatComponent {
         this.$observer = observe;
     }
 
+    private recipientAvatar: string | null = null;
+    private recipientName: string | null = null;
+    public setRecipientDialog(avatar: string, name: string) {
+        this.recipientAvatar = avatar;
+        this.recipientName = name;
+    }
+
     public init(parent: HTMLElement) {
         this.root = parent.querySelector('.wrapper-dialog-window');
         if (this.root === null) return;
@@ -25,15 +33,17 @@ class ChatComponent {
         this.placeMessage = this.root.querySelector('.place-for-message');
         this.send?.addEventListener('click', this.onSendMessage);
         this.input?.addEventListener('keydown', this.onSendMessage);
-        this.$observer.subscribe(EventType.GET_ALL_MESSAGE_START_DIALOG, this.onGetAllMessageByChatRoom);
+        // this.$observer.subscribe(EventType.GET_ALL_MESSAGE_START_DIALOG, this.onGetAllMessageByChatRoom);
         this.$observer.subscribe(EventType.RECEIVE_MESSAGE, this.onReceiveMessage);
+        // this.$observer.subscribe(EventType.START_DIALOG, this.onInitDialog);
     }
 
     public unmount(): void {
         this.send?.removeEventListener('click', this.onSendMessage);
         this.input?.removeEventListener('keydown', this.onSendMessage);
+        // this.$observer.unsubscribe(EventType.START_DIALOG, this.onInitDialog);
         this.$observer.unsubscribe(EventType.RECEIVE_MESSAGE, this.onReceiveMessage);
-        this.$observer.unsubscribe(EventType.GET_ALL_MESSAGE_START_DIALOG, this.onGetAllMessageByChatRoom);
+        // this.$observer.unsubscribe(EventType.GET_ALL_MESSAGE_START_DIALOG, this.onGetAllMessageByChatRoom);
     }
 
     public make() {
@@ -68,7 +78,7 @@ class ChatComponent {
         this.placeMessage.scrollTo(0, this.placeMessage.scrollHeight);
     }
 
-    private makeInterLocutorsMessages(photoURL: string, name: string, message: string): void {
+    private makeInterLocutorsMessages(photoURL: string | null, name: string, message: string): void {
         const data = `
         <div class="interlocutor">
             <img src="${photoURL}" alt="userPhoto" style="width: 25px; height: 25px;">
@@ -83,6 +93,10 @@ class ChatComponent {
         this.placeMessage.insertAdjacentHTML('beforeend', data);
         this.placeMessage.scrollTo(0, this.placeMessage.scrollHeight);
     }
+
+    // private onInitDialog = () => {
+    //     //
+    // };
 
     private onSendMessage = (event: Event) => {
         if (event instanceof KeyboardEvent) {
@@ -103,10 +117,13 @@ class ChatComponent {
         this.input.value = '';
         this.$observer.emit(EventType.SEND_MESSAGE, message);
     }
-
+    private tt = 0;
     private onReceiveMessage = (message: INewMessage) => {
-        console.log(message);
-        console.log('Receive__Message: ', message);
+        // console.log(message);
+        // console.log('Receive__Message: ', message);
+        this.tt += 1;
+        console.log('MESSAGE__VIEW::<<', message);
+        console.log(this.tt);
         if (message.userID === UserState.instance.CurrentUser?.uid) {
             this.makeOwnMessage(message.text);
         } else {
@@ -114,6 +131,7 @@ class ChatComponent {
         }
     };
 
+    // отрисовываем все сообщения в chat room после обновлении браузера или инициализации
     private onGetAllMessageByChatRoom = (messageArr: INewMessage[]) => {
         if (this.placeMessage === null) return;
 
@@ -123,7 +141,7 @@ class ChatComponent {
             if (message.userID === UserState.instance.CurrentUser?.uid) {
                 this.makeOwnMessage(message.text);
             } else {
-                this.makeInterLocutorsMessages('', message.name, message.text);
+                this.makeInterLocutorsMessages(this.recipientAvatar, message.name, message.text);
             }
         });
     };

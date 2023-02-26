@@ -4,12 +4,14 @@ import IFollower from '../../../firebase/model/IFollower';
 import IUser from '../../../firebase/model/IUser';
 import UserState from '../../../state/UserState';
 import ChatComponent from '../component/ChatComponents';
-import MessageModal from '../modal/messageModal';
+import ModalWindow from '../modal/ModalWindow';
 import EventType from '../type/EventType';
 import MessageUserComponents from '../component/MessageUserComponents';
 import '../style/message-page.scss';
 import ISubscription from '../../../firebase/model/ISubscription';
 import SubFolType from '../type/SubFolType';
+import RecipientRoom from '../type/RecipientRoom';
+import RecipientStartDialog from '../type/RecipientStartDialog';
 
 class MessageView {
     private sendBth: HTMLElement | null = null;
@@ -23,6 +25,7 @@ class MessageView {
     private recipientName: HTMLElement | null = null;
 
     private containerBlockLeft: HTMLElement | null = null;
+    private recipientInfo: HTMLElement | null = null;
 
     public constructor(observer: Observer) {
         this.$observer = observer;
@@ -34,6 +37,7 @@ class MessageView {
         if (this.root === null) return;
         this.topMessageBtn = this.root.querySelector('.message-btn');
 
+        this.recipientInfo = this.root.querySelector('.message-block__right-header');
         this.containerBlockLeft = this.root.querySelector('.message-block__left-main');
 
         this.placeChat = this.root.querySelector('.message-block__right-main');
@@ -65,14 +69,21 @@ class MessageView {
     private enable(): void {
         this.topMessageBtn?.addEventListener('click', this.onOpenModal);
         this.sendBth?.addEventListener('click', this.onOpenModal);
+        this.$observer.subscribe(EventType.INIT_GET_ALL_CHAT__ROOM, this.onInitAllChatRoom);
+        this.$observer.subscribe(EventType.GET_CHAT_ROOM, this.onGetChatRoom);
+        this.$observer.subscribe(EventType.START_DIALOG, this.onInitDialog);
     }
 
     private disable(): void {
         this.topMessageBtn?.removeEventListener('click', this.onOpenModal);
         this.sendBth?.removeEventListener('click', this.onOpenModal);
+        this.$observer.unsubscribe(EventType.INIT_GET_ALL_CHAT__ROOM, this.onInitAllChatRoom);
+        this.$observer.unsubscribe(EventType.GET_CHAT_ROOM, this.onGetChatRoom);
+        this.$observer.unsubscribe(EventType.START_DIALOG, this.onInitDialog);
     }
 
     public make(): string {
+        console.log(UserState.instance.CurrentUser);
         return `
         <div class="message-block">
           <div class="message-block__left">
@@ -86,11 +97,8 @@ class MessageView {
             </div>
           </div>
           <div class="message-block__right">
-            <div class="message-block__right-header hidden">
-              <a class="user-message" href="#">
-                <img class="user-avatar" src="https://amiel.club/uploads/posts/2022-03/1647762844_3-amiel-club-p-kartinki-litsa-cheloveka-3.png" alt="avatar">
-                <span class="user-name">Tomas</span>
-              </a>
+            <div class="message-block__right-header">
+              
             </div>
             <div class="message-block__right-main">
               <div class="message-block__right-img"></div>
@@ -101,6 +109,15 @@ class MessageView {
           </div>
         </div>
       `.trim();
+    }
+
+    private makeRecipientInfo(avatar: string | undefined, name: string): string {
+        return `
+            <a class="user-message" href="#">
+                <img class="user-avatar" src="${avatar === undefined ? '' : avatar}" alt="avatar">
+                <span class="user-name">${name}</span>
+            </a>
+            `;
     }
 
     // public make(): string {
@@ -123,12 +140,57 @@ class MessageView {
     //   `.trim();
     // }
 
+    // Получаем все чат комнаты при инициализации или обновления браузера
+    private onInitAllChatRoom = (data: RecipientRoom[]) => {
+        data.forEach((elem) => {
+            const mUser = new MessageUserComponents(this.$observer);
+            const user = elem.recipientUser;
+            const room = elem.room;
+            this.containerBlockLeft?.insertAdjacentHTML(
+                'afterbegin',
+                mUser.make(user.avatar, user.nickName, 'Hello', room.chatID)
+            );
+            if (this.containerBlockLeft !== null) {
+                mUser.init(this.containerBlockLeft);
+            }
+        });
+
+        if (this.placeChat !== null) this.placeChat.innerHTML = '';
+    };
+
     // Открывает модальное окно для добавления user в чат комнату
     private onOpenModal = () => {
-        if (this.root === null) return;
+        if (this.root === null || this.placeChat === null) return;
 
-        const modal = new MessageModal(this.$observer);
+        const modal = new ModalWindow(this.$observer);
         modal.init(this.root);
+
+        this.placeChat.innerHTML = '';
+    };
+
+    // Добовляем комнату
+    private onGetChatRoom = (data: RecipientRoom) => {
+        if (this.containerBlockLeft === null) return;
+        const mUser = new MessageUserComponents(this.$observer);
+        const user = data.recipientUser;
+        const room = data.room;
+        this.containerBlockLeft?.insertAdjacentHTML(
+            'afterbegin',
+            mUser.make(user.avatar, user.nickName, 'Hello', room.chatID)
+        );
+        mUser.init(this.containerBlockLeft);
+    };
+
+    private onInitDialog = (data: RecipientStartDialog) => {
+        if (this.placeChat === null || this.recipientInfo === null) return;
+        this.recipientInfo.innerHTML = '';
+        this.placeChat.innerHTML = '';
+        this.chat.unmount();
+        this.recipientInfo.insertAdjacentHTML('afterbegin', this.makeRecipientInfo(data.avatar, data.name));
+        console.log(this.placeChat);
+        this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
+        this.chat.setRecipientDialog(data.avatar, data.name);
+        this.chat.init(this.placeChat);
     };
 
     // private onStartDialog = (recipientID: string) => {
