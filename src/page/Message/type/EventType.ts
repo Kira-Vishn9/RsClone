@@ -10,6 +10,7 @@ enum EventType {
     // GET_ALL_MESSAGE_START_DIALOG = 'eventGetAllMessageStartDialog',
     SEND_MESSAGE = 'eventSendMessage',
     RECEIVE_MESSAGE = 'eventReveiveMessage',
+    NOTIFICATION = 'eventNotification',
 }
 
 export default EventType;
