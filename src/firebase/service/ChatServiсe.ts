@@ -18,14 +18,21 @@ import {
     serverTimestamp,
     DocumentData,
     DocumentReference,
+    updateDoc,
 } from 'firebase/firestore';
 import EventBus from '../../app/event_bus/EventBus';
+import EventType from '../../app/types/EventType';
 import UserState from '../../state/UserState';
 import Auth from '../auth/Auth';
 import app from '../config/config';
 import IChatRoom from '../model/IChatRoom';
 import IMessage from '../model/IMessage';
 import INewMessage from '../model/INewMessage';
+
+type Notify = {
+    roomID: string;
+    countMessage: number;
+};
 
 type ReciveRoom = (room: IChatRoom) => void;
 
@@ -92,8 +99,8 @@ class ChatServiсe {
             const chatRooms = rooms.docs.map((room) => room.data()) as IChatRoom[];
             const filterChatRooms = chatRooms.filter((room) => room.userID === id || room.recipientID === id);
 
-            const test = rooms.docs.filter((room) => room.data().userID === id || room.data().recipientID === id);
-            test.forEach((t) => {
+            const filter = rooms.docs.filter((room) => room.data().userID === id || room.data().recipientID === id);
+            filter.forEach((t) => {
                 console.log('test::', t.ref);
 
                 const messageCollection = collection(t.ref, 'message');
@@ -123,7 +130,9 @@ class ChatServiсe {
     // TODO Решить проблему с subscription, unsubscription Refactor
     private eventLoadMessage: Unsubscribe | null = null;
     public async loadMessage(data: CollectionReference<DocumentData>) {
-        if (this.eventLoadMessage !== null) this.eventLoadMessage();
+        // console.log('message::<<', 'aga');
+
+        // if (this.eventLoadMessage !== null) this.eventLoadMessage();
         let test = 0;
         // data.forEach((ref) => {
         // const messageCollection = collection(ref, this.pathMessage);
@@ -151,8 +160,8 @@ class ChatServiсe {
         this.roomID = roomid;
         const user = UserState.instance.CurrentUser;
         if (user === null) return;
-
         if (user.displayName === null) return;
+
         const docRoom = doc(this.chatRooms, roomid);
         const messageCollection = collection(docRoom, 'message');
         const docRef = doc(messageCollection);
@@ -164,14 +173,15 @@ class ChatServiсe {
         //     timestamp: Timestamp.now(),
         // };
         const message: INewMessage = {
+            messageID: docRef.id,
             userID: UserState.instance.CurrentUser?.uid,
             text: messageText,
-            avatarURL: 's',
             name: user.displayName,
+            isRead: false,
             timestamp: serverTimestamp(),
         };
-        // await setDoc(docRef, message);
-        await addDoc(messageCollection, message);
+        await setDoc(docRef, message);
+        // await addDoc(messageCollection, message);
         // this.loadMessage(messageCollection);
     }
 
@@ -210,10 +220,13 @@ class ChatServiсe {
             const rooms = await this.getAllChatRoomBySelfUserID(id);
             const find = rooms?.find((room) => {
                 if (room.userID === id || room.recipientID === secondID) {
+                    if (room.userID === secondID || room.recipientID === id) {
+                        return true;
+                    }
                     return true;
-                } else if (room.userID === secondID || room.recipientID === id) {
-                    return true;
-                }
+                } //else if (room.userID === secondID || room.recipientID === id) {
+                //     return true;
+                // }
                 return false;
             });
             if (find === undefined) {
@@ -224,6 +237,67 @@ class ChatServiсe {
         } catch (error) {
             return error as FirebaseError;
         }
+    }
+
+    // для обноружения и уведомления непрочитаных сообщениях
+    public async unreadNotificationsMessage(ownUserID: string): Promise<void> {
+        const coll = collection(this.database, this.pathChatsRoom);
+        const rooms = await getDocs(coll);
+        const filter = rooms.docs.filter(
+            (room) => room.data().userID === ownUserID || room.data().recipientID === ownUserID
+        );
+
+        filter.forEach((room) => {
+            const messageCollection = collection(room.ref, 'message');
+            let notifyObj: Notify[] = [];
+            let tempRoomID = room.ref.id;
+            let tempCountMessage = 0;
+
+            onSnapshot(messageCollection, (snapshot) => {
+                notifyObj = [];
+                snapshot.docChanges().forEach((change) => {
+                    const message = change.doc.data() as INewMessage;
+                    if (message.isRead === false) {
+                        const roomID = change.doc.ref.parent.parent?.id;
+                        if (roomID !== undefined) {
+                            console.log('Не прочитаное сообщения');
+                            console.log('ROOM::', roomID, 'MESSAGE::', message);
+                            // if (tempRoomID === roomID) {
+                            tempCountMessage += 1;
+                            // } else {
+                            //     tempCountMessage = 0;
+                            // }
+                        }
+                    }
+                });
+                notifyObj.push({ roomID: tempRoomID, countMessage: tempCountMessage });
+                console.log(notifyObj, 'jgdgjdhgdkdhgdh');
+
+                EventBus.instance.emit(EventBus.instance.eventType.NOTIFICATION, notifyObj);
+            });
+        });
+    }
+
+    public updateMessageAsRead(roomID: string, messageID: string): void {
+        const docRoom = doc(this.chatRooms, roomID);
+        const messageCollection = collection(docRoom, 'message');
+        const docRef = doc(messageCollection, messageID);
+        console.log('updateMessageAsRead::<<', docRef.id);
+        updateDoc(docRef, {
+            isRead: true,
+        });
+    }
+
+    public updateMessageAllAsRead(roomID: string): void {
+        const docRoom = doc(this.chatRooms, roomID);
+        const messageCollection = collection(docRoom, 'message');
+        onSnapshot(messageCollection, (snaphot) => {
+            snaphot.forEach((msg) => {
+                updateDoc(msg.ref, {
+                    isRead: true,
+                });
+            });
+        });
     }
 }
 
