@@ -1,23 +1,17 @@
-import { DataSnapshot } from 'firebase/database';
-import { DocumentSnapshot } from 'firebase/firestore/lite';
 import EventBus from '../../../app/event_bus/EventBus';
 import Observer from '../../../app/observer/Observer';
 import IChatRoom from '../../../firebase/model/IChatRoom';
 import IFollower from '../../../firebase/model/IFollower';
 import IMessage from '../../../firebase/model/IMessage';
-import INewMessage from '../../../firebase/model/INewMessage';
 import ISubscription from '../../../firebase/model/ISubscription';
-import IUser from '../../../firebase/model/IUser';
 import ChatServiсe from '../../../firebase/service/ChatServiсe';
 import FollowersService from '../../../firebase/service/FollowersService';
 import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
 import UserState from '../../../state/UserState';
-import ChatComponent from '../component/ChatComponents';
 import EventType from '../type/EventType';
 import RecipientRoom from '../type/RecipientRoom';
 import RecipientStartDialog from '../type/RecipientStartDialog';
-import SubFolType from '../type/SubFolType';
 
 class MessageModel {
     private $observer: Observer;
@@ -104,20 +98,40 @@ class MessageModel {
         const getFollowers = await FollowersService.instance.getFollowers(ownUserId);
         const getSubscriptions = await SubscriptionsService.instance.getSubscriptions(ownUserId);
 
-        let filter: (ISubscription & IFollower)[] = [];
+        let union: (ISubscription & IFollower)[] = [];
 
         if (getFollowers !== null) {
-            filter.push(...getFollowers);
+            union.push(...getFollowers);
         }
 
         if (getSubscriptions !== null) {
-            filter.push(...getSubscriptions);
+            union.push(...getSubscriptions);
         }
 
-        console.log(filter);
+        const filter: (ISubscription & IFollower)[] = [union[0]];
 
-        filter = filter.filter((val) => val.id !== ownUserId);
+        // union = union.filter((val) => !(val.userID === ownUserId));
+        // filter = filter.filter((val) => val.userID === val.userID);
 
+        for (let i = 0; i < union.length; i += 1) {
+            const elem = union[i];
+            const result = checkDublicat(elem);
+            if (result === false) {
+                filter.push(elem);
+            }
+        }
+
+        function checkDublicat(elem: ISubscription & IFollower): boolean {
+            for (let i = 0; i < filter.length; i++) {
+                const result = filter[i];
+                if (result.userID === elem.userID) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        console.log('FILTER:::', filter);
         if (filter) {
             if (cb !== undefined) {
                 cb(filter);
@@ -172,7 +186,18 @@ class MessageModel {
         console.log(messageArr);
         messageArr?.forEach((message) => {
             console.log('notification::<<::', message);
-            // this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
+            this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
+
+            if (this.chatRoomID !== null) {
+                ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
+                const notify = [
+                    {
+                        roomID: this.chatRoomID,
+                        countMessage: 0,
+                    },
+                ];
+                this.$observer.emit(EventType.NOTIFICATION, notify); //<< Отправляем полученгые данные во view
+            }
         });
     }
 
@@ -183,7 +208,7 @@ class MessageModel {
     };
 
     // Отлавливаем сообщения в реальном времени
-    private onLoadMessage = (message: INewMessage) => {
+    private onLoadMessage = (message: IMessage) => {
         console.log('RECIEVE_MESSAGE::', message);
         console.log(this.chatRoomID, 'agagagag');
         this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
