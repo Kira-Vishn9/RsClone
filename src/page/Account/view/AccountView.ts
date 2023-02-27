@@ -3,7 +3,7 @@ import IUser from '../../../firebase/model/IUser';
 import UserService from '../../../firebase/service/UserSevice';
 import { LocalStorage } from '../../../localStorage/localStorage';
 import '../style/account.scss';
-const logo = '../../../shared/Assets/svg/instagram-logo.svg';
+const logo = './shared/Assets/svg/instagram-logo.svg';
 enum StateBlockChangeAccount {
     LOGIN,
     REGISTRATION,
