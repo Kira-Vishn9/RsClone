@@ -87,6 +87,8 @@ class ProfileView {
     };
 
     private onGetPost = (event: IPosts[]) => {
+        console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', event);
+
         event.forEach((post: IPosts) => {
             const createPost = makePost(post.fileURL, post.likesUsers.length, post.comments.length, post.postID);
             this.postContainer?.insertAdjacentHTML('afterbegin', createPost);
