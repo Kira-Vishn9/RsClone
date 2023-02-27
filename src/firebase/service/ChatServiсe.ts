@@ -133,6 +133,7 @@ class ChatServiсe {
                 }
             });
         });
+        // this.eventLoadMessage();
     }
 
     public async saveMessage(roomid: string, messageText: string): Promise<void> {
@@ -178,61 +179,61 @@ class ChatServiсe {
     }
 
     // для обноружения и уведомления непрочитаных сообщениях
-    public async unreadNotificationsMessage(ownUserID: string): Promise<void> {
-        const coll = collection(this.database, this.pathChatsRoom);
-        const rooms = await getDocs(coll);
-        const filter = rooms.docs.filter(
-            (room) => room.data().userID === ownUserID || room.data().recipientID === ownUserID
-        );
+    // public async unreadNotificationsMessage(ownUserID: string): Promise<void> {
+    //     const coll = collection(this.database, this.pathChatsRoom);
+    //     const rooms = await getDocs(coll);
+    //     const filter = rooms.docs.filter(
+    //         (room) => room.data().userID === ownUserID || room.data().recipientID === ownUserID
+    //     );
 
-        filter.forEach((room) => {
-            const messageCollection = collection(room.ref, 'message');
-            let notifyObj: Notify[] = [];
-            let tempRoomID = room.ref.id;
-            let tempCountMessage = 0;
+    //     filter.forEach((room) => {
+    //         const messageCollection = collection(room.ref, 'message');
+    //         let notifyObj: Notify[] = [];
+    //         let tempRoomID = room.ref.id;
+    //         let tempCountMessage = 0;
 
-            onSnapshot(messageCollection, (snapshot) => {
-                notifyObj = [];
-                snapshot.docChanges().forEach((change) => {
-                    const message = change.doc.data() as IMessage;
-                    if (message.isRead === false) {
-                        const roomID = change.doc.ref.parent.parent?.id;
-                        if (roomID !== undefined) {
-                            console.log('Не прочитаное сообщения');
-                            console.log('ROOM::', roomID, 'MESSAGE::', message);
-                            tempCountMessage += 1;
-                        }
-                    }
-                });
-                notifyObj.push({ roomID: tempRoomID, countMessage: tempCountMessage });
-                console.log(notifyObj, 'jgdgjdhgdkdhgdh');
+    //         onSnapshot(messageCollection, (snapshot) => {
+    //             notifyObj = [];
+    //             snapshot.docChanges().forEach((change) => {
+    //                 const message = change.doc.data() as IMessage;
+    //                 if (message.isRead === false) {
+    //                     const roomID = change.doc.ref.parent.parent?.id;
+    //                     if (roomID !== undefined) {
+    //                         console.log('Не прочитаное сообщения');
+    //                         console.log('ROOM::', roomID, 'MESSAGE::', message);
+    //                         tempCountMessage += 1;
+    //                     }
+    //                 }
+    //             });
+    //             notifyObj.push({ roomID: tempRoomID, countMessage: tempCountMessage });
+    //             console.log(notifyObj, 'jgdgjdhgdkdhgdh');
 
-                EventBus.instance.emit(EventBus.instance.eventType.NOTIFICATION, notifyObj);
-            });
-        });
-    }
+    //             EventBus.instance.emit(EventBus.instance.eventType.NOTIFICATION, notifyObj);
+    //         });
+    //     });
+    // }
 
-    public updateMessageAsRead(roomID: string, messageID: string): void {
-        const docRoom = doc(this.chatRooms, roomID);
-        const messageCollection = collection(docRoom, 'message');
-        const docRef = doc(messageCollection, messageID);
-        console.log('updateMessageAsRead::<<', docRef.id);
-        updateDoc(docRef, {
-            isRead: true,
-        });
-    }
+    // public updateMessageAsRead(roomID: string, messageID: string): void {
+    //     const docRoom = doc(this.chatRooms, roomID);
+    //     const messageCollection = collection(docRoom, 'message');
+    //     const docRef = doc(messageCollection, messageID);
+    //     console.log('updateMessageAsRead::<<', docRef.id);
+    //     updateDoc(docRef, {
+    //         isRead: true,
+    //     });
+    // }
 
-    public updateMessageAllAsRead(roomID: string): void {
-        const docRoom = doc(this.chatRooms, roomID);
-        const messageCollection = collection(docRoom, 'message');
-        onSnapshot(messageCollection, (snaphot) => {
-            snaphot.forEach((msg) => {
-                updateDoc(msg.ref, {
-                    isRead: true,
-                });
-            });
-        });
-    }
+    // public updateMessageAllAsRead(roomID: string): void {
+    //     const docRoom = doc(this.chatRooms, roomID);
+    //     const messageCollection = collection(docRoom, 'message');
+    //     onSnapshot(messageCollection, (snaphot) => {
+    //         snaphot.forEach((msg) => {
+    //             updateDoc(msg.ref, {
+    //                 isRead: true,
+    //             });
+    //         });
+    //     });
+    // }
 }
 
 export default ChatServiсe;
