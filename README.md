@@ -7,17 +7,18 @@ RsClone
 
 -Screenshot 2023-02-27 at 17 54 03
 
-Team:
-Olga's worker branch - dev_olga
-[git] https://github.com/tizary
-Kira's worker branch - dev_kira
-[git] https://github.com/Kira-Vishn9
-Nikolay's worker branch - dev_nikolay
-[git] https://github.com/Doonn3
-Branch for merge code develop
-[доска Trello] https://trello.com/b/E8dJtafu/rs-clone
-[Figma] https://www.figma.com/file/uKTo5jaCV2QYWDyDpK8X3F/Instagram-UI-(Community)?node-id=0%3A1
-[Deploy netlify] https://deploy-preview-30--tubular-hummingbird-1be2ec.netlify.app/?#/account
+-Team:
+-Olga's worker branch - dev_olga
+-[git] https://github.com/tizary
+-Kira's worker branch - dev_kira
+-[git] https://github.com/Kira-Vishn9
+-Nikolay's worker branch - dev_nikolay
+-[git] https://github.com/Doonn3
+-Branch for merge code develop
+-[доска Trello] https://trello.com/b/E8dJtafu/rs-clone
+-[Figma] https://www.figma.com/file/uKTo5jaCV2QYWDyDpK8X3F/Instagram-UI-(Community)?node-id=0%3A1
+-[Deploy netlify] https://deploy-preview-30--tubular-hummingbird-1be2ec.netlify.app/?#/account
+
 #Оценивание работы : -Окно входа -Есть проверка на наличие регистрации в базе 15 -Есть проверка на правилность введных данных 15
 
 -Окно регистрации -Есть проверка на коректные данные mail 15
