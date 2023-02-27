@@ -1,6 +1,6 @@
 import { DataSnapshot } from 'firebase/database';
 import Observer from '../../../app/observer/Observer';
-import INewMessage from '../../../firebase/model/INewMessage';
+import IMessage from '../../../firebase/model/IMessage';
 import EventType from '../type/EventType';
 import '../style/chat.scss';
 import UserState from '../../../state/UserState';
@@ -94,10 +94,6 @@ class ChatComponent {
         this.placeMessage.scrollTo(0, this.placeMessage.scrollHeight);
     }
 
-    // private onInitDialog = () => {
-    //     //
-    // };
-
     private onSendMessage = (event: Event) => {
         if (event instanceof KeyboardEvent) {
             if (event.key === 'Enter') {
@@ -117,13 +113,9 @@ class ChatComponent {
         this.input.value = '';
         this.$observer.emit(EventType.SEND_MESSAGE, message);
     }
-    private tt = 0;
-    private onReceiveMessage = (message: INewMessage) => {
-        // console.log(message);
-        // console.log('Receive__Message: ', message);
-        this.tt += 1;
+
+    private onReceiveMessage = (message: IMessage) => {
         console.log('MESSAGE__VIEW::<<', message);
-        console.log(this.tt);
         if (message.userID === UserState.instance.CurrentUser?.uid) {
             this.makeOwnMessage(message.text);
         } else {
@@ -132,12 +124,12 @@ class ChatComponent {
     };
 
     // отрисовываем все сообщения в chat room после обновлении браузера или инициализации
-    private onGetAllMessageByChatRoom = (messageArr: INewMessage[]) => {
+    private onGetAllMessageByChatRoom = (messageArr: IMessage[]) => {
         if (this.placeMessage === null) return;
 
         this.placeMessage.innerHTML = '';
         console.log('avatar::', this.recipientAvatar);
-        messageArr.forEach((message: INewMessage) => {
+        messageArr.forEach((message: IMessage) => {
             if (message.userID === UserState.instance.CurrentUser?.uid) {
                 this.makeOwnMessage(message.text);
             } else {
