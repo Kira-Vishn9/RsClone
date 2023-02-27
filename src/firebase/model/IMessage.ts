@@ -1,9 +1,13 @@
+import { FieldValue } from 'firebase/firestore';
+
 interface IMessage {
-    UserId: string;
-    recipientId: string;
-    recipientAvatar: string;
-    recipientName: string;
-    message: string;
+    messageID?: string;
+    userID?: string;
+    name: string;
+    imgURL?: string;
+    text: string;
+    timestamp: FieldValue;
+    isRead?: boolean;
 }
 
 export default IMessage;
