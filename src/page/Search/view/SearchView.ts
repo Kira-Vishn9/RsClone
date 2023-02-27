@@ -1,5 +1,6 @@
 import Observer from '../../../app/observer/Observer';
 import IUser from '../../../firebase/model/IUser';
+import { LocalStorage } from '../../../localStorage/localStorage';
 import UserState from '../../../state/UserState';
 import '../style/search.scss';
 import EventType from '../types/EventType';
@@ -50,6 +51,8 @@ class SearchView {
 
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
+            const localId = LocalStorage.instance.getUser().id;
+            if (user.id === localId) continue;
             if (user.id === undefined) continue;
             this.searchList?.insertAdjacentHTML(
                 'beforeend',
