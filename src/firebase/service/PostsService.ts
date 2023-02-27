@@ -1,18 +1,6 @@
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    updateDoc,
-    doc,
-    getDoc,
-    setDoc,
-    DocumentData,
-    deleteDoc,
-} from 'firebase/firestore/lite';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getFirestore, collection, getDocs, updateDoc, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore/lite';
 import app from '../config/config';
 import IPosts from '../model/IPosts';
-import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
 
 class PostsService {

@@ -1,12 +1,5 @@
 import { FirebaseError } from 'firebase/app';
-import {
-    CollectionReference,
-    DocumentChangeType,
-    DocumentData,
-    DocumentReference,
-    onSnapshot,
-    query,
-} from 'firebase/firestore';
+import { CollectionReference, DocumentChangeType, DocumentData, onSnapshot } from 'firebase/firestore';
 import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
 import UserState from '../../state/UserState';
 import app from '../config/config';
@@ -38,22 +31,21 @@ class SubscriptionsService {
                 return;
             }
             console.log('aga');
-            await this.checkForDuplicateSubscriptions(subCollection, async (data: DocumentChangeType) => {
-                if (data === 'added') {
-                    if (subUser !== null && subUser.id !== undefined) {
-                        const follower = await FollowersService.instance.setFollower(subUser.id, userID);
-                    }
-                    console.log('aga2');
-
-                    const subDocRef = doc(subCollection);
-                    sub.id = subDocRef.id;
-                    console.log('sub', sub);
-                    await setDoc(subDocRef, sub);
-                    if (cb !== undefined) {
-                        cb();
-                    }
-                    console.log('Записал в Подписчик');
+            await this.checkForDuplicateSubscriptions(subCollection, async () => {
+                if (subUser !== null && subUser.id !== undefined) {
+                    const follower = await FollowersService.instance.setFollower(subUser.id, userID);
                 }
+
+                console.log('aga2');
+
+                const subDocRef = doc(subCollection);
+                sub.id = subDocRef.id;
+                console.log('sub', sub);
+                await setDoc(subDocRef, sub);
+                if (cb !== undefined) {
+                    cb();
+                }
+                console.log('Записал в Подписчик');
             });
         } catch (error) {
             //
@@ -63,21 +55,23 @@ class SubscriptionsService {
     // eslint-disable-next-line prettier/prettier
     private async checkForDuplicateSubscriptions(
         docRef: CollectionReference<DocumentData>,
-        cb: (data: DocumentChangeType) => void
+        cb: () => void
     ): Promise<void> {
         // const tt = query(docRef);
         const eventSnapshot = onSnapshot(docRef, (snaphot) => {
-            if (snaphot.empty) {
-                cb('added');
-                eventSnapshot();
-                return;
-            }
+            // if (snaphot.empty) {
+            //     cb('added');
+            //     eventSnapshot();
+            //     return;
+            // }
 
             snaphot.docChanges().forEach((change) => {
                 if (change.type === 'added') {
-                    cb(change.type);
+                    //
                 }
             });
+
+            cb();
             eventSnapshot();
         });
     }

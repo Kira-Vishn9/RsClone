@@ -1,4 +1,4 @@
-import { DocumentData, DocumentReference } from 'firebase/firestore/lite';
+import { DocumentReference } from 'firebase/firestore/lite';
 
 interface IUser {
     id?: string;
@@ -17,7 +17,5 @@ interface IUser {
     savedPosts?: DocumentReference;
     createAt?: Date;
 }
-//DocumentData
-//DocumentReference
 
 export default IUser;
