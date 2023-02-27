@@ -1,4 +1,5 @@
 import Observer from '../../../app/observer/Observer';
+import Auth from '../../../firebase/auth/Auth';
 import IUser from '../../../firebase/model/IUser';
 import UserService from '../../../firebase/service/UserSevice';
 import UserState from '../../../state/UserState';
@@ -31,7 +32,8 @@ class SettingsModel {
 
     private onUpdateUserData = async (user: IUser) => {
         await UserService.instance.updateUserData(user);
-        window.location.href = '#/account';
+        await Auth.instance.logOutAccount();
+        // window.location.href = '#/account'; //<< Костыль
     };
 }
 
