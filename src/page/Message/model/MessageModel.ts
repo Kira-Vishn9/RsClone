@@ -28,7 +28,7 @@ class MessageModel {
         this.$observer.subscribe(EventType.START_DIALOG, this.onGetRoomID);
         this.$observer.subscribe(EventType.SEND_MESSAGE, this.onSendMessage);
         EventBus.instance.subscribe(EventBus.instance.eventType.LOAD_MESSAGE, this.onLoadMessage);
-        EventBus.instance.subscribe(EventBus.instance.eventType.NOTIFICATION, this.onNotifications);
+        // EventBus.instance.subscribe(EventBus.instance.eventType.NOTIFICATION, this.onNotifications);
     }
 
     public unmount(): void {
@@ -37,7 +37,7 @@ class MessageModel {
         this.$observer.unsubscribe(EventType.START_DIALOG, this.onGetRoomID);
         this.$observer.unsubscribe(EventType.SEND_MESSAGE, this.onSendMessage);
         EventBus.instance.unsubscribe(EventBus.instance.eventType.LOAD_MESSAGE, this.onLoadMessage);
-        EventBus.instance.unsubscribe(EventBus.instance.eventType.NOTIFICATION, this.onNotifications);
+        // EventBus.instance.unsubscribe(EventBus.instance.eventType.NOTIFICATION, this.onNotifications);
     }
 
     // Получаем все чат комнаты при инициализации когда обновляем браузер
@@ -84,7 +84,7 @@ class MessageModel {
 
         this.$observer.emit(EventType.INIT_GET_ALL_CHAT__ROOM, data);
 
-        await ChatServiсe.instance.unreadNotificationsMessage(ownUserID); //<< Читаем с EventBus ппц жопа код
+        // await ChatServiсe.instance.unreadNotificationsMessage(ownUserID); //<< Читаем с EventBus ппц жопа код
     }
 
     // Получает Всех Фоловеров и Подписки для модального окна в Message
@@ -188,16 +188,16 @@ class MessageModel {
             console.log('notification::<<::', message);
             this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
 
-            if (this.chatRoomID !== null) {
-                ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
-                const notify = [
-                    {
-                        roomID: this.chatRoomID,
-                        countMessage: 0,
-                    },
-                ];
-                this.$observer.emit(EventType.NOTIFICATION, notify); //<< Отправляем полученгые данные во view
-            }
+            // if (this.chatRoomID !== null) {
+            //     ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
+            //     const notify = [
+            //         {
+            //             roomID: this.chatRoomID,
+            //             countMessage: 0,
+            //         },
+            //     ];
+            //     this.$observer.emit(EventType.NOTIFICATION, notify); //<< Отправляем полученгые данные во view
+            // }
         });
     }
 
@@ -214,9 +214,9 @@ class MessageModel {
         this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
 
         // Меняем сообщения с не прочитанного на прочитанное
-        if (this.chatRoomID !== null && message.messageID !== undefined) {
-            ChatServiсe.instance.updateMessageAsRead(this.chatRoomID, message.messageID);
-        }
+        // if (this.chatRoomID !== null && message.messageID !== undefined) {
+        //     ChatServiсe.instance.updateMessageAsRead(this.chatRoomID, message.messageID);
+        // }
     };
 
     // Получаем Уведомления не прочитаных сооющений
