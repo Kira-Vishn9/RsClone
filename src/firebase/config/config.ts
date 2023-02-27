@@ -41,14 +41,22 @@ import { initializeApp } from 'firebase/app';
 //     measurementId: 'G-22K4SGNZG8',
 // };
 
-const firebaseConfig = {
-    apiKey: 'AIzaSyBA2_iDvz0S3dD5DdrwYj3CEqyTQ53DWhg',
-    authDomain: 'clone-rs-insta.firebaseapp.com',
-    projectId: 'clone-rs-insta',
-    storageBucket: 'clone-rs-insta.appspot.com',
-    messagingSenderId: '776294553380',
-    appId: '1:776294553380:web:6fc53a7e835b2561f885b1',
-};
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyBA2_iDvz0S3dD5DdrwYj3CEqyTQ53DWhg',
+//     authDomain: 'clone-rs-insta.firebaseapp.com',
+//     projectId: 'clone-rs-insta',
+//     storageBucket: 'clone-rs-insta.appspot.com',
+//     messagingSenderId: '776294553380',
+//     appId: '1:776294553380:web:6fc53a7e835b2561f885b1',
+// };
 
+const firebaseConfig = {
+    apiKey: 'AIzaSyDh6R825jbmjHCjET4fAr1reDv7AeH3qHA',
+    authDomain: 'base-core-rs.firebaseapp.com',
+    projectId: 'base-core-rs',
+    storageBucket: 'base-core-rs.appspot.com',
+    messagingSenderId: '1079152600713',
+    appId: '1:1079152600713:web:6b8acc80c29ffaf6760858',
+};
 const app = initializeApp(firebaseConfig);
 export default app;
