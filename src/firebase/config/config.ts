@@ -50,13 +50,22 @@ import { initializeApp } from 'firebase/app';
 //     appId: '1:776294553380:web:6fc53a7e835b2561f885b1',
 // };
 
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyDh6R825jbmjHCjET4fAr1reDv7AeH3qHA',
+//     authDomain: 'base-core-rs.firebaseapp.com',
+//     projectId: 'base-core-rs',
+//     storageBucket: 'base-core-rs.appspot.com',
+//     messagingSenderId: '1079152600713',
+//     appId: '1:1079152600713:web:6b8acc80c29ffaf6760858',
+// };
+
 const firebaseConfig = {
-    apiKey: 'AIzaSyDh6R825jbmjHCjET4fAr1reDv7AeH3qHA',
-    authDomain: 'base-core-rs.firebaseapp.com',
-    projectId: 'base-core-rs',
-    storageBucket: 'base-core-rs.appspot.com',
-    messagingSenderId: '1079152600713',
-    appId: '1:1079152600713:web:6b8acc80c29ffaf6760858',
+    apiKey: 'AIzaSyD63NS2qtthQ3H3lPgm_SEJKtF07KRNVCw',
+    authDomain: 'rs-clone-insta-48d9b.firebaseapp.com',
+    projectId: 'rs-clone-insta-48d9b',
+    storageBucket: 'rs-clone-insta-48d9b.appspot.com',
+    messagingSenderId: '748808076227',
+    appId: '1:748808076227:web:9066776d287b4148509b76',
 };
 const app = initializeApp(firebaseConfig);
 export default app;
