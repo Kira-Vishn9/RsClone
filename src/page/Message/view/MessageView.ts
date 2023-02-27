@@ -12,6 +12,8 @@ import ISubscription from '../../../firebase/model/ISubscription';
 import SubFolType from '../type/SubFolType';
 import RecipientRoom from '../type/RecipientRoom';
 import RecipientStartDialog from '../type/RecipientStartDialog';
+import { LocalStorage } from '../../../localStorage/localStorage';
+import ProfileHeadComponent from '../../Profile/components/ProfileHeadComponent';
 
 class MessageView {
     private sendBth: HTMLElement | null = null;
@@ -113,7 +115,7 @@ class MessageView {
 
     private makeRecipientInfo(avatar: string | undefined, name: string): string {
         return `
-            <a class="user-message" href="#">
+            <a class="user-message">
                 <img class="user-avatar" src="${avatar === undefined ? '' : avatar}" alt="avatar">
                 <span class="user-name">${name}</span>
             </a>
@@ -186,6 +188,7 @@ class MessageView {
         this.recipientInfo.innerHTML = '';
         this.placeChat.innerHTML = '';
         this.chat.unmount();
+        console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJ', data);
         this.recipientInfo.insertAdjacentHTML('afterbegin', this.makeRecipientInfo(data.avatar, data.name));
         console.log(this.placeChat);
         this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
