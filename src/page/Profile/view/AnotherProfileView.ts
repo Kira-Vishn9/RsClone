@@ -61,14 +61,14 @@ class AnotherProfileView {
     }
 
     private onGetUser = (event: SubscribedType) => {
-        console.log('adsadasdad');
-        console.log(event.user.id);
+        // console.log('adsadasdad');
+        // console.log(event.user.id);
         if (this.root === null) return;
         if (event.user.id === undefined) return;
         const avatars = event.user.avatar;
         const fullname = event.user.name;
         const nickName = event.user.nickName;
-        console.log('event', event.user);
+        // console.log('event', event.user);
         LocalStorage.instance.setData(anotherKeyID, event.user.id);
         if (event.subscribed === null) {
             this.root.insertAdjacentHTML(
@@ -168,7 +168,7 @@ class AnotherProfileView {
 
     // Кнопка Отписки
     private btnUnsubscribe(): void {
-        console.log('Нажата Отпска');
+        // console.log('Нажата Отпска');
         if (this.profileHead.UserID === null) return;
         this.$observer.emit(AnotherEventType.BUTTON_CLICK_UNSUBSCRIBE, this.profileHead.UserID, () => {
             this.profileHead.btnSubscribed();
@@ -177,7 +177,7 @@ class AnotherProfileView {
 
     // Кнопка Подписки
     private btnSubscribe(): void {
-        console.log('Нажата Подписка');
+        // console.log('Нажата Подписка');
         const fullName = this.profileHead.Fullname;
         const name = this.profileHead.Name;
         const id = this.profileHead.UserID;
@@ -193,11 +193,11 @@ class AnotherProfileView {
             userID: id,
             avatar: this.profileHead.ImgAvatar === undefined ? '' : this.profileHead.ImgAvatar,
         };
-        console.log('534534789553');
+        // console.log('534534789553');
         const btn = this.profileHead.BtnSubUnSub;
         if (btn === null) return;
         btn.disabled = true;
-        console.log('agagaggaga', sub);
+        // console.log('agagaggaga', sub);
 
         this.$observer.emit(AnotherEventType.BUTTON_CLICK_SUBSCRIBE, sub, () => {
             this.profileHead.btnUnSubscribed();

@@ -24,28 +24,28 @@ class SubscriptionsService {
             const subUser = await UserService.instance.getUser(sub.userID);
 
             const find = await this.findSubscraptions(userID, sub.userID);
-            console.log(find);
+            // console.log(find);
             if (find instanceof FirebaseError) return;
             if (find !== null) {
-                console.log('Такой Документ Существует!!!!');
+                // console.log('Такой Документ Существует!!!!');
                 return;
             }
-            console.log('aga');
+            // console.log('aga');
             await this.checkForDuplicateSubscriptions(subCollection, async () => {
                 if (subUser !== null && subUser.id !== undefined) {
                     const follower = await FollowersService.instance.setFollower(subUser.id, userID);
                 }
 
-                console.log('aga2');
+                // console.log('aga2');
 
                 const subDocRef = doc(subCollection);
                 sub.id = subDocRef.id;
-                console.log('sub', sub);
+                // console.log('sub', sub);
                 await setDoc(subDocRef, sub);
                 if (cb !== undefined) {
                     cb();
                 }
-                console.log('Записал в Подписчик');
+                // console.log('Записал в Подписчик');
             });
         } catch (error) {
             //
@@ -110,12 +110,12 @@ class SubscriptionsService {
             const docRef = doc(this.data, ownUserID);
             const subCollection = collection(docRef, this.pathSubscriptions);
             const subDocRef = doc(subCollection, subID);
-            console.log('deleteSub');
+            // console.log('deleteSub');
             const sub = await this.getSubscription(subID);
-            console.log('qqqqqqqqqqq', sub);
+            // console.log('qqqqqqqqqqq', sub);
             if (sub === null) return;
             const getUser = await UserService.instance.getUser(sub.userID);
-            console.log('qqqqqqqqqqq');
+            // console.log('qqqqqqqqqqq');
 
             if (getUser === null || getUser.id === undefined) return;
 

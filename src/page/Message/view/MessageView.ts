@@ -85,7 +85,7 @@ class MessageView {
     }
 
     public make(): string {
-        console.log(UserState.instance.CurrentUser);
+        // console.log(UserState.instance.CurrentUser);
         return `
         <div class="message-block">
           <div class="message-block__left">
@@ -185,13 +185,13 @@ class MessageView {
 
     private tt = 0;
     private onInitDialog = (data: RecipientStartDialog) => {
-        console.log('QWEDQWREQWREWRFEWGFEWGEWGEWG');
+        // console.log('QWEDQWREQWREWRFEWGFEWGEWGEWG');
         if (this.placeChat === null || this.recipientInfo === null) return;
         this.recipientInfo.innerHTML = '';
         this.placeChat.innerHTML = '';
         this.chat.unmount();
         this.tt += 1;
-        console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', this.tt);
+        // console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', this.tt);
         this.recipientInfo.insertAdjacentHTML('afterbegin', this.makeRecipientInfo(data.avatar, data.name));
         this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
         this.chat.setRecipientDialog(data.avatar, data.name);

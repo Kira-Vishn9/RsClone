@@ -24,7 +24,7 @@ class Observer {
             if (subscribe.eventType === eventType) {
                 if (subscribe.func === fun) {
                     this.subscribers.splice(i, 1);
-                    console.log('suvVV::', subscribe);
+                    // console.log('suvVV::', subscribe);
                     return;
                 }
             }

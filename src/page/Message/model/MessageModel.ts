@@ -43,13 +43,13 @@ class MessageModel {
     // Получаем все чат комнаты при инициализации когда обновляем браузер
     private async getChatRooms(): Promise<void> {
         const ownUserID = UserState.instance.UserID;
-        console.log(ownUserID);
+        // console.log(ownUserID);
         if (ownUserID === null) return;
         const rooms = await ChatServiсe.instance.getAllChatRoomBySelfUserID(ownUserID);
         const users = await UserService.instance.getAllUser();
         if (rooms === null || users === null) return;
-        console.log(rooms);
-        console.log(users);
+        // console.log(rooms);
+        // console.log(users);
         const filterUser = users.filter((user) => user.id !== ownUserID);
 
         const data: RecipientRoom[] = [];
@@ -80,7 +80,7 @@ class MessageModel {
             }
         }
 
-        console.log(data);
+        // console.log(data);
 
         this.$observer.emit(EventType.INIT_GET_ALL_CHAT__ROOM, data);
 
@@ -131,7 +131,7 @@ class MessageModel {
             return false;
         }
 
-        console.log('FILTER:::', filter);
+        // console.log('FILTER:::', filter);
         if (filter) {
             if (cb !== undefined) {
                 cb(filter);
@@ -162,13 +162,13 @@ class MessageModel {
             room: room,
         };
         this.$observer.emit(EventType.GET_CHAT_ROOM, data); // Event
-        console.log('Получил ЭВЕНТ');
+        // console.log('Получил ЭВЕНТ');
     };
 
     // запоминаем ид команты когда нажали комнату
     private onGetRoomID = async (roomID: RecipientStartDialog) => {
         this.chatRoomID = roomID.roomID;
-        console.log('SAVE ROOM ID:: ', this.chatRoomID);
+        // console.log('SAVE ROOM ID:: ', this.chatRoomID);
         await this.getAllMessageForRoom();
 
         // Меняем сообщения с не прочитанного на прочитанное
@@ -183,9 +183,9 @@ class MessageModel {
     private async getAllMessageForRoom(): Promise<void> {
         if (this.chatRoomID === null) return;
         const messageArr = await ChatServiсe.instance.getAllMessagesByRoomID(this.chatRoomID);
-        console.log(messageArr);
+        // console.log(messageArr);
         messageArr?.forEach((message) => {
-            console.log('notification::<<::', message);
+            // console.log('notification::<<::', message);
             this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
 
             // if (this.chatRoomID !== null) {
@@ -209,8 +209,8 @@ class MessageModel {
 
     // Отлавливаем сообщения в реальном времени
     private onLoadMessage = (message: IMessage) => {
-        console.log('RECIEVE_MESSAGE::', message);
-        console.log(this.chatRoomID, 'agagagag');
+        // console.log('RECIEVE_MESSAGE::', message);
+        // console.log(this.chatRoomID, 'agagagag');
         this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
 
         // Меняем сообщения с не прочитанного на прочитанное
@@ -221,9 +221,9 @@ class MessageModel {
 
     // Получаем Уведомления не прочитаных сооющений
     private onNotifications = (notifi: { roomID: string; countMessage: number }[]) => {
-        console.log('NOTIFI', notifi);
+        // console.log('NOTIFI', notifi);
         if (notifi[0].roomID === this.chatRoomID) return;
-        console.log('qqqqqqqqq', notifi);
+        // console.log('qqqqqqqqq', notifi);
         this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
     };
 }

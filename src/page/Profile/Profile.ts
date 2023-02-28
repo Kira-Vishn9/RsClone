@@ -38,7 +38,7 @@ class Profile extends Base {
                 return this.view.make();
 
             case ProfileState.ANOTHER_PROFILE:
-                console.log('ANOTHER');
+                // console.log('ANOTHER');
                 return this.anotherView.make();
         }
     }

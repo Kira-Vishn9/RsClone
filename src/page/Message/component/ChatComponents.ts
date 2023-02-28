@@ -115,7 +115,7 @@ class ChatComponent {
     }
 
     private onReceiveMessage = (message: IMessage) => {
-        console.log('MESSAGE__VIEW::<<', message);
+        // console.log('MESSAGE__VIEW::<<', message);
         if (message.userID === UserState.instance.CurrentUser?.uid) {
             this.makeOwnMessage(message.text);
         } else {
@@ -128,7 +128,7 @@ class ChatComponent {
         if (this.placeMessage === null) return;
 
         this.placeMessage.innerHTML = '';
-        console.log('avatar::', this.recipientAvatar);
+        // console.log('avatar::', this.recipientAvatar);
         messageArr.forEach((message: IMessage) => {
             if (message.userID === UserState.instance.CurrentUser?.uid) {
                 this.makeOwnMessage(message.text);

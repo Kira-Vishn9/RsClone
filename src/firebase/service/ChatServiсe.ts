@@ -53,10 +53,10 @@ class ChatServiсe {
             if (findDublicat instanceof FirebaseError) return;
 
             if (findDublicat) {
-                console.log('Такая Комната Чата Существует!!!');
+                // console.log('Такая Комната Чата Существует!!!');
                 return;
             }
-            console.log('Такой Комнаты НЕМА!!!');
+            // console.log('Такой Комнаты НЕМА!!!');
 
             const docRef = doc(this.chatRooms);
             this.roomID = docRef.id;
@@ -74,13 +74,13 @@ class ChatServiсe {
 
     public eventSnapShot(data: DocumentReference<DocumentData>): void {
         const event = onSnapshot(data, (snaphot) => {
-            console.log(snaphot.data());
-            console.log('ahahah');
+            // console.log(snaphot.data());
+            // console.log('ahahah');
             const chatRoom = snaphot.data() as IChatRoom;
 
-            console.log('WEWEAWEAWEAWEE', snaphot.ref.parent);
-            console.log('EEEEEEE', snaphot.ref.parent.id);
-            console.log('000000000', snaphot.id);
+            // console.log('WEWEAWEAWEAWEE', snaphot.ref.parent);
+            // console.log('EEEEEEE', snaphot.ref.parent.id);
+            // console.log('000000000', snaphot.id);
             const docRef = doc(snaphot.ref.parent, snaphot.id);
             const messageCollection = collection(docRef, 'message');
 
@@ -106,7 +106,7 @@ class ChatServiсe {
             this.eventLoadMessageArr.forEach((event) => event());
 
             filter.forEach((t) => {
-                console.log('test::', t.ref);
+                // console.log('test::', t.ref);
 
                 const messageCollection = collection(t.ref, 'message');
                 this.loadMessage(messageCollection);
@@ -140,7 +140,7 @@ class ChatServiсe {
             snapshot.docChanges().forEach((change) => {
                 if (change.type === 'added') {
                     const data = change.doc.data() as IMessage;
-                    console.log('LOAD__MESSAGE::', data);
+                    // console.log('LOAD__MESSAGE::', data);
                     EventBus.instance.emit(EventBus.instance.eventType.LOAD_MESSAGE, data); //<< Глобальный Event
                 }
             });

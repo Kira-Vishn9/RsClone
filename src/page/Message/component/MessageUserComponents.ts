@@ -56,7 +56,7 @@ class MessageUserComponents {
         // if (this.elem === null) return;
         // this.elem.textContent = this.name;
         if (this.attribute === undefined) return;
-        console.log(this.attribute);
+        // console.log(this.attribute);
         const startDialogInfo: RecipientStartDialog = {
             avatar: this.avatars === undefined ? '' : this.avatars,
             name: this.name,
@@ -73,7 +73,7 @@ class MessageUserComponents {
         const nt = notifi[0];
         if (nt.roomID === this.attribute) {
             if (nt.countMessage > 0) {
-                console.log('qweqweqweqweqweqwe');
+                // console.log('qweqweqweqweqweqwe');
                 notifiHtmlElem.classList.remove('hidden');
                 notifiHtmlElem.textContent = `${nt.countMessage}`;
             } else {
