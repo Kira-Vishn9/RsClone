@@ -183,14 +183,16 @@ class MessageView {
         mUser.init(this.containerBlockLeft);
     };
 
+    private tt = 0;
     private onInitDialog = (data: RecipientStartDialog) => {
+        console.log('QWEDQWREQWREWRFEWGFEWGEWGEWG');
         if (this.placeChat === null || this.recipientInfo === null) return;
         this.recipientInfo.innerHTML = '';
         this.placeChat.innerHTML = '';
         this.chat.unmount();
-        console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJ', data);
+        this.tt += 1;
+        console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', this.tt);
         this.recipientInfo.insertAdjacentHTML('afterbegin', this.makeRecipientInfo(data.avatar, data.name));
-        console.log(this.placeChat);
         this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
         this.chat.setRecipientDialog(data.avatar, data.name);
         this.chat.init(this.placeChat);

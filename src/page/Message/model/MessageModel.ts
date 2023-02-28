@@ -172,11 +172,11 @@ class MessageModel {
         await this.getAllMessageForRoom();
 
         // Меняем сообщения с не прочитанного на прочитанное
-        if (this.chatRoomID !== null) {
-            const notifi = [{ roomID: this.chatRoomID, countMessage: 0 }];
-            // ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
-            // this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
-        }
+        // if (this.chatRoomID !== null) {
+        // const notifi = [{ roomID: this.chatRoomID, countMessage: 0 }];
+        // ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
+        // this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
+        // }
     };
 
     // Получаем все message при инициализации или обновления браузера когда нажали на комнату

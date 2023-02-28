@@ -78,6 +78,15 @@ class ChatServiсe {
             console.log('ahahah');
             const chatRoom = snaphot.data() as IChatRoom;
 
+            console.log('WEWEAWEAWEAWEE', snaphot.ref.parent);
+            console.log('EEEEEEE', snaphot.ref.parent.id);
+            console.log('000000000', snaphot.id);
+            const docRef = doc(snaphot.ref.parent, snaphot.id);
+            const messageCollection = collection(docRef, 'message');
+
+            if (this.eventLoadMessage !== null) this.eventLoadMessage();
+            this.loadMessage(messageCollection);
+
             if (this.recieveEventGetRoom !== null) this.recieveEventGetRoom(chatRoom);
             event();
         });
@@ -93,11 +102,13 @@ class ChatServiсe {
             const filterChatRooms = chatRooms.filter((room) => room.userID === id || room.recipientID === id);
 
             const filter = rooms.docs.filter((room) => room.data().userID === id || room.data().recipientID === id);
+
+            this.eventLoadMessageArr.forEach((event) => event());
+
             filter.forEach((t) => {
                 console.log('test::', t.ref);
 
                 const messageCollection = collection(t.ref, 'message');
-
                 this.loadMessage(messageCollection);
             });
             return filterChatRooms;
@@ -121,6 +132,7 @@ class ChatServiсe {
     }
 
     // TODO Решить проблему с subscription, unsubscription Refactor
+    private eventLoadMessageArr: Unsubscribe[] = [];
     private eventLoadMessage: Unsubscribe | null = null;
     public async loadMessage(data: CollectionReference<DocumentData>) {
         const messageQuery = query(data, orderBy('timestamp', 'desc'), limit(1));
@@ -134,6 +146,7 @@ class ChatServiсe {
             });
         });
         // this.eventLoadMessage();
+        this.eventLoadMessageArr.push(this.eventLoadMessage);
     }
 
     public async saveMessage(roomid: string, messageText: string): Promise<void> {
@@ -160,10 +173,10 @@ class ChatServiсe {
         try {
             const rooms = await this.getAllChatRoomBySelfUserID(id);
             const find = rooms?.find((room) => {
-                if (room.userID === id || room.recipientID === secondID) {
-                    if (room.userID === secondID || room.recipientID === id) {
-                        return true;
-                    }
+                if (room.userID === id && room.recipientID === secondID) {
+                    // if (room.userID === secondID || room.recipientID === id) {
+                    //     return true;
+                    // }
                     return true;
                 }
                 return false;

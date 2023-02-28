@@ -9,7 +9,7 @@ enum EventType {
     START_DIALOG = 'eventStartDialog',
     // GET_ALL_MESSAGE_START_DIALOG = 'eventGetAllMessageStartDialog',
     SEND_MESSAGE = 'eventSendMessage',
-    RECEIVE_MESSAGE = 'eventReveiveMessage',
+    RECEIVE_MESSAGE = 'eventReceiveMessage',
     NOTIFICATION = 'eventNotification',
 }
 
