@@ -1,0 +1,81 @@
+.aside {
+  padding: 30px;
+  font-size: 18px;
+
+  &__list {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+
+    &-item {
+      display: flex;
+
+      a {
+        flex-shrink: 1;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        color: #262626;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    &-active {
+      font-weight: 900;
+    }
+  }
+}
+
+.logo {
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.aside__list-item:hover .home-ico,
+.aside__list-item:hover .messenger-ico,
+.aside__list-item:hover .new-posts-ico,
+.aside__list-item:hover .profile-ico,
+.aside__list-item:hover .search-ico  {
+  transform: scale(1.2);
+}
+
+.home-ico,
+.messenger-ico,
+.new-posts-ico,
+.profile-ico,
+.search-ico {
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin-right: 20px;
+  transition: .5s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.home-ico {
+  background: url('../../shared/Assets/icon/home.svg');
+}
+
+.messenger-ico {
+  background: url('../../shared/Assets/icon/messenger.svg');
+}
+
+.new-posts-ico {
+  background: url('../../shared/Assets/icon/new-posts.svg');
+}
+
+.profile-ico {
+  border: 1px solid #000;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.search-ico {
+  background: url('../../shared/Assets/icon/search.png');
+}

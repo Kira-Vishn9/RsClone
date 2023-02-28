@@ -1,0 +1,58 @@
+#sub-foll-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.4);
+}
+
+.content__sub-foll {
+    width: 300px;
+    height: 300px;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.title__sub-foll {
+    text-align: center;
+    border-bottom: 2px solid rgba(122, 122, 122, 0.7);
+}
+
+.container-block__sub-foll {
+    display: flex;
+    flex-direction: column;
+}
+
+.item__sub-foll {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content__item {
+    display: flex;
+
+    .avatar__item {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .text-content__item {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.btn-subscriptions__item {
+    cursor: pointer;
+}
