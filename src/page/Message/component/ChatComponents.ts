@@ -1,6 +1,6 @@
 import { DataSnapshot } from 'firebase/database';
 import Observer from '../../../app/observer/Observer';
-import INewMessage from '../../../firebase/model/INewMessage';
+import IMessage from '../../../firebase/model/IMessage';
 import EventType from '../type/EventType';
 import '../style/chat.scss';
 import UserState from '../../../state/UserState';
@@ -81,7 +81,7 @@ class ChatComponent {
     private makeInterLocutorsMessages(photoURL: string | null, name: string, message: string): void {
         const data = `
         <div class="interlocutor">
-            <img src="${photoURL}" alt="userPhoto" style="width: 25px; height: 25px;">
+            <img class="interlocutor__img" src="${photoURL}" alt="userPhoto"">
             <div class="interlocutor__content">
                 <span class="interlocutor__name">${name}</span>
                 <span class="interlocutor__text">${message}</span>
@@ -93,10 +93,6 @@ class ChatComponent {
         this.placeMessage.insertAdjacentHTML('beforeend', data);
         this.placeMessage.scrollTo(0, this.placeMessage.scrollHeight);
     }
-
-    // private onInitDialog = () => {
-    //     //
-    // };
 
     private onSendMessage = (event: Event) => {
         if (event instanceof KeyboardEvent) {
@@ -117,27 +113,23 @@ class ChatComponent {
         this.input.value = '';
         this.$observer.emit(EventType.SEND_MESSAGE, message);
     }
-    private tt = 0;
-    private onReceiveMessage = (message: INewMessage) => {
-        // console.log(message);
-        // console.log('Receive__Message: ', message);
-        this.tt += 1;
-        console.log('MESSAGE__VIEW::<<', message);
-        console.log(this.tt);
+
+    private onReceiveMessage = (message: IMessage) => {
+        // console.log('MESSAGE__VIEW::<<', message);
         if (message.userID === UserState.instance.CurrentUser?.uid) {
             this.makeOwnMessage(message.text);
         } else {
-            this.makeInterLocutorsMessages('', message.name, message.text);
+            this.makeInterLocutorsMessages(this.recipientAvatar, message.name, message.text);
         }
     };
 
     // отрисовываем все сообщения в chat room после обновлении браузера или инициализации
-    private onGetAllMessageByChatRoom = (messageArr: INewMessage[]) => {
+    private onGetAllMessageByChatRoom = (messageArr: IMessage[]) => {
         if (this.placeMessage === null) return;
 
         this.placeMessage.innerHTML = '';
-
-        messageArr.forEach((message: INewMessage) => {
+        // console.log('avatar::', this.recipientAvatar);
+        messageArr.forEach((message: IMessage) => {
             if (message.userID === UserState.instance.CurrentUser?.uid) {
                 this.makeOwnMessage(message.text);
             } else {

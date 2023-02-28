@@ -1,5 +1,4 @@
 .message-block {
-    position: absolute;
     right: 50px;
     width: 70%;
     height: 86vh;
@@ -51,12 +50,17 @@
         &__notifications {
             position: absolute;
             right: 0px;
-            bottom: 5px;
+            bottom: 0px;
 
-            width: 10px;
-            height: 10px;
-            background-color: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 20px;
+            height: 20px;
+            background-color: #ff6f6f;
             border-radius: 50%;
+            color: white;
         }
     }
 
@@ -99,6 +103,8 @@
                 font-size: 16px;
                 line-height: 24px;
                 color: #262626;
+
+                cursor: default;
             }
 
             .user-avatar {

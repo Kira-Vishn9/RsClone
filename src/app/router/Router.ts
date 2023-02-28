@@ -35,7 +35,7 @@ class Router {
     private tempRoute: Base | null = null;
 
     private onHascChange = () => {
-        console.log(window.location.hash);
+        // console.log(window.location.hash);
         if (this.tempRoute !== null && this.tempRoute.unmount) this.tempRoute.unmount();
         const route = this.getRoute(window.location.hash);
         this.tempRoute = route;

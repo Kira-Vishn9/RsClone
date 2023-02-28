@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, doc, getDoc, setDoc, DocumentData } from 'firebase/firestore/lite';
+import { getFirestore, collection } from 'firebase/firestore/lite';
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -6,19 +6,14 @@ import {
     signOut,
     AuthErrorCodes,
     onAuthStateChanged,
-    updateCurrentUser,
-    User,
     updateProfile,
     updateEmail,
-    Unsubscribe,
-    NextOrObserver,
 } from 'firebase/auth';
 import app from '../config/config';
 import IUser from '../model/IUser';
 import { FirebaseError } from 'firebase/app';
 import { LocalStorage } from '../../localStorage/localStorage';
 import UserService from '../service/UserSevice';
-import UserState from '../../state/UserState';
 
 class Auth {
     public static instance = new Auth();

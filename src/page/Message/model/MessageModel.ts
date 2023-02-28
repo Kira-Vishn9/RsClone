@@ -1,23 +1,17 @@
-import { DataSnapshot } from 'firebase/database';
-import { DocumentSnapshot } from 'firebase/firestore/lite';
 import EventBus from '../../../app/event_bus/EventBus';
 import Observer from '../../../app/observer/Observer';
 import IChatRoom from '../../../firebase/model/IChatRoom';
 import IFollower from '../../../firebase/model/IFollower';
 import IMessage from '../../../firebase/model/IMessage';
-import INewMessage from '../../../firebase/model/INewMessage';
 import ISubscription from '../../../firebase/model/ISubscription';
-import IUser from '../../../firebase/model/IUser';
 import ChatServiсe from '../../../firebase/service/ChatServiсe';
 import FollowersService from '../../../firebase/service/FollowersService';
 import SubscriptionsService from '../../../firebase/service/SubscriptionsService';
 import UserService from '../../../firebase/service/UserSevice';
 import UserState from '../../../state/UserState';
-import ChatComponent from '../component/ChatComponents';
 import EventType from '../type/EventType';
 import RecipientRoom from '../type/RecipientRoom';
 import RecipientStartDialog from '../type/RecipientStartDialog';
-import SubFolType from '../type/SubFolType';
 
 class MessageModel {
     private $observer: Observer;
@@ -34,6 +28,7 @@ class MessageModel {
         this.$observer.subscribe(EventType.START_DIALOG, this.onGetRoomID);
         this.$observer.subscribe(EventType.SEND_MESSAGE, this.onSendMessage);
         EventBus.instance.subscribe(EventBus.instance.eventType.LOAD_MESSAGE, this.onLoadMessage);
+        // EventBus.instance.subscribe(EventBus.instance.eventType.NOTIFICATION, this.onNotifications);
     }
 
     public unmount(): void {
@@ -42,18 +37,19 @@ class MessageModel {
         this.$observer.unsubscribe(EventType.START_DIALOG, this.onGetRoomID);
         this.$observer.unsubscribe(EventType.SEND_MESSAGE, this.onSendMessage);
         EventBus.instance.unsubscribe(EventBus.instance.eventType.LOAD_MESSAGE, this.onLoadMessage);
+        // EventBus.instance.unsubscribe(EventBus.instance.eventType.NOTIFICATION, this.onNotifications);
     }
 
     // Получаем все чат комнаты при инициализации когда обновляем браузер
     private async getChatRooms(): Promise<void> {
         const ownUserID = UserState.instance.UserID;
-        console.log(ownUserID);
+        // console.log(ownUserID);
         if (ownUserID === null) return;
         const rooms = await ChatServiсe.instance.getAllChatRoomBySelfUserID(ownUserID);
         const users = await UserService.instance.getAllUser();
         if (rooms === null || users === null) return;
-        console.log(rooms);
-        console.log(users);
+        // console.log(rooms);
+        // console.log(users);
         const filterUser = users.filter((user) => user.id !== ownUserID);
 
         const data: RecipientRoom[] = [];
@@ -84,9 +80,11 @@ class MessageModel {
             }
         }
 
-        console.log(data);
+        // console.log(data);
 
         this.$observer.emit(EventType.INIT_GET_ALL_CHAT__ROOM, data);
+
+        // await ChatServiсe.instance.unreadNotificationsMessage(ownUserID); //<< Читаем с EventBus ппц жопа код
     }
 
     // Получает Всех Фоловеров и Подписки для модального окна в Message
@@ -100,20 +98,40 @@ class MessageModel {
         const getFollowers = await FollowersService.instance.getFollowers(ownUserId);
         const getSubscriptions = await SubscriptionsService.instance.getSubscriptions(ownUserId);
 
-        let filter: (ISubscription & IFollower)[] = [];
+        let union: (ISubscription & IFollower)[] = [];
 
         if (getFollowers !== null) {
-            filter.push(...getFollowers);
+            union.push(...getFollowers);
         }
 
         if (getSubscriptions !== null) {
-            filter.push(...getSubscriptions);
+            union.push(...getSubscriptions);
         }
 
-        console.log(filter);
+        const filter: (ISubscription & IFollower)[] = [union[0]];
 
-        filter = filter.filter((val) => val.id !== ownUserId);
+        // union = union.filter((val) => !(val.userID === ownUserId));
+        // filter = filter.filter((val) => val.userID === val.userID);
 
+        for (let i = 0; i < union.length; i += 1) {
+            const elem = union[i];
+            const result = checkDublicat(elem);
+            if (result === false) {
+                filter.push(elem);
+            }
+        }
+
+        function checkDublicat(elem: ISubscription & IFollower): boolean {
+            for (let i = 0; i < filter.length; i++) {
+                const result = filter[i];
+                if (result.userID === elem.userID) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // console.log('FILTER:::', filter);
         if (filter) {
             if (cb !== undefined) {
                 cb(filter);
@@ -144,14 +162,44 @@ class MessageModel {
             room: room,
         };
         this.$observer.emit(EventType.GET_CHAT_ROOM, data); // Event
-        console.log('Получил ЭВЕНТ');
+        // console.log('Получил ЭВЕНТ');
     };
 
-    // запоминаем ид команты
-    private onGetRoomID = (roomID: RecipientStartDialog) => {
+    // запоминаем ид команты когда нажали комнату
+    private onGetRoomID = async (roomID: RecipientStartDialog) => {
         this.chatRoomID = roomID.roomID;
-        console.log('SAVE ROOM ID:: ', this.chatRoomID);
+        // console.log('SAVE ROOM ID:: ', this.chatRoomID);
+        await this.getAllMessageForRoom();
+
+        // Меняем сообщения с не прочитанного на прочитанное
+        // if (this.chatRoomID !== null) {
+        // const notifi = [{ roomID: this.chatRoomID, countMessage: 0 }];
+        // ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
+        // this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
+        // }
     };
+
+    // Получаем все message при инициализации или обновления браузера когда нажали на комнату
+    private async getAllMessageForRoom(): Promise<void> {
+        if (this.chatRoomID === null) return;
+        const messageArr = await ChatServiсe.instance.getAllMessagesByRoomID(this.chatRoomID);
+        // console.log(messageArr);
+        messageArr?.forEach((message) => {
+            // console.log('notification::<<::', message);
+            this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
+
+            // if (this.chatRoomID !== null) {
+            //     ChatServiсe.instance.updateMessageAllAsRead(this.chatRoomID);
+            //     const notify = [
+            //         {
+            //             roomID: this.chatRoomID,
+            //             countMessage: 0,
+            //         },
+            //     ];
+            //     this.$observer.emit(EventType.NOTIFICATION, notify); //<< Отправляем полученгые данные во view
+            // }
+        });
+    }
 
     // Отпровлчем сообщения
     private onSendMessage = async (message: string) => {
@@ -160,9 +208,23 @@ class MessageModel {
     };
 
     // Отлавливаем сообщения в реальном времени
-    private onLoadMessage = (message: INewMessage) => {
-        console.log('RECIEVE_MESSAGE::', message);
+    private onLoadMessage = (message: IMessage) => {
+        // console.log('RECIEVE_MESSAGE::', message);
+        // console.log(this.chatRoomID, 'agagagag');
         this.$observer.emit(EventType.RECEIVE_MESSAGE, message);
+
+        // Меняем сообщения с не прочитанного на прочитанное
+        // if (this.chatRoomID !== null && message.messageID !== undefined) {
+        //     ChatServiсe.instance.updateMessageAsRead(this.chatRoomID, message.messageID);
+        // }
+    };
+
+    // Получаем Уведомления не прочитаных сооющений
+    private onNotifications = (notifi: { roomID: string; countMessage: number }[]) => {
+        // console.log('NOTIFI', notifi);
+        if (notifi[0].roomID === this.chatRoomID) return;
+        // console.log('qqqqqqqqq', notifi);
+        this.$observer.emit(EventType.NOTIFICATION, notifi); //<< Отправляем полученгые данные во view
     };
 }
 

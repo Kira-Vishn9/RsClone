@@ -11,24 +11,61 @@ import { initializeApp } from 'firebase/app';
 // };
 
 // const firebaseConfig = {
-//     apiKey: "AIzaSyAbrSlPJqm6a0sdSm-f4Ds7MWrIpoyIF-s",
-//     authDomain: "clone-instagram-7c300.firebaseapp.com",
-//     databaseURL: "https://clone-instagram-7c300-default-rtdb.firebaseio.com",
-//     projectId: "clone-instagram-7c300",
-//     storageBucket: "clone-instagram-7c300.appspot.com",
-//     messagingSenderId: "572673925162",
-//     appId: "1:572673925162:web:c129d35a8ea48e1ce9a353"
-//   };
+//     apiKey: 'AIzaSyAbrSlPJqm6a0sdSm-f4Ds7MWrIpoyIF-s',
+//     authDomain: 'clone-instagram-7c300.firebaseapp.com',
+//     databaseURL: 'https://clone-instagram-7c300-default-rtdb.firebaseio.com',
+//     projectId: 'clone-instagram-7c300',
+//     storageBucket: 'clone-instagram-7c300.appspot.com',
+//     messagingSenderId: '572673925162',
+//     appId: '1:572673925162:web:c129d35a8ea48e1ce9a353',
+// };
+
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyBUzYL3IZqUD3gKEkhoeQesm5m6fkitS9Y',
+//     authDomain: 'rs-clone-insta.firebaseapp.com',
+//     databaseURL: 'https://rs-clone-insta-default-rtdb.europe-west1.firebasedatabase.app',
+//     projectId: 'rs-clone-insta',
+//     storageBucket: 'rs-clone-insta.appspot.com',
+//     messagingSenderId: '238045707767',
+//     appId: '1:238045707767:web:94f7fa1a43cf21a25502f2',
+// };
+
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyBArE9ymJXKuYsS8_DOsar1Ebb5n29Byc8',
+//     authDomain: 'my-last-project-30f8a.firebaseapp.com',
+//     databaseURL: 'https://my-last-project-30f8a-default-rtdb.europe-west1.firebasedatabase.app',
+//     projectId: 'my-last-project-30f8a',
+//     storageBucket: 'my-last-project-30f8a.appspot.com',
+//     messagingSenderId: '20021421397',
+//     appId: '1:20021421397:web:a89788389263b370053bdc',
+//     measurementId: 'G-22K4SGNZG8',
+// };
+
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyBA2_iDvz0S3dD5DdrwYj3CEqyTQ53DWhg',
+//     authDomain: 'clone-rs-insta.firebaseapp.com',
+//     projectId: 'clone-rs-insta',
+//     storageBucket: 'clone-rs-insta.appspot.com',
+//     messagingSenderId: '776294553380',
+//     appId: '1:776294553380:web:6fc53a7e835b2561f885b1',
+// };
+
+// const firebaseConfig = {
+//     apiKey: 'AIzaSyDh6R825jbmjHCjET4fAr1reDv7AeH3qHA',
+//     authDomain: 'base-core-rs.firebaseapp.com',
+//     projectId: 'base-core-rs',
+//     storageBucket: 'base-core-rs.appspot.com',
+//     messagingSenderId: '1079152600713',
+//     appId: '1:1079152600713:web:6b8acc80c29ffaf6760858',
+// };
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyBUzYL3IZqUD3gKEkhoeQesm5m6fkitS9Y',
-    authDomain: 'rs-clone-insta.firebaseapp.com',
-    databaseURL: 'https://rs-clone-insta-default-rtdb.europe-west1.firebasedatabase.app',
-    projectId: 'rs-clone-insta',
-    storageBucket: 'rs-clone-insta.appspot.com',
-    messagingSenderId: '238045707767',
-    appId: '1:238045707767:web:94f7fa1a43cf21a25502f2',
+    apiKey: 'AIzaSyD63NS2qtthQ3H3lPgm_SEJKtF07KRNVCw',
+    authDomain: 'rs-clone-insta-48d9b.firebaseapp.com',
+    projectId: 'rs-clone-insta-48d9b',
+    storageBucket: 'rs-clone-insta-48d9b.appspot.com',
+    messagingSenderId: '748808076227',
+    appId: '1:748808076227:web:9066776d287b4148509b76',
 };
-
 const app = initializeApp(firebaseConfig);
 export default app;

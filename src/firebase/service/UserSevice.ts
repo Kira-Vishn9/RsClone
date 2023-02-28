@@ -1,12 +1,8 @@
-import { User } from 'firebase/auth';
-import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
-import userState from '../../state/user.state';
+import { collection, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
 import UserState from '../../state/UserState';
 import Auth from '../auth/Auth';
 import app from '../config/config';
-import ISubscription from '../model/ISubscription';
 import IUser from '../model/IUser';
-import PullPushImg from '../pull-push-img/PullPushImg';
 
 class UserService {
     public static instance: UserService = new UserService();
@@ -51,8 +47,6 @@ class UserService {
             // const docRef = doc(this.data);
             const data = collection(this.db, 'Users');
             const docRef = doc(data, id);
-
-            userState.id = docRef.id;
             UserState.instance.setUserID(docRef.id);
             const u = {
                 fullname: user.name,

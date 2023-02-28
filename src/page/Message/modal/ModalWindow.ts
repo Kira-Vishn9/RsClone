@@ -43,10 +43,6 @@ class ModalWindow {
         <div class="wrapper-overflow">
         <div class="wrapper">
             <div class="title">
-                <span class="close">
-                    <div class="line1"></div>
-                    <div class="line2"></div>
-                </span>
                 <span>Новое сообщение</span>
                 <span class="next">Далее</span>
             </div>

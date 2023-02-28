@@ -57,4 +57,8 @@ export class LocalStorage {
         if (data === null) return null;
         return JSON.parse(data);
     }
+
+    public deleteData(key: string): void {
+        localStorage.removeItem(key);
+    }
 }

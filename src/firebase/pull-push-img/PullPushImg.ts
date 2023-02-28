@@ -1,12 +1,10 @@
 import app from '../config/config';
 import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { FirebaseError, getApp } from 'firebase/app';
-import userState from '../../state/user.state';
 import UserService from '../service/UserSevice';
 
 class PullPushImg {
     public static instance: PullPushImg = new PullPushImg();
-    // private firebaseApp = getApp();
     private storage = getStorage(app, 'gs://rs-clone-insta.appspot.com/');
     private defaultPath = 'images';
 

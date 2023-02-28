@@ -5,7 +5,7 @@
             border-radius: 100%;
             margin-right: 8px ;
     }
-    
+
     display: flex;
     justify-content: center;
     position: absolute;
@@ -15,7 +15,9 @@
     background-color: rgba(1, 1, 1, 0.5);
     color: white;
     top: 0;
+    right: 0;
     left: 0;
+    bottom: 0;
     width: 100%;
     .wrapper{
         background: rgb(38, 38, 38);
@@ -49,6 +51,9 @@
                     left: -2px;
                 }
             }
+            .next {
+                cursor: pointer;
+            }
         }
         .search-peaple{
             margin-top: 10px;
@@ -66,10 +71,10 @@
             }
         }
         .choose{
-            
+
             .list-human{
                 padding: 0;
-                overflow: scroll;
+                overflow-y: auto;
                 height: 330px;
                 .list-item{
                     display: flex;
@@ -87,6 +92,6 @@
                     }
                 }
             }
-        }   
+        }
     }
 }

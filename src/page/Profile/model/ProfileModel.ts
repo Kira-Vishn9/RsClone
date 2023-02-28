@@ -57,6 +57,7 @@ class ProfileModel {
                 postArr.push(post);
             }
         }
+        // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', postArr);
 
         this.observer.emit('eventPost', postArr);
 
@@ -129,13 +130,16 @@ class ProfileModel {
         // UserService.instance.deleteSubscriptions(subID);
         const userID = UserState.instance.UserID;
         if (userID === null) return;
-        console.log(subID);
+        // console.log(subID);
         SubscriptionsService.instance.deleteSubscriptions(userID, subID);
         this.observer.emit(EventType.RERENDER, {});
     };
 
     // Выход из accounts
     private onLogOut = async () => {
+        LocalStorage.instance.deleteData('another-profile-id');
+        LocalStorage.instance.deleteData('author');
+        LocalStorage.instance.deleteData('user');
         await Auth.instance.logOutAccount();
     };
 }

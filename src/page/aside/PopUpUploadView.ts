@@ -1,11 +1,8 @@
-import { DocumentReference } from 'firebase/firestore/lite';
-import IComment from '../../firebase/model/IComment';
 import IPosts from '../../firebase/model/IPosts';
 import PullPushImg from '../../firebase/pull-push-img/PullPushImg';
 import PostsService from '../../firebase/service/PostsService';
 import UserService from '../../firebase/service/UserSevice';
 import { LocalStorage } from '../../localStorage/localStorage';
-import userState from '../../state/user.state';
 import UserState from '../../state/UserState';
 import './popapUpload.scss';
 

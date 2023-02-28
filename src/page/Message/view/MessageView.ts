@@ -12,6 +12,8 @@ import ISubscription from '../../../firebase/model/ISubscription';
 import SubFolType from '../type/SubFolType';
 import RecipientRoom from '../type/RecipientRoom';
 import RecipientStartDialog from '../type/RecipientStartDialog';
+import { LocalStorage } from '../../../localStorage/localStorage';
+import ProfileHeadComponent from '../../Profile/components/ProfileHeadComponent';
 
 class MessageView {
     private sendBth: HTMLElement | null = null;
@@ -83,7 +85,7 @@ class MessageView {
     }
 
     public make(): string {
-        console.log(UserState.instance.CurrentUser);
+        // console.log(UserState.instance.CurrentUser);
         return `
         <div class="message-block">
           <div class="message-block__left">
@@ -113,7 +115,7 @@ class MessageView {
 
     private makeRecipientInfo(avatar: string | undefined, name: string): string {
         return `
-            <a class="user-message" href="#">
+            <a class="user-message">
                 <img class="user-avatar" src="${avatar === undefined ? '' : avatar}" alt="avatar">
                 <span class="user-name">${name}</span>
             </a>
@@ -181,85 +183,20 @@ class MessageView {
         mUser.init(this.containerBlockLeft);
     };
 
+    private tt = 0;
     private onInitDialog = (data: RecipientStartDialog) => {
+        // console.log('QWEDQWREQWREWRFEWGFEWGEWGEWG');
         if (this.placeChat === null || this.recipientInfo === null) return;
         this.recipientInfo.innerHTML = '';
         this.placeChat.innerHTML = '';
         this.chat.unmount();
+        this.tt += 1;
+        // console.log('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', this.tt);
         this.recipientInfo.insertAdjacentHTML('afterbegin', this.makeRecipientInfo(data.avatar, data.name));
-        console.log(this.placeChat);
         this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
         this.chat.setRecipientDialog(data.avatar, data.name);
         this.chat.init(this.placeChat);
     };
-
-    // private onStartDialog = (recipientID: string) => {
-    //     if (this.placeChat === null) return;
-    //     this.placeChat.innerHTML = '';
-    //     this.placeChat.insertAdjacentHTML('afterbegin', this.chat.make());
-    //     this.chat.init(this.placeChat);
-    // };
-
-    // private messageUserComponentArr: MessageUserComponents[] = [];
-    // private onApendUserToMessageBlockLeft = (user: IUser) => {
-    //     const component = new MessageUserComponents(this.$observer);
-    //     const make = component.make(user.avatar, user.nickName, 'Hello', user.id);
-    //     this.containerBlockLeft?.insertAdjacentHTML('afterbegin', make);
-    //     if (this.root !== null) {
-    //         component.init(this.root);
-    //         component.setRecipientHTML(this.recipientName);
-    //     }
-    //     this.messageUserComponentArr.push(component);
-    // };
-
-    // private onGetAllChatRooms = (data: { users: IUser[]; rooms: IChatRoom[] }) => {
-    //     if (this.containerBlockLeft === null) return;
-
-    //     data.rooms.forEach((room) => {
-    //         const findUser = data.users.find((user) => {
-    //             if (user.id === undefined) return;
-    //             if (room.recipientID === user.id) {
-    //                 return user.id;
-    //             }
-    //         });
-
-    //         console.log(findUser);
-
-    //         if (findUser !== undefined && this.root !== null) {
-    //             const component = new MessageUserComponents(this.$observer);
-    //             const make = component.make(findUser.avatar, findUser.nickName, 'Hello', room.chatID);
-    //             this.containerBlockLeft?.insertAdjacentHTML('afterbegin', make);
-
-    //             component.init(this.root);
-    //             component.setRecipientHTML(this.recipientName);
-
-    //             this.messageUserComponentArr.push(component);
-    //         }
-    //     });
-    // };
-
-    // private showMessage(): void {
-    //     const messageInfo = document.querySelector('.message-block__right-header');
-    //     const messageBlock = document.querySelector('.message-block__right-main');
-    //     if (messageInfo && messageBlock) {
-    //         messageInfo.classList.remove('hidden');
-    //         // messageBlock.innerHTML = '';
-    //     }
-    // }
-
-    // private openModalM = () => {
-    //     const messageModal = new MessageModal(this.$observer);
-    //     this.$observer.emit(EventType.openModal, {}, (data: SubFolType[]) => {
-    //         this.root?.insertAdjacentHTML('afterbegin', messageModal.make());
-    //         messageModal.init();
-
-    //         for (let i = 0; i < data.length; i++) {
-    //             let avatar = data[i].avatar;
-    //             if (avatar === undefined) continue;
-    //             messageModal.makeItem(avatar, data[i].fullname, data[i].userID);
-    //         }
-    //     });
-    // };
 }
 
 export default MessageView;

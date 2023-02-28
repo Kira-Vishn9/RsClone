@@ -73,7 +73,7 @@ class AnotherProfileModel {
         // UserState.instance.AnotherUserID = anotherID;
         const myID = UserState.instance.UserID;
         let userID = UserState.instance.AnotherUserID;
-        console.log('MYID:: ', myID);
+        // console.log('MYID:: ', myID);
         if (myID === null) return;
 
         if (userID === null) {
@@ -125,15 +125,17 @@ class AnotherProfileModel {
     }
 
     private onSubscriptions = async (sub: ISubscription, cb?: () => void) => {
-        console.log('kekt:', sub);
+        // console.log('kekt:', sub);
         const userID = UserState.instance.UserID;
-        console.log('kektV2:', sub);
+        // console.log('kektV2:', sub);
         if (userID === null) return;
-        console.log('kektV3:', sub);
+        // console.log('kektV3:', sub);
 
         // sub.userID = this.userID;
-        console.log('jifdgjhgfjhgfdjh', sub);
-        console.log('kektV4:', sub);
+        // console.log('jifdgjhgfjhgfdjh', sub);
+        // console.log('kektV4:', sub);
+
+        // console.log('BTN__CLICK__SUBSCRIBE::<<', sub);
 
         // UserService.instance.setSubscriptions(userID, sub, false);
         await SubscriptionsService.instance.setSubscriptions(userID, sub, async () => {

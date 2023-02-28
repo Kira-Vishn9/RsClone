@@ -1,4 +1,4 @@
-import { DocumentData, DocumentReference, DocumentSnapshot } from 'firebase/firestore/lite';
+import { DocumentReference } from 'firebase/firestore/lite';
 import IComment from './IComment';
 
 interface IPosts {
