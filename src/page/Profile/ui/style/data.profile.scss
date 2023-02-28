@@ -6,12 +6,17 @@
 .item-social {
     display: flex;
     margin-right: 20px;
-    
+
     color: black;
     font-size: 20px;
-    
+
     > :first-child {
         margin-right: 10px;
         font-weight: bold;
     }
+}
+
+.followers__profile,
+.subscriptions__profile {
+    cursor: pointer;
 }
